@@ -1,0 +1,325 @@
+---
+// Bento laid out to match the reference exactly:
+//   col 1 — tint card (art top-left, text bottom) over a tall image
+//   col 2 — one full-height accent card: two text blocks, art at the foot
+//   col 3 — image over a tint card (text top, art bottom-right)
+//
+// Columns 1 and 3 are sized by card aspect-ratio; column 2 stretches to
+// whatever they come out to, so all three always finish level.
+//
+// The three `art-*.svg` files are placeholders — swap the paths below.
+---
+
+<section class="why" id="why">
+  <header class="why__head">
+    <p class="eyebrow"><span aria-hidden="true"></span>Why InFocus</p>
+    <h2 class="why__title">Accelerated. Hands-On. Industry-Led.</h2>
+    <p class="why__lede">
+      InFocus Film School provides a superior education through accelerated, hands-on learning.
+    </p>
+  </header>
+
+  <div class="bento">
+    <div class="col">
+      <article class="card card--a" style="--i:0">
+        <img class="art art--a" src="/images/art-a.svg" alt="" aria-hidden="true" />
+        <div class="card__text">
+          <h3>Accelerated</h3>
+          <p>An accelerated education in film and entertainment arts — you reach the industry sooner.</p>
+        </div>
+      </article>
+
+      <figure class="card card--img card--b" style="--i:1">
+        <img
+          src="/images/about-3.jpg"
+          alt="Two students building a camera rig in the studio"
+          width="1200"
+          height="800"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </div>
+
+    <div class="col col--feature">
+      <article class="card card--c" style="--i:2">
+        <div class="card__block">
+          <h3>Hands-On Learning</h3>
+          <p>Project-based courses with a focus on building a strong portfolio.</p>
+        </div>
+        <div class="card__block">
+          <h3>Industry Instructors</h3>
+          <p>Industry-professional instructors mentor students through interactive classes.</p>
+        </div>
+        <img class="art art--c" src="/images/art-film.svg" alt="" aria-hidden="true" />
+      </article>
+    </div>
+
+    <div class="col">
+      <figure class="card card--img card--d" style="--i:3">
+        <img
+          src="/images/about-4.jpg"
+          alt="Crew setting up lights and a bounce board for a shot"
+          width="1200"
+          height="676"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <article class="card card--e" style="--i:4">
+        <div class="card__text">
+          <h3>Creative Autonomy</h3>
+          <p>Realize your own artistic vision and keep creative control of your work.</p>
+        </div>
+        <img class="art art--e" src="/images/art-c.svg" alt="" aria-hidden="true" />
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(56px, 7vw, 118px) var(--gutter);
+  }
+
+  .why__head {
+    max-width: 1600px;
+    margin: 0 auto clamp(30px, 3.6vw, 58px);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.3vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .why__title {
+    margin: 0;
+    max-width: 20ch;
+    font-size: clamp(30px, 3.8vw, 68px);
+    font-weight: 600;
+    line-height: 1.02;
+  }
+
+  .why__lede {
+    margin: clamp(14px, 1.5vw, 24px) 0 0;
+    max-width: 56ch;
+    color: #5c5c5c;
+    font-size: clamp(15px, 1.1vw, 19px);
+    line-height: 1.55;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.5vw, 24px);
+    align-items: stretch;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.5vw, 24px);
+  }
+
+  .card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: clamp(17px, 1.45vw, 26px);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: clamp(13px, 0.96vw, 16px);
+    line-height: 1.55;
+  }
+
+  /* ---- Column 1 ---- */
+
+  .card--a {
+    aspect-ratio: 69 / 50;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: var(--grey);
+    padding: clamp(18px, 1.9vw, 32px);
+  }
+
+  .card--a p {
+    color: #5a5a5a;
+  }
+
+  /* Art sits in the top of the card and runs past its edge, as in the
+     reference where the leaves overflow the corner. */
+  .art--a {
+    position: absolute;
+    top: -6%;
+    left: 5%;
+    width: 54%;
+    height: auto;
+  }
+
+  .card--b {
+    aspect-ratio: 14 / 13;
+  }
+
+  /* ---- Column 2: stretches to match columns 1 and 3 ---- */
+
+  .col--feature .card {
+    flex: 1;
+  }
+
+  .card--c {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 1.8vw, 28px);
+    background: var(--red);
+    color: var(--white);
+    padding: clamp(18px, 1.9vw, 32px);
+  }
+
+  .card--c p {
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .art--c {
+    width: min(92%, 360px);
+    height: auto;
+    margin: auto auto 0;
+    padding-top: clamp(14px, 2vw, 30px);
+  }
+
+  /* ---- Column 3 ---- */
+
+  .card--d {
+    aspect-ratio: 16 / 15;
+  }
+
+  .card--e {
+    aspect-ratio: 7 / 5;
+    display: flex;
+    flex-direction: column;
+    background: #ededed;
+    padding: clamp(18px, 1.9vw, 32px);
+  }
+
+  .card--e p {
+    color: #5a5a5a;
+  }
+
+  .art--e {
+    width: 34%;
+    height: auto;
+    margin: auto 0 0 auto;
+  }
+
+  /* ---- Images ---- */
+
+  .card--img {
+    margin: 0;
+  }
+
+  .card--img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Scroll reveal ---- */
+
+  .card {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .why.is-in .card {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 0.07s),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 0.07s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .why.is-in .card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Below three columns the hand-built stacks leave a hole, so the wrappers
+     are dissolved and every card becomes a direct grid item instead. */
+  @media (max-width: 1000px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .col {
+      display: contents;
+    }
+
+    .card--c {
+      aspect-ratio: 5 / 6;
+    }
+  }
+
+  @media (max-width: 660px) {
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .card--c {
+      aspect-ratio: auto;
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector('.why');
+
+  if (section) {
+    if (!window.IntersectionObserver) {
+      section.classList.add('is-in');
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      io.observe(section);
+    }
+  }
+</script>

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Camera originals: 77MB including a 48MB video and a 24MB RAW. Web
+# derivatives live in public/. Track these with git-lfs if they need to
+# be in the repo — committing them plainly bloats history permanently.
+source-photos/

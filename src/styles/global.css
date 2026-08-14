@@ -1,0 +1,114 @@
+@import '@fontsource-variable/oswald';
+@import '@fontsource-variable/open-sans';
+@import '@fontsource-variable/bodoni-moda/opsz-italic.css';
+
+:root {
+  /* Brand palette. Black is avoided — charcoal stands in for it. */
+  --charcoal: #333333;
+  --red: #bd2f2f;
+  --white: #ffffff;
+  --grey: #e1e1e1;
+  --blue: #224466;
+  --black: #000000;
+
+  /* The guide prefers charcoal over black, but the hero is black by
+     request. --charcoal stays the default for sections added later. */
+  --bg: var(--black);
+  --fg: var(--white);
+  --fg-muted: #d6d6d6;
+  --btn-bg: var(--white);
+  --btn-fg: var(--charcoal);
+  --rule: rgba(255, 255, 255, 0.22);
+
+  --gutter: clamp(14px, 1.5vw, 24px);
+  --nav-h: clamp(64px, 5.8vw, 96px);
+
+  /* Headings are Oswald. Body is Avenir, with Open Sans as the web
+     fallback per the brand guide — Avenir is a system face on Apple
+     devices and can't be self-hosted. */
+  --font-head: 'Oswald Variable', 'Oswald', sans-serif;
+  --font-body: 'Avenir Next', 'Avenir', 'Open Sans Variable', 'Open Sans', sans-serif;
+  /* Display-only accent face for the hero slogan. */
+  --font-accent: 'Bodoni Moda Variable', 'Didot', 'Times New Roman', serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* `clip` rather than `hidden`: hidden makes body a scroll container,
+     which breaks position: sticky in the programs rail. */
+  overflow-x: clip;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Headings are Oswald, capitalised and left-justified. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-head);
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Nav and UI micro-labels — Oswald, matching the brand's heading voice. */
+.label {
+  font-family: var(--font-head);
+  font-size: clamp(11px, 0.85vw, 14px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

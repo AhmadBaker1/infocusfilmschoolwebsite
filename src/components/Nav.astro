@@ -1,0 +1,89 @@
+---
+// Top bar: three links left, centred wordmark, three links right.
+const linksLeft = [
+  { label: 'Programs', href: '/programs' },
+  { label: 'Admissions', href: '/admissions' },
+  { label: 'Resources', href: '/resources' },
+];
+
+const linksRight = [
+  { label: 'Events', href: '/events' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Contact Us', href: '/contact' },
+];
+---
+
+<header class="nav">
+  <nav class="nav__group nav__group--left" aria-label="Primary">
+    <button class="label nav__menu" type="button" aria-expanded="false">Menu</button>
+    {linksLeft.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
+  </nav>
+
+  <a class="nav__wordmark" href="/" aria-label="In Focus Film School — home">
+    <img
+      class="nav__logo"
+      src="/images/logo-on-dark.png"
+      alt="In Focus Film School"
+      width="1090"
+      height="390"
+    />
+  </a>
+
+  <nav class="nav__group nav__group--right" aria-label="Secondary">
+    {linksRight.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
+  </nav>
+</header>
+
+<style>
+  .nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    height: var(--nav-h);
+    padding: 0 clamp(16px, 2.4vw, 40px);
+  }
+
+  .nav__group {
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.85vw, 30px);
+  }
+
+  .nav__group--right {
+    justify-self: end;
+  }
+
+  .nav__wordmark {
+    justify-self: center;
+    display: block;
+    line-height: 0;
+  }
+
+  .nav__logo {
+    height: clamp(28px, 2.7vw, 44px);
+    width: auto;
+  }
+
+  .nav__menu {
+    display: none;
+  }
+
+  /* Below this the three-column grid can't hold a centred wordmark
+     without forcing the page wider than the viewport. */
+  @media (max-width: 860px) {
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .nav__group a {
+      display: none;
+    }
+
+    .nav__menu {
+      display: inline-block;
+    }
+  }
+</style>

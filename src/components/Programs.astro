@@ -1,0 +1,403 @@
+---
+// Film Production is the pinned feature; the rest scroll past it in the rail.
+// Thumbnails are stand-ins from the existing photo set — swap for real
+// per-program artwork when it exists.
+const feature = { n: 1, name: 'Film Production', href: '/programs/film-production' };
+
+const rail = [
+  { n: 2, name: '3D Animation Intensive', img: '/images/about-5.jpg' },
+  { n: 3, name: 'Game Design', img: '/images/about-6.jpg' },
+  { n: 4, name: 'Visual Effects Compositing', img: '/images/about-2.jpg' },
+  { n: 5, name: 'Graphic + Digital Design', img: '/images/about-3.jpg' },
+  { n: 6, name: 'Cinematography Intensive', img: '/images/about-4.jpg' },
+  { n: 7, name: 'Documentary Film', img: '/images/herobg-3.jpg' },
+  { n: 8, name: 'Writing for Film + TV', img: '/images/about-1.jpg' },
+  { n: 9, name: 'Acting Program', img: '/images/herobg-1.jpg' },
+];
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+
+<section class="programs" id="programs">
+  <header class="programs__head">
+    <p class="eyebrow"><span aria-hidden="true"></span>What we teach</p>
+    <h2 class="programs__title">Diploma + Certificate Programs</h2>
+  </header>
+
+  <div class="programs__inner">
+    <div class="feature-col">
+      <a class="feature" href={feature.href} data-stage>
+        <video
+          class="feature__video"
+          poster="/video/programs-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+          tabindex="-1"
+          data-src="/video/programs.mp4"></video>
+        <span class="feature__scrim" aria-hidden="true"></span>
+
+        <span class="feature__n">{String(feature.n).padStart(2, '0')}</span>
+        <span class="feature__body">
+          <span class="feature__name">{feature.name}</span>
+          <span class="feature__cta">Explore program</span>
+        </span>
+      </a>
+    </div>
+
+    <ol class="rail">
+      {
+        rail.map((p) => (
+          <li>
+            <a class="card" href={`/programs/${slug(p.name)}`}>
+              <span class="card__thumb">
+                <img src={p.img} alt="" width="1200" height="800" loading="lazy" decoding="async" />
+              </span>
+              <span class="card__meta">
+                <span class="card__n">{String(p.n).padStart(2, '0')}</span>
+                <span class="card__name">{p.name}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <footer class="programs__foot">
+    <a class="programs__all" href="/programs"><span>View all programs</span></a>
+  </footer>
+</section>
+
+<style>
+  .programs {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  /* Left-justified per the brand guide, on the same left edge as the
+     feature card below it. */
+  .programs__head {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(56px, 7vw, 116px) var(--gutter) clamp(30px, 3.4vw, 54px);
+    text-align: left;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.3vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .programs__title {
+    margin: 0;
+    max-width: 20ch;
+    font-size: clamp(32px, 4.2vw, 76px);
+    font-weight: 600;
+    line-height: 1.02;
+  }
+
+  .programs__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+    gap: clamp(18px, 2.2vw, 38px);
+    align-items: start;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  /* ---- Pinned feature ---- */
+
+  .feature-col {
+    position: sticky;
+    /* Sits just below the top edge while the rail scrolls past. */
+    top: clamp(16px, 3.5vh, 44px);
+  }
+
+  .feature {
+    position: relative;
+    display: block;
+    height: min(76vh, 720px);
+    overflow: hidden;
+    border-radius: 6px;
+    background: #101010;
+    color: var(--white);
+    isolation: isolate;
+  }
+
+  .feature__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* The source has letterbox bars baked in; the zoom pushes them out. */
+    transform: scale(1.22);
+    filter: brightness(1.35) saturate(1.06);
+    z-index: 0;
+  }
+
+  .feature__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.28) 42%,
+      rgba(0, 0, 0, 0.12) 100%
+    );
+    z-index: 1;
+  }
+
+  .feature__n,
+  .feature__body {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .feature__n {
+    top: clamp(18px, 2vw, 34px);
+    left: clamp(18px, 2vw, 34px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.85vw, 14px);
+    letter-spacing: 0.16em;
+    opacity: 0.8;
+  }
+
+  .feature__body {
+    left: clamp(18px, 2vw, 40px);
+    right: clamp(18px, 2vw, 40px);
+    bottom: clamp(18px, 2vw, 38px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.2vw, 18px);
+    align-items: flex-start;
+  }
+
+  .feature__name {
+    font-family: var(--font-head);
+    font-size: clamp(30px, 3.8vw, 68px);
+    font-weight: 600;
+    line-height: 0.98;
+    text-transform: uppercase;
+  }
+
+  .feature__cta {
+    position: relative;
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.85vw, 14px);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+  }
+
+  .feature__cta::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--red);
+    transform-origin: left;
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .feature:hover .feature__cta::after {
+    transform: scaleX(0.4);
+  }
+
+  /* ---- Scrolling rail ---- */
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 1.6vw, 24px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--grey);
+    color: var(--charcoal);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .card__thumb {
+    display: block;
+    overflow: hidden;
+  }
+
+  .card__thumb img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .card__thumb img {
+    transform: scale(1.05);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(13px, 1.2vw, 20px) clamp(14px, 1.3vw, 22px) clamp(16px, 1.5vw, 24px);
+  }
+
+  .card__n {
+    font-family: var(--font-head);
+    font-size: clamp(9px, 0.65vw, 11px);
+    letter-spacing: 0.14em;
+    opacity: 0.6;
+  }
+
+  .card__name {
+    font-family: var(--font-head);
+    font-size: clamp(14px, 1.1vw, 20px);
+    font-weight: 500;
+    line-height: 1.14;
+    text-transform: uppercase;
+  }
+
+  .card:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  /* ---- Footer ---- */
+
+  .programs__foot {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(34px, 4vw, 64px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .programs__all {
+    position: relative;
+    font-family: var(--font-head);
+    font-size: clamp(12px, 0.95vw, 15px);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    transition: color 0.2s ease;
+  }
+
+  .programs__all span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -7px;
+    height: 2px;
+    background: var(--red);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .programs__all:hover {
+    color: var(--red);
+  }
+
+  .programs__all:hover span::after {
+    transform: scaleX(0.45);
+  }
+
+  /* Pinning needs a tall viewport and two real columns; below this it
+     stacks and the rail becomes a plain grid. */
+  @media (max-width: 900px) {
+    .programs__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(16px, 3vw, 26px);
+    }
+
+    .feature-col {
+      position: static;
+    }
+
+    .feature {
+      height: min(60vh, 460px);
+    }
+
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rail {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card__thumb img,
+    .feature__cta::after,
+    .programs__all span::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // ~10MB reel, so it only downloads once the feature is near the viewport.
+  const stage = document.querySelector<HTMLElement>('[data-stage]');
+  const video = stage?.querySelector<HTMLVideoElement>('video');
+
+  if (stage && video) {
+    const load = () => {
+      const src = video.dataset.src;
+      if (!src || video.src) return;
+      video.src = src;
+      video.play().catch(() => {
+        /* autoplay refused — the poster stands in */
+      });
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Leave the poster; no looping motion.
+    } else if (!window.IntersectionObserver) {
+      load();
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              load();
+              io.disconnect();
+            }
+          }
+        },
+        { rootMargin: '400px' }
+      );
+      io.observe(stage);
+    }
+  }
+</script>

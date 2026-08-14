@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" fill="none"
+     stroke="#ffffff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+  <!-- feed reel -->
+  <circle cx="72" cy="162" r="52"/>
+  <circle cx="72" cy="162" r="10" fill="#ffffff" fill-opacity="0.55" stroke="none"/>
+  <path d="M72 162 L26 208"/>
+  <circle cx="24" cy="210" r="7"/>
+
+  <!-- lamp housing -->
+  <ellipse cx="166" cy="62" rx="48" ry="46"/>
+  <circle cx="166" cy="62" r="9" fill="#ffffff" fill-opacity="0.45" stroke="none"/>
+  <path d="M150 106 L150 126 M186 106 L186 126"/>
+
+  <!-- body -->
+  <rect x="112" y="124" width="150" height="100" rx="6"/>
+  <rect x="126" y="150" width="26" height="52" rx="5" fill="#ffffff" fill-opacity="0.16" stroke="none"/>
+  <rect x="168" y="150" width="26" height="52" rx="5" fill="#ffffff" fill-opacity="0.16" stroke="none"/>
+
+  <!-- lens -->
+  <rect x="262" y="150" width="46" height="46" rx="5"/>
+  <ellipse cx="310" cy="173" rx="10" ry="23"/>
+
+  <!-- base -->
+  <rect x="142" y="224" width="92" height="18" rx="4"/>
+  <path d="M20 250 L300 250"/>
+
+  <!-- take-up reel -->
+  <circle cx="360" cy="170" r="58"/>
+  <circle cx="360" cy="170" r="49"/>
+  <circle cx="360" cy="170" r="12" fill="#ffffff" fill-opacity="0.55" stroke="none"/>
+  <path d="M360 152 L360 124 M343 164 L316 156 M349 185 L333 207 M371 185 L387 207 M377 164 L404 156"/>
+
+  <!-- film strip -->
+  <path d="M416 140 C 456 150 456 196 416 206"/>
+  <path d="M416 157 C 438 163 438 187 416 193"/>
+</svg>

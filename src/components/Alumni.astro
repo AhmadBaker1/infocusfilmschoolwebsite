@@ -1,0 +1,239 @@
+---
+// Every logo is trimmed to its ink and recoloured white, so the wall is
+// balanced by eye here rather than by raw file dimensions. `s` scales each
+// against the base height — wide wordmarks sit shorter, square marks taller.
+const logos = [
+  { src: '/images/logo-disney.png', name: 'Disney', s: 1.25 },
+  { src: '/images/logo-marvel.png', name: 'Marvel Studios', s: 0.9 },
+  { src: '/images/logo-netflix.png', name: 'Netflix', s: 1 },
+  { src: '/images/logo-warner.png', name: 'Warner Bros. Pictures', s: 1.75 },
+  { src: '/images/logo-hallmark.png', name: 'Hallmark Channel', s: 1.35 },
+  { src: '/images/logo-ea.png', name: 'EA Sports', s: 1.55 },
+  { src: '/images/logo-microsoft.png', name: 'Microsoft', s: 0.9 },
+];
+---
+
+<section class="alumni" id="alumni">
+  <div class="alumni__inner">
+    <header class="alumni__head">
+      <p class="eyebrow"><span aria-hidden="true"></span>Alumni</p>
+      <!-- Spaces around the <br> so the words stay separated once it is
+           hidden at narrow widths. -->
+      <h2 class="alumni__title">Where Our <br /> Alumni Work</h2>
+      <p class="alumni__note">
+        Company names and logos are trademarks of their respective owners and are shown to
+        indicate where InFocus graduates have worked.
+      </p>
+    </header>
+
+    <ul class="wall">
+      {
+        logos.map((l, i) => (
+          <li class="wall__cell" style={`--i:${i}`}>
+            <img src={l.src} alt={l.name} style={`--s:${l.s}`} loading="lazy" decoding="async" />
+          </li>
+        ))
+      }
+      <li class="wall__cell wall__cell--cta" style={`--i:${logos.length}`}>
+        <a href="/student-work">
+          <span>Alumni work</span>
+          <span class="wall__arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .alumni {
+    background: var(--charcoal);
+    color: var(--white);
+    padding: clamp(56px, 7vw, 118px) var(--gutter);
+  }
+
+  .alumni__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(34px, 5vw, 88px);
+    align-items: start;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.3vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .alumni__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 60px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .alumni__note {
+    margin: clamp(22px, 2.6vw, 40px) 0 0;
+    max-width: 40ch;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: clamp(11px, 0.76vw, 13px);
+    line-height: 1.55;
+  }
+
+  /* Hairline cell grid — gives the marks a structure to sit in rather than
+     floating them in a row. Borders collapse via negative offsets. */
+  .wall {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .wall__cell {
+    display: grid;
+    place-items: center;
+    min-height: clamp(96px, 9.5vw, 156px);
+    padding: clamp(14px, 1.6vw, 26px);
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    transition: background-color 0.3s ease;
+  }
+
+  .wall__cell:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .wall img {
+    --base: clamp(24px, 2.5vw, 44px);
+    height: calc(var(--base) * var(--s, 1));
+    width: auto;
+    max-width: 100%;
+    opacity: 0.78;
+    transition: opacity 0.25s ease;
+  }
+
+  .wall__cell:hover img {
+    opacity: 1;
+  }
+
+  /* The eighth cell would otherwise be a hole; it carries the CTA instead. */
+  .wall__cell--cta {
+    padding: 0;
+    background: var(--red);
+  }
+
+  .wall__cell--cta:hover {
+    background: #a82727;
+  }
+
+  .wall__cell--cta a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    padding: clamp(14px, 1.6vw, 26px);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.85vw, 14px);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .wall__arrow {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .wall__cell--cta:hover .wall__arrow {
+    transform: translateX(5px);
+  }
+
+  /* ---- Scroll reveal ---- */
+
+  .wall__cell {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .alumni.is-in .wall__cell {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 0.05s),
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 0.05s),
+      background-color 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wall__cell,
+    .alumni.is-in .wall__cell {
+      opacity: 1;
+      transform: none;
+      transition: background-color 0.3s ease;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .alumni__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(28px, 5vw, 44px);
+    }
+
+    .alumni__title br {
+      display: none;
+    }
+
+    .alumni__note {
+      max-width: none;
+      order: 3;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .wall {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector('.alumni');
+
+  if (section) {
+    if (!window.IntersectionObserver) {
+      section.classList.add('is-in');
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.15 }
+      );
+      io.observe(section);
+    }
+  }
+</script>
