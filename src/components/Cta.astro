@@ -1,0 +1,274 @@
+---
+// Closing CTA. The photo bleeds in from the right and dissolves into flat
+// black across the middle, leaving the left side clear for the copy.
+---
+
+<section class="cta" id="apply">
+  <img
+    class="cta__bg"
+    src="/images/statement.jpg"
+    alt=""
+    aria-hidden="true"
+    width="2200"
+    height="1467"
+    loading="lazy"
+    decoding="async"
+  />
+  <span class="cta__fade" aria-hidden="true"></span>
+
+  <div class="cta__inner">
+    <div class="cta__copy">
+      <p class="cta__eyebrow">Get started</p>
+
+      <h2 class="cta__title">Ready to make<br />your first film?</h2>
+
+      <div class="cta__actions">
+        <a class="btn btn--solid" href="/apply">
+          Apply Now
+          <span class="btn__arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="btn btn--ghost" href="/contact">
+          Talk to admissions
+          <span class="btn__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(420px, 46vw, 680px);
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(56px, 7vw, 110px) var(--gutter);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cta__bg {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 68%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 38%;
+    z-index: 0;
+  }
+
+  /* Two passes: solid black across the copy dissolving to clear over the
+     photo, then a vertical fade so the image sinks into the footer's black
+     instead of ending on a hard cut. */
+  .cta__fade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 52%,
+        rgba(0, 0, 0, 0.5) 80%,
+        rgba(0, 0, 0, 0.88) 94%,
+        #000 100%
+      ),
+      linear-gradient(
+        to right,
+        #000 0%,
+        #000 30%,
+        rgba(0, 0, 0, 0.94) 40%,
+        rgba(0, 0, 0, 0.66) 54%,
+        rgba(0, 0, 0, 0.28) 72%,
+        rgba(0, 0, 0, 0.12) 100%
+      );
+  }
+
+  .cta__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .cta__copy {
+    max-width: min(620px, 48%);
+  }
+
+  .cta__eyebrow {
+    margin: 0 0 clamp(18px, 2vw, 30px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .cta__title {
+    margin: 0 0 clamp(30px, 3.6vw, 56px);
+    font-size: clamp(34px, 4.4vw, 78px);
+    font-weight: 600;
+    line-height: 1.04;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-head);
+    font-size: clamp(12px, 0.9vw, 15px);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .btn__arrow {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn--solid {
+    padding: clamp(15px, 1.5vw, 22px) clamp(22px, 2.2vw, 36px);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .btn--solid:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .btn--solid:hover .btn__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .btn--ghost {
+    padding: clamp(15px, 1.5vw, 22px) clamp(10px, 1vw, 18px);
+    color: rgba(255, 255, 255, 0.65);
+    transition: color 0.25s ease;
+  }
+
+  .btn--ghost:hover {
+    color: var(--white);
+  }
+
+  .btn--ghost:hover .btn__arrow {
+    transform: translateX(4px);
+  }
+
+  /* ---- Scroll reveal ---- */
+
+  .cta__eyebrow,
+  .cta__title,
+  .cta__actions {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .cta.is-in .cta__eyebrow,
+  .cta.is-in .cta__title,
+  .cta.is-in .cta__actions {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s),
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s);
+  }
+
+  .cta.is-in .cta__title {
+    --d: 0.08s;
+  }
+
+  .cta.is-in .cta__actions {
+    --d: 0.16s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta__eyebrow,
+    .cta__title,
+    .cta__actions {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Too narrow to split side by side — the photo fills and the fade turns
+     vertical so the copy still has solid ground under it. */
+  @media (max-width: 820px) {
+    .cta__bg {
+      width: 100%;
+      object-position: 50% 28%;
+    }
+
+    .cta__fade {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.82) 42%,
+        rgba(0, 0, 0, 0.95) 70%,
+        #000 100%
+      );
+    }
+
+    .cta {
+      align-items: flex-end;
+      min-height: clamp(460px, 90vw, 620px);
+    }
+
+    .cta__copy {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .cta__title br {
+      display: none;
+    }
+
+    .cta__actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .btn--solid,
+    .btn--ghost {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  const section = document.querySelector('.cta');
+
+  if (section) {
+    if (!window.IntersectionObserver) {
+      section.classList.add('is-in');
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.2 }
+      );
+      io.observe(section);
+    }
+  }
+</script>

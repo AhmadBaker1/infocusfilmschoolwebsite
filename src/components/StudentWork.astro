@@ -1,0 +1,422 @@
+---
+// Cinema-arc carousel. Cards sit on a curve via perspective + rotateY, driven
+// from a fractional index so dragging feels continuous rather than stepped.
+//
+// Only the centred card is a live player; the rest are thumbnails. Eight
+// simultaneous YouTube iframes would each pull the full player bundle and
+// stream at once, which is far too heavy for a landing page.
+// `start` skips each film's intro, in seconds. Tune per video — title cards
+// and studio idents are rarely the same length.
+const videos = [
+  { id: 'n1zRhg8le1g', title: 'Student film', start: 10 },
+  { id: '1DrJ87GL0Ag', title: 'Student film', start: 10 },
+  { id: 'fVXfpriaUZw', title: 'Student film', start: 10 },
+  { id: 'VDZ9pL0ZKjc', title: 'Student film', start: 10 },
+];
+---
+
+<section class="work" id="student-work">
+  <header class="work__head">
+    <p class="eyebrow"><span aria-hidden="true"></span>Student Work</p>
+    <h2 class="work__title">Our Students' Work</h2>
+  </header>
+
+  <div class="stage" data-stage>
+    <div class="track" data-track>
+      {
+        videos.map((v, i) => (
+          <article class="slide" data-slide data-index={i} data-id={v.id} data-start={v.start}>
+            <div class="slide__frame">
+              <img
+                class="slide__thumb"
+                src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
+                alt={v.title}
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="slide__player" data-player></div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    {/* One catcher above every card: nothing inside a slide — least of all a
+        cross-origin iframe — can intercept the drag. */}
+    <div class="stage__catch" aria-hidden="true"></div>
+  </div>
+
+  <div class="work__foot">
+    <div class="dots" data-dots>
+      {videos.map((_, i) => <button type="button" data-dot={i} aria-label={`Go to video ${i + 1}`} />)}
+    </div>
+    <a class="work__all" href="https://www.youtube.com/@infocusfilmschooltv/videos" target="_blank" rel="noopener">
+      <span>Watch more on YouTube</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .work {
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(56px, 7vw, 118px) 0 clamp(44px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .work__head {
+    max-width: 1600px;
+    margin: 0 auto clamp(28px, 3.4vw, 54px);
+    padding: 0 var(--gutter);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.3vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .work__title {
+    margin: 0;
+    font-size: clamp(30px, 3.8vw, 68px);
+    font-weight: 600;
+    line-height: 1.02;
+  }
+
+  /* ---- Stage ---- */
+
+  .stage {
+    position: relative;
+    height: clamp(220px, 26vw, 420px);
+    perspective: 1400px;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .stage.is-dragging {
+    cursor: grabbing;
+  }
+
+  .track {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+  }
+
+  .slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: clamp(300px, 38vw, 660px);
+    margin: 0;
+    will-change: transform;
+    /* transform is written per-frame by the script */
+  }
+
+  .slide__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #141414;
+    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.55);
+  }
+
+  .slide__thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slide__player {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* The iframe must not receive pointer events at all — otherwise YouTube
+     swallows the drag before it can reach the stage. */
+  .slide__player :global(iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .stage__catch {
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+  }
+
+  /* ---- Foot ---- */
+
+  .work__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1600px;
+    margin: clamp(26px, 3vw, 46px) auto 0;
+    padding: 0 var(--gutter);
+  }
+
+  .dots {
+    display: flex;
+    gap: 9px;
+  }
+
+  .dots button {
+    width: 30px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.24);
+    transition: background-color 0.3s ease;
+  }
+
+  .dots button[aria-current='true'] {
+    background: var(--red);
+  }
+
+  .work__all {
+    position: relative;
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.85vw, 14px);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s ease;
+  }
+
+  .work__all:hover {
+    color: var(--white);
+  }
+
+  .work__all span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--red);
+  }
+</style>
+
+<script>
+  type Slide = HTMLElement;
+
+  const stage = document.querySelector<HTMLElement>('[data-stage]');
+  const slides = Array.from(document.querySelectorAll<Slide>('[data-slide]'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+
+  if (stage && slides.length) {
+    const N = slides.length;
+    const DWELL = 6000; // ms a video holds centre before rotating on
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let pos = 0; // fractional carousel position
+    let target = 0;
+    let dragging = false;
+    let hovering = false;
+    let startX = 0;
+    let startPos = 0;
+    let lastAdvance = 0;
+    let activeId = -1;
+
+    // Shortest signed distance from slide i to the current position, wrapped.
+    const delta = (i: number, p: number) => {
+      let d = i - p;
+      while (d > N / 2) d -= N;
+      while (d < -N / 2) d += N;
+      return d;
+    };
+
+    const layout = () => {
+      for (let i = 0; i < N; i++) {
+        const d = delta(i, pos);
+        const a = Math.abs(d);
+        const x = d * 62; // percent of card width
+        const rot = Math.max(-52, Math.min(52, -d * 26));
+        const z = -a * 190;
+        const scale = Math.max(0.62, 1 - a * 0.1);
+        const op = a > 2.4 ? 0 : 1;
+        const s = slides[i];
+        s.style.transform =
+          `translate(-50%, -50%) translateX(${x}%) translateZ(${z}px) rotateY(${rot}deg) scale(${scale})`;
+        s.style.opacity = String(op);
+        s.style.zIndex = String(100 - Math.round(a * 10));
+      }
+    };
+
+    // Every slide gets its own player, mounted once when the section comes
+    // into view. Built through the IFrame API rather than a bare src: the
+    // `autoplay=1` parameter is advisory and browsers often ignore it, but
+    // mute() + playVideo() on ready is an explicit instruction.
+    let mounted = false;
+
+    const loadApi = () =>
+      new Promise<void>((resolve) => {
+        const w = window as any;
+        if (w.YT && w.YT.Player) return resolve();
+        const prev = w.onYouTubeIframeAPIReady;
+        w.onYouTubeIframeAPIReady = () => {
+          if (typeof prev === 'function') prev();
+          resolve();
+        };
+        if (!document.querySelector('script[data-yt-api]')) {
+          const s = document.createElement('script');
+          s.src = 'https://www.youtube.com/iframe_api';
+          s.setAttribute('data-yt-api', '');
+          document.head.appendChild(s);
+        }
+      });
+
+    const mountAll = async () => {
+      if (mounted) return;
+      mounted = true;
+      await loadApi();
+
+      const w = window as any;
+      for (const slide of slides) {
+        const holder = slide.querySelector<HTMLElement>('[data-player]');
+        const id = slide.dataset.id;
+        if (!holder || !id) continue;
+
+        const start = Number(slide.dataset.start) || 0;
+        const target = document.createElement('div');
+        holder.appendChild(target);
+
+        new w.YT.Player(target, {
+          videoId: id,
+          playerVars: {
+            autoplay: 1,
+            mute: 1,
+            controls: 0,
+            rel: 0,
+            playsinline: 1,
+            modestbranding: 1,
+            disablekb: 1,
+            loop: 1,
+            playlist: id,
+            start,
+          },
+          events: {
+            onReady: (e: any) => {
+              e.target.mute();
+              if (start) e.target.seekTo(start, true);
+              e.target.playVideo();
+            },
+            onStateChange: (e: any) => {
+              // loop=1 is unreliable on single videos, and when it does fire
+              // it restarts at 0 — so seek back past the intro explicitly.
+              if (e.data === w.YT.PlayerState.ENDED) {
+                e.target.seekTo(start, true);
+                e.target.playVideo();
+              }
+            },
+          },
+        });
+      }
+    };
+
+    const syncDots = () => {
+      const idx = ((Math.round(pos) % N) + N) % N;
+      if (idx === activeId) return;
+      activeId = idx;
+      dots.forEach((d, i) => d.setAttribute('aria-current', String(i === idx)));
+    };
+
+    const frame = (t: number) => {
+      if (!lastAdvance) lastAdvance = t;
+
+      // Auto-rotate: hold on each video, then step to the next.
+      if (!dragging && !hovering && !reduced && t - lastAdvance > DWELL) {
+        target = Math.round(target) + 1;
+        lastAdvance = t;
+      }
+
+      if (!dragging) pos += (target - pos) * 0.09;
+
+      layout();
+      syncDots();
+      requestAnimationFrame(frame);
+    };
+
+    if (!window.IntersectionObserver) {
+      mountAll();
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              mountAll();
+              io.disconnect();
+            }
+          }
+        },
+        { rootMargin: '200px' }
+      );
+      io.observe(stage);
+    }
+
+    // ---- interaction ----
+
+    stage.addEventListener('pointerenter', () => (hovering = true));
+    stage.addEventListener('pointerleave', () => {
+      hovering = false;
+      lastAdvance = performance.now();
+    });
+
+    stage.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      startX = e.clientX;
+      startPos = pos;
+      stage.classList.add('is-dragging');
+      stage.setPointerCapture(e.pointerId);
+    });
+
+    stage.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const cardW = slides[0].getBoundingClientRect().width || 1;
+      pos = startPos - (e.clientX - startX) / (cardW * 0.62);
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      stage.classList.remove('is-dragging');
+      target = Math.round(pos);
+      lastAdvance = performance.now();
+    };
+
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
+
+    dots.forEach((d, i) =>
+      d.addEventListener('click', () => {
+        // Move to the nearest wrap of i so it never spins the long way round.
+        target = pos + delta(i, pos);
+        lastAdvance = performance.now();
+      })
+    );
+
+    layout();
+    requestAnimationFrame(frame);
+  }
+</script>

@@ -1,0 +1,523 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  ['scope', 'Scope'],
+  ['definition', 'Definition of Personal Information'],
+  ['what-we-collect', 'Information We Collect'],
+  ['payment', 'Providing Payment Online'],
+  ['access', 'Access to Personal Information'],
+  ['protection', 'Protection of Personal Information'],
+  ['cookies', 'Cookie Use'],
+  ['officer', 'Privacy Officer'],
+  ['changes', 'Changes to This Policy'],
+];
+---
+
+<Base
+  title="Privacy Policy — InFocus Film School"
+  description="How InFocus Film School collects, uses, and protects your personal information."
+>
+  <div class="head">
+    <Nav />
+    <div class="head__inner">
+      <p class="eyebrow"><span aria-hidden="true"></span>Legal</p>
+      <h1>Privacy Policy</h1>
+      <p class="head__note">
+        InFocus Film School values your privacy and is committed to protecting all personal
+        information under its control.
+      </p>
+    </div>
+  </div>
+
+  <div class="legal">
+    <div class="legal__inner">
+      <aside class="toc">
+        <h2>Contents</h2>
+        <nav aria-label="Sections">
+          <ol>
+            {sections.map(([id, label]) => <li><a href={`#${id}`} data-toc={id}>{label}</a></li>)}
+          </ol>
+        </nav>
+      </aside>
+
+      <article class="doc">
+        <section id="scope">
+          <h2>Scope</h2>
+          <p>
+            InFocus Film School values your privacy and is committed to protecting all personal
+            information under its control. This privacy policy describes what information we
+            collect, why we collect it, and how we handle it. This policy applies to all personal
+            information collected by or provided to InFocus Film School.
+          </p>
+        </section>
+
+        <section id="definition">
+          <h2>Definition of Personal Information</h2>
+          <p>
+            We consider personal information to be any recorded information that identifies or can
+            identify an individual. Thus, personal information includes your name, address, phone
+            number, email address, date of birth, financial information, and/or information about
+            your relationship with InFocus.
+          </p>
+          <p>
+            Non-identifiable or aggregate information, such as statistical information about InFocus
+            Film School enrollment, IP addresses, ISP information, or information that is of public
+            record is not considered personal information.
+          </p>
+        </section>
+
+        <section id="what-we-collect">
+          <h2>Information We Collect</h2>
+          <p>
+            We do not automatically gather any personally identifiable information from you. Any
+            personal information voluntarily provided to InFocus Film School through forms on our
+            website or any partner’s website is collected, used, and protected in accordance with
+            the Freedom of Information and Protection of Privacy Act and other applicable
+            legislation.
+          </p>
+          <p>
+            We may collect personal information such as your name, address, contact information, or
+            other information for reasons including, but not limited to:
+          </p>
+          <ul>
+            <li>Providing you with information about our programs, courses, or services;</li>
+            <li>Enrolling you in our programs or other courses we offer;</li>
+            <li>Communication of news or other information that may be of interest to you;</li>
+            <li>
+              For accounting purposes, such as payment processing, student loan applications, or the
+              issuance of receipts;
+            </li>
+            <li>For security reasons, such as to verify your identity or age;</li>
+            <li>
+              To keep a record of your relationship with us, which may include emails or other
+              communications exchanged; or,
+            </li>
+            <li>
+              Required information disclosure to the BC Ministry of Advanced Education, Skills, and
+              Training.
+            </li>
+          </ul>
+          <p>
+            All personal information we collect is provided voluntarily and knowingly by you. We do
+            not gather any personal information automatically or without your consent.
+          </p>
+          <p>
+            When you provide us with information such as your email address, we may occasionally
+            contact you with newsletters and other information that may be of interest to you. You
+            may opt-out of receiving any of these communications by following the unsubscribe link
+            in any newsletter we send, or by contacting us at
+            <a href="mailto:privacy@infocusfilmschool.com">privacy@infocusfilmschool.com</a>.
+          </p>
+        </section>
+
+        <section id="payment">
+          <h2>Providing Payment Online</h2>
+          <p>
+            We use Shopify Inc’s platform to collect and process payments online. When provided,
+            your information is collected and stored in Shopify’s data storage, databases and the
+            general Shopify application. They store your information on a secure server behind a
+            firewall. If you choose a direct payment gateway to complete your purchase, then Shopify
+            stores your credit card data. It is encrypted through the Payment Card Industry Data
+            Security Standard (PCI-DSS). Your purchase transaction data is stored only as long as is
+            necessary to complete your purchase transaction. After your payment is complete, your
+            purchase transaction information is deleted and neither InFocus Film School nor Shopify
+            Inc. will be able to view or access any of your credit card details.
+          </p>
+          <p>
+            All direct payment gateways adhere to the standards set by PCI-DSS as managed by the PCI
+            Security Standards Council, which is a joint effort of brands like Visa, Mastercard,
+            American Express and Discover. PCI-DSS requirements help ensure the secure handling of
+            credit card information by our store and its service providers. For more insight, you may
+            also want to read Shopify’s
+            <a href="https://www.shopify.com/legal/terms" target="_blank" rel="noopener">Terms of Service</a>
+            or
+            <a href="https://www.shopify.com/legal/privacy" target="_blank" rel="noopener">Privacy Statement</a>.
+          </p>
+          <p>
+            You may also be provided with the option of paying through PayPal. PayPal collects and
+            stores information in a similar manner to Shopify. PayPal’s terms of service can be found
+            <a href="https://www.paypal.com/us/legalhub/useragreement-full" target="_blank" rel="noopener">here</a>.
+          </p>
+        </section>
+
+        <section id="access">
+          <h2>Access to Personal Information</h2>
+          <p>
+            In general, your personal information will only be accessible by InFocus Film School
+            employees, however, in order to carry out the services we provide to you and the
+            day-to-day operation of our business, we may be required to share some of your personal
+            information with third-party service providers.
+          </p>
+          <p>
+            When personal information is shared, we will only share information necessary for these
+            third-parties to perform the service they provide to us. These services may include email
+            distribution, accounting, banking, record keeping, and other services needed for the
+            operation of InFocus Film School.
+          </p>
+          <p>
+            In some cases these third-party service providers may be outside of Canada, operating
+            under different privacy legislation. We will always require that any third-party we share
+            information with have a robust privacy policy of their own, ensuring all personal
+            information is securely stored and protected.
+          </p>
+          <p>
+            You have the right to view the personal information we have collected about you. To do
+            so, or to request a correction be made to your personal information, please email
+            <a href="mailto:privacy@infocusfilmschool.com">privacy@infocusfilmschool.com</a>.
+          </p>
+          <p>
+            With the exception of the cases stated above, we will never sell, distribute, or share
+            your personal information without your permission, unless required by law or legal order.
+          </p>
+        </section>
+
+        <section id="protection">
+          <h2>Protection of Personal Information</h2>
+          <p>
+            InFocus Film School is committed to protecting your privacy and the security of your
+            personal information.
+          </p>
+          <p>
+            Any personal information provided to us, whether through forms on this website, by email
+            or phone conversations, in person, or by other means, is collected, used, and protected
+            in accordance with the Personal Information Protection Act.
+          </p>
+          <p>
+            Personal information is stored on a secure, TLS protected server. All data is encrypted
+            and is not accessible by anyone except current InFocus employees. Whenever personal
+            information is included in any printed document, it is kept in a secure, locked location
+            and destroyed once its intended use has been completed.
+          </p>
+        </section>
+
+        <section id="cookies">
+          <h2>Cookie Use</h2>
+          <p>
+            Our website uses cookies to offer a better browsing experience. In the course of using
+            our website, we may collect a limited amount of information essential for the site’s
+            operation and security. This information includes your IP address, the name of your
+            Internet Service Provider, and information concerning the pages you visit. Such
+            information cannot be used to identify you and is used to analyze user trends and
+            interests, and to help us make this site more useful to visitors.
+            <a class="ph" href="#">Click here</a> for more information on cookies.
+          </p>
+        </section>
+
+        <section id="officer">
+          <h2>Privacy Officer</h2>
+          <p>
+            If you have any question or concerns about this policy or the information we collect, you
+            may contact our privacy officer via any of the following means:
+          </p>
+
+          <div class="card">
+            <dl>
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:privacy@infocusfilmschool.com">privacy@infocusfilmschool.com</a></dd>
+              </div>
+              <div>
+                <dt>Phone</dt>
+                <dd><a href="tel:+16049156900">+1 604-915-6900</a></dd>
+              </div>
+              <div>
+                <dt>Mail</dt>
+                <dd>
+                  InFocus Film School<br />
+                  Attn. Privacy Officer<br />
+                  554 Seymour St.<br />
+                  Vancouver, BC, Canada V6B 3J5
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <section id="changes">
+          <h2>Changes to This Policy</h2>
+          <p>
+            This Privacy Policy may change from time to time. Please review it frequently to stay
+            up-to-date.
+          </p>
+        </section>
+      </article>
+    </div>
+  </div>
+
+  <Footer />
+</Base>
+
+<style>
+  /* Dark header so the nav (white type, no background of its own) stays
+     legible above the white document body. */
+  .head {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .head__inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(30px, 5vw, 76px) var(--gutter) clamp(48px, 6vw, 96px);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .head h1 {
+    margin: 0;
+    font-size: clamp(38px, 5.4vw, 96px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .head__note {
+    margin: clamp(16px, 1.8vw, 26px) 0 0;
+    max-width: 58ch;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: clamp(15px, 1.05vw, 18px);
+    line-height: 1.6;
+  }
+
+  .legal {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(44px, 5.5vw, 92px) var(--gutter) clamp(56px, 7vw, 118px);
+  }
+
+  .legal__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.44fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 96px);
+    align-items: start;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ---- Contents rail ---- */
+
+  .toc {
+    position: sticky;
+    top: clamp(20px, 4vh, 48px);
+  }
+
+  .toc h2 {
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(10px, 0.75vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    counter-reset: toc;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .toc a {
+    counter-increment: toc;
+    display: block;
+    padding: 8px 0 8px 16px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: clamp(13px, 0.95vw, 15px);
+    line-height: 1.35;
+    color: #6a6a6a;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    margin-right: 10px;
+    font-family: var(--font-head);
+    font-size: 0.8em;
+    color: #b4b4b4;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  .toc a[aria-current='true']::before {
+    color: var(--red);
+  }
+
+  /* ---- Document ---- */
+
+  .doc section + section {
+    margin-top: clamp(36px, 4.4vw, 72px);
+    padding-top: clamp(36px, 4.4vw, 72px);
+    border-top: 1px solid rgba(51, 51, 51, 0.1);
+  }
+
+  .doc section {
+    scroll-margin-top: clamp(20px, 5vh, 60px);
+  }
+
+  .doc h2 {
+    margin: 0 0 clamp(14px, 1.5vw, 22px);
+    font-size: clamp(21px, 2.1vw, 36px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .doc p,
+  .doc li {
+    font-size: clamp(15px, 1.02vw, 17px);
+    line-height: 1.72;
+    color: #4e4e4e;
+  }
+
+  .doc p {
+    margin: 0 0 1.05em;
+    max-width: 70ch;
+  }
+
+  .doc p:last-child {
+    margin-bottom: 0;
+  }
+
+  .doc ul {
+    margin: 0 0 1.05em;
+    padding-left: 0;
+    max-width: 70ch;
+    list-style: none;
+  }
+
+  .doc ul li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+  }
+
+  .doc ul li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.7em;
+    width: 6px;
+    height: 6px;
+    background: var(--red);
+  }
+
+  .doc a:not(.ph) {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .doc a:not(.ph):hover {
+    color: var(--red);
+  }
+
+  /* Unresolved link, marked so it can't ship looking real. */
+  .ph {
+    color: #a6a6a6;
+    text-decoration: underline dotted #c4c4c4;
+    text-underline-offset: 3px;
+  }
+
+  .card {
+    margin-top: clamp(18px, 2vw, 28px);
+    padding: clamp(20px, 2.4vw, 36px);
+    background: #f4f4f4;
+    border-left: 3px solid var(--red);
+  }
+
+  .card dl {
+    display: grid;
+    gap: clamp(14px, 1.6vw, 22px);
+    margin: 0;
+  }
+
+  .card dt {
+    font-family: var(--font-head);
+    font-size: clamp(10px, 0.72vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+    margin-bottom: 5px;
+  }
+
+  .card dd {
+    margin: 0;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.6;
+    color: var(--charcoal);
+  }
+
+  @media (max-width: 900px) {
+    .legal__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: clamp(24px, 4vw, 36px);
+      border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+    }
+  }
+</style>
+
+<script>
+  // Highlight the section currently in view in the contents rail.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = document.querySelectorAll<HTMLElement>('.doc section');
+
+  if (sections.length && window.IntersectionObserver) {
+    let current = '';
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && e.target.id !== current) {
+            current = e.target.id;
+            for (const [id, a] of links) a.setAttribute('aria-current', String(id === current));
+          }
+        }
+      },
+      { rootMargin: '-10% 0px -70% 0px', threshold: 0 }
+    );
+    for (const s of sections) io.observe(s);
+  }
+</script>

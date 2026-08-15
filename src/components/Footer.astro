@@ -1,0 +1,398 @@
+---
+// Shares the CTA's black so the two read as one continuous block, parted
+// only by a hairline. The oversized wordmark closes the page.
+const programs = [
+  ['Film Production', '/programs/film-production'],
+  ['3D Animation Intensive', '/programs/3d-animation-intensive'],
+  ['Game Design', '/programs/game-design'],
+  ['Visual Effects Compositing', '/programs/visual-effects-compositing'],
+  ['Graphic + Digital Design', '/programs/graphic-digital-design'],
+  ['Cinematography Intensive', '/programs/cinematography-intensive'],
+  ['Documentary Film', '/programs/documentary-film'],
+  ['Writing for Film + TV', '/programs/writing-for-film-tv'],
+  ['Acting Program', '/programs/acting-program'],
+];
+
+const school = [
+  ['Admissions', '/admissions'],
+  ['Resources', '/resources'],
+  ['Events', '/events'],
+  ['Student Work', '/student-work'],
+  ['About Us', '/about'],
+  ['Contact Us', '/contact'],
+];
+
+// Taken from the live site's contact page. No LinkedIn or TikTok is listed
+// there, so neither is included rather than guessed at.
+const social = [
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/infocusfilmschool/',
+    path: 'M7.6 2h8.8A5.6 5.6 0 0 1 22 7.6v8.8a5.6 5.6 0 0 1-5.6 5.6H7.6A5.6 5.6 0 0 1 2 16.4V7.6A5.6 5.6 0 0 1 7.6 2Zm0 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4Zm4.4 3.6a4.4 4.4 0 1 1 0 8.8 4.4 4.4 0 0 1 0-8.8Zm0 2a2.4 2.4 0 1 0 0 4.8 2.4 2.4 0 0 0 0-4.8ZM17.3 6a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z',
+  },
+  {
+    name: 'Facebook',
+    href: 'https://www.facebook.com/infocusfilmschool',
+    path: 'M13.5 22v-8.2h2.8l.42-3.2H13.5V8.5c0-.93.26-1.56 1.6-1.56h1.7V4.08A22.6 22.6 0 0 0 14.3 4c-2.5 0-4.2 1.52-4.2 4.32v2.28H7.3v3.2h2.8V22Z',
+  },
+  {
+    name: 'YouTube',
+    href: 'https://www.youtube.com/@infocusfilmschooltv',
+    path: 'M21.6 7.2c-.23-.86-.9-1.54-1.76-1.77C18.28 5 12 5 12 5s-6.28 0-7.84.43c-.85.23-1.53.9-1.76 1.77C2 8.78 2 12 2 12s0 3.22.4 4.8c.23.86.9 1.54 1.76 1.77C5.72 19 12 19 12 19s6.28 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.22 22 12 22 12s0-3.22-.4-4.8ZM10 15.1V8.9l5.4 3.1Z',
+  },
+  {
+    name: 'X',
+    href: 'https://twitter.com/iffilmschool',
+    path: 'M18.9 2.5h3.3l-7.2 8.2L23.4 22h-6.6l-5.2-6.8L5.7 22H2.4l7.7-8.8L2 2.5h6.8L13.5 8.7ZM17.7 20h1.8L7.4 4.4H5.5Z',
+  },
+];
+
+const accreditation = [
+  { src: '/images/ptiru-logo.png', alt: 'Designated — B.C. Private Training Institutions Regulatory Unit', w: 647, h: 646 },
+  { src: '/images/EQA_RGB_pos.png', alt: 'Education Quality Assurance — British Columbia', w: 263, h: 263 },
+];
+
+const year = 2026;
+---
+
+<footer class="foot">
+  {/* The brand mark at scale, bleeding off the bottom edge. Geometry is the
+      real one measured off IF-Square: 8.8% stroke, dot at 30.25/30.69 r11.55. */}
+  <svg class="foot__mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+    <rect x="1.7" y="1.7" width="96.6" height="96.6" stroke="currentColor" stroke-width="3.2" />
+    <circle cx="30.25" cy="30.69" r="11.55" class="foot__dot" />
+  </svg>
+
+  <div class="foot__inner">
+    <div class="foot__grid">
+      <div class="foot__brand">
+        <a href="/" aria-label="InFocus Film School — home">
+          <img src="/images/logo-on-dark.png" alt="InFocus Film School" width="1090" height="390" />
+        </a>
+        <p class="foot__tag">Your future in focus.</p>
+
+        <address class="foot__contact">
+          <a href="https://maps.google.com/?q=554+Seymour+Street+Vancouver+BC+V6B+3J5" target="_blank" rel="noopener">
+            554 Seymour Street<br />Vancouver, BC V6B 3J5
+          </a>
+          <span class="foot__pair"><span>General</span><a href="tel:+16049156900">604-915-6900</a></span>
+          <span class="foot__pair"><span>Admissions</span><a href="tel:+16047791145">604-779-1145</a></span>
+          <a href="mailto:info@infocusfilmschool.com">info@infocusfilmschool.com</a>
+          <a href="mailto:admissions@infocusfilmschool.com">admissions@infocusfilmschool.com</a>
+        </address>
+
+        <ul class="socials">
+          {
+            social.map((s) => (
+              <li>
+                <a href={s.href} target="_blank" rel="noopener" aria-label={s.name}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.path} /></svg>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <nav class="foot__col" aria-label="Programs">
+        <h2>Programs</h2>
+        <ul>{programs.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+      </nav>
+
+      <nav class="foot__col" aria-label="School">
+        <h2>School</h2>
+        <ul>{school.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+      </nav>
+
+      <div class="foot__col foot__accred">
+        <h2>Accredited</h2>
+        <ul>
+          {
+            accreditation.map((a) => (
+              <li>
+                <img src={a.src} alt={a.alt} width={a.w} height={a.h} loading="lazy" decoding="async" />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot__bar">
+      <p>&copy; {year} InFocus Film School. All rights reserved.</p>
+      <ul>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a class="ph" href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <img
+    class="foot__glow"
+    src="/images/footer-glow.jpg"
+    alt=""
+    aria-hidden="true"
+    width="1300"
+    height="447"
+    loading="lazy"
+    decoding="async"
+  />
+</footer>
+
+<style>
+  .foot {
+    position: relative;
+    background: var(--black);
+    color: var(--white);
+    /* Hairline is the only thing between this and the CTA above. */
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* Bottom padding reserves exactly the band's rendered height — the
+       image is 1800x620, so at full-bleed it is always 100vw / 2.9. */
+    padding: clamp(48px, 6vw, 96px) var(--gutter) calc(100vw / 2.9);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Full-bleed closing band. Rendered at its natural aspect rather than
+     cropped — `cover` was cutting off the fade baked into the top of the
+     file and leaving a hard edge against the footer black. */
+  .foot__glow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Brand mark at scale, sitting on the band and bleeding off the bottom.
+     Above the gradient, below the copy. */
+  .foot__mark {
+    position: absolute;
+    left: 50%;
+    /* Sized and offset so the square lands inside the gradient band rather
+       than cutting up through the link columns. */
+    bottom: calc(100vw / -15);
+    transform: translateX(-50%);
+    width: clamp(300px, 40vw, 620px);
+    height: auto;
+    z-index: 1;
+    /* Stroke is thinner than the real mark's 8.8% — at this scale the true
+       proportion reads as a slab rather than an outline. */
+    color: rgba(255, 255, 255, 0.26);
+    pointer-events: none;
+  }
+
+  .foot__dot {
+    fill: var(--red);
+    opacity: 0.46;
+  }
+
+  .foot__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .foot__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    gap: clamp(30px, 4vw, 72px);
+  }
+
+  .foot__brand img {
+    width: clamp(130px, 12vw, 190px);
+    height: auto;
+  }
+
+  .foot__tag {
+    margin: clamp(14px, 1.6vw, 22px) 0 0;
+    font-family: var(--font-head);
+    font-size: clamp(13px, 1vw, 17px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .foot__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: clamp(20px, 2.4vw, 34px);
+    font-style: normal;
+    font-size: clamp(13px, 0.92vw, 15px);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .foot__contact a {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .foot__contact a:hover {
+    color: var(--white);
+  }
+
+  .socials {
+    display: flex;
+    gap: clamp(10px, 1.2vw, 16px);
+    margin: clamp(20px, 2.2vw, 30px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.62);
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .socials svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+  }
+
+  .socials a:hover {
+    color: var(--white);
+    border-color: var(--red);
+    background: var(--red);
+  }
+
+  /* Seals are government marks — shown as supplied, never recoloured. */
+  /* Specificity must beat `.foot__col ul`, which sets column direction and
+     sits later in this file. */
+  /* Specificity must beat `.foot__col ul`, which sits later in this file. */
+  .foot__col.foot__accred ul {
+    display: flex;
+    flex-direction: column;
+    /* Both marks are square and fill their canvas, so a shared width puts
+       their left and right edges on the same lines. */
+    align-items: flex-start;
+    gap: clamp(16px, 1.9vw, 28px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot__accred li {
+    flex: 0 0 auto;
+  }
+
+  /* Width is set rather than left to `auto` — a flex item sizes from the
+     image's intrinsic width (647px) before any height constraint applies. */
+  .foot__accred img {
+    width: clamp(84px, 7.4vw, 124px);
+    height: auto;
+    display: block;
+  }
+
+  /* Label + number on one line so the two phone lines stay distinguishable. */
+  .foot__pair {
+    display: flex;
+    gap: 8px;
+  }
+
+  .foot__pair > span {
+    min-width: 76px;
+    color: rgba(255, 255, 255, 0.34);
+  }
+
+  .foot__col h2 {
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(10px, 0.75vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .foot__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot__col a {
+    font-size: clamp(13px, 0.92vw, 15px);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s ease;
+  }
+
+  .foot__col a:hover {
+    color: var(--white);
+  }
+
+  /* Anything still awaiting real content is dimmed and dotted, so an
+     unfilled placeholder can't quietly ship looking like a real link. */
+  .ph {
+    color: rgba(255, 255, 255, 0.3) !important;
+    text-decoration: underline dotted rgba(255, 255, 255, 0.3);
+    text-underline-offset: 3px;
+  }
+
+  .foot__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: clamp(40px, 5vw, 80px);
+    padding-top: clamp(16px, 1.8vw, 26px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .foot__bar p {
+    margin: 0;
+    font-size: clamp(11px, 0.8vw, 13px);
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .foot__bar ul {
+    display: flex;
+    gap: clamp(16px, 2vw, 30px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .foot__bar a {
+    font-size: clamp(11px, 0.8vw, 13px);
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  @media (max-width: 1000px) {
+    .foot__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .foot__brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .foot__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .foot__bar {
+      justify-content: flex-start;
+    }
+  }
+</style>
