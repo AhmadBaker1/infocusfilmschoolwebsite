@@ -105,8 +105,8 @@ const year = 2026;
       </nav>
 
       <div class="foot__col foot__accred">
-        <h2>Accredited</h2>
-        <ul>
+        {/* No heading — each seal's alt text already names its body. */}
+        <ul aria-label="Accreditation">
           {
             accreditation.map((a) => (
               <li>
@@ -280,6 +280,8 @@ const year = 2026;
        their left and right edges on the same lines. */
     align-items: flex-start;
     gap: clamp(16px, 1.9vw, 28px);
+    /* No lift needed: with the heading gone the list already starts on the
+       column's top edge, level with the logo and the other headings. */
     margin: 0;
     padding: 0;
     list-style: none;
@@ -308,8 +310,11 @@ const year = 2026;
     color: rgba(255, 255, 255, 0.34);
   }
 
+  /* line-height:1 plus a small lift puts the cap-height of the column
+     headings on the same line as the top of the logo artwork. */
   .foot__col h2 {
-    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    line-height: 1;
+    margin: -0.22em 0 clamp(14px, 1.6vw, 22px);
     font-family: var(--font-head);
     font-size: clamp(10px, 0.75vw, 12px);
     font-weight: 500;
