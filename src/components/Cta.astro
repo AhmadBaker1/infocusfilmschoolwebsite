@@ -142,12 +142,16 @@
     border-radius: 10px;
     background: var(--white);
     color: var(--charcoal);
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition:
+      background-color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn--solid:hover {
     background: var(--red);
     color: var(--white);
+    transform: translateY(-2px);
   }
 
   .btn--solid:hover .btn__arrow {
@@ -157,11 +161,11 @@
   .btn--ghost {
     padding: clamp(15px, 1.5vw, 22px) clamp(10px, 1vw, 18px);
     color: rgba(255, 255, 255, 0.65);
-    transition: color 0.25s ease;
+    transition: color 0.34s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn--ghost:hover {
-    color: var(--white);
+    color: var(--red);
   }
 
   .btn--ghost:hover .btn__arrow {
@@ -202,6 +206,12 @@
       opacity: 1;
       transform: none;
       transition: none;
+    }
+
+    .btn--solid:hover,
+    .btn--solid:hover .btn__arrow,
+    .btn--ghost:hover .btn__arrow {
+      transform: none;
     }
   }
 

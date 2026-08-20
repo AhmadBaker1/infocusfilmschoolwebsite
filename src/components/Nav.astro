@@ -1,41 +1,194 @@
 ---
-// Top bar: three links left, centred wordmark, three links right.
-const linksLeft = [
-  { label: 'Programs', href: '/programs' },
-  { label: 'Admissions', href: '/admissions' },
-  { label: 'Resources', href: '/resources' },
+// Mega menu modelled on troofai.com: hover opens a full-width panel under the
+// bar, moving between triggers swaps panels instantly, and a short close delay
+// lets the pointer travel diagonally into the panel without it collapsing.
+//
+// Programs is real data. Admissions and Resources are placeholder link sets —
+// those pages don't exist yet.
+const menus = [
+  {
+    key: 'programs',
+    label: 'Programs',
+    href: '/programs',
+    groups: [
+      {
+        title: 'Film & Television',
+        items: [
+          ['Film Production', '/programs/film-production'],
+          ['Cinematography Intensive', '/programs/cinematography-intensive'],
+          ['Documentary Film', '/programs/documentary-film'],
+          ['Writing for Film + TV', '/programs/writing-for-film-tv'],
+          ['Acting Program', '/programs/acting-program'],
+        ],
+      },
+      {
+        title: 'Animation, VFX & Games',
+        items: [
+          ['3D Animation Intensive', '/programs/3d-animation-intensive'],
+          ['Visual Effects Compositing', '/programs/visual-effects-compositing'],
+          ['Game Design', '/programs/game-design'],
+          ['Graphic + Digital Design', '/programs/graphic-digital-design'],
+        ],
+      },
+    ],
+    foot: {
+      text: 'Accelerated, project-based training taught by working industry professionals.',
+      cta: ['Why InFocus', '/#why'],
+    },
+  },
+  {
+    key: 'admissions',
+    label: 'Admissions',
+    href: '/admissions',
+    groups: [
+      // The real Admissions items. Split across the panel's two columns —
+      // the source menu is one list, but seven in a single column would
+      // leave the second empty.
+      {
+        title: 'Applying',
+        items: [
+          ['How to Apply', '/admissions/how-to-apply'],
+          ['Finances', '/admissions/finances'],
+          ['FAQ', '/admissions/how-to-apply#faq'],
+        ],
+      },
+      {
+        title: 'Student Support',
+        items: [
+          ['Housing', '/admissions/housing'],
+          ['International Students', '/admissions/international-students'],
+          ['Indigenous Students', '/admissions/indigenous-students'],
+          ['LGBTQ2SAI+ Students', '/admissions/lgbtq2sai-students'],
+        ],
+      },
+    ],
+    foot: {
+      text: 'Questions? Call admissions on 604-779-1145.',
+      cta: ['Apply Now', '/apply'],
+    },
+  },
+  {
+    key: 'resources',
+    label: 'Resources',
+    href: '/resources',
+    groups: [
+      {
+        title: 'For Students',
+        items: [
+          ['Student Work', '/student-work'],
+          ['Career Services', '/resources/careers'],
+          ['Alumni', '/resources/alumni'],
+          ['FAQ', '/resources/faq'],
+        ],
+      },
+      {
+        title: 'News',
+        items: [
+          ['Blog', '/resources/blog'],
+          ['Press', '/resources/press'],
+          ['Events', '/events'],
+        ],
+      },
+    ],
+    foot: {
+      text: 'Where our graduates work: Disney, Marvel Studios, Netflix and more.',
+      cta: ['See Alumni', '/#alumni'],
+    },
+  },
 ];
 
-const linksRight = [
-  { label: 'Events', href: '/events' },
+// Events drops out of the bar — it still sits in the Resources panel and
+// the footer, so nothing is orphaned.
+const rightLinks = [
   { label: 'About Us', href: '/about' },
   { label: 'Contact Us', href: '/contact' },
 ];
 ---
 
-<header class="nav">
-  <nav class="nav__group nav__group--left" aria-label="Primary">
-    <button class="label nav__menu" type="button" aria-expanded="false">Menu</button>
-    {linksLeft.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
-  </nav>
+<header class="nav" data-nav>
+  <div class="nav__bar">
+    <nav class="nav__group nav__group--left" aria-label="Primary">
+      <button class="label nav__burger" type="button" data-burger aria-expanded="false">Menu</button>
+      {
+        menus.map((m) => (
+          <button
+            class="label nav__trigger"
+            type="button"
+            data-trigger={m.key}
+            aria-expanded="false"
+            aria-controls={`panel-${m.key}`}
+          >
+            {m.label}
+          </button>
+        ))
+      }
+    </nav>
 
-  <a class="nav__wordmark" href="/" aria-label="In Focus Film School — home">
+    <a class="nav__wordmark" href="/" aria-label="InFocus Film School — home">
+      <img class="nav__logo" src="/images/logo-on-dark.png" alt="InFocus Film School" width="1090" height="390" />
+    </a>
+
+    <nav class="nav__group nav__group--right" aria-label="Secondary">
+      {rightLinks.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
+      <a class="label nav__apply" href="/apply">Apply Now</a>
+    </nav>
+  </div>
+
+  <div class="mega" data-mega>
+    {/* Same closing band the footer uses, so menu and footer read as one system. */}
     <img
-      class="nav__logo"
-      src="/images/logo-on-dark.png"
-      alt="In Focus Film School"
-      width="1090"
-      height="390"
+      class="mega__glow"
+      src="/images/footer-glow.jpg"
+      alt=""
+      aria-hidden="true"
+      width="1800"
+      height="620"
+      loading="lazy"
+      decoding="async"
     />
-  </a>
+    {/* Brand mark in the corner, bleeding off the edge — same geometry as
+        the footer's, scaled down. */}
+    <svg class="mega__mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <rect x="4.4" y="4.4" width="91.2" height="91.2" stroke="currentColor" stroke-width="5.5" />
+      <circle cx="30.25" cy="30.69" r="11.55" class="mega__dot" />
+    </svg>
+    {
+      menus.map((m) => (
+        <div class="panel" id={`panel-${m.key}`} data-panel={m.key} hidden>
+          <div class="panel__main">
+            {m.groups.map((g) => (
+              <div class="grp">
+                <h2>{g.title}</h2>
+                <ul>
+                  {g.items.map(([label, href]) => (
+                    <li>
+                      <a href={href}>{label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-  <nav class="nav__group nav__group--right" aria-label="Secondary">
-    {linksRight.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
-  </nav>
+          <div class="panel__foot">
+            <p>{m.foot.text}</p>
+            <a class="panel__cta" href={m.foot.cta[1]}>{m.foot.cta[0]}</a>
+          </div>
+        </div>
+      ))
+    }
+  </div>
 </header>
 
 <style>
   .nav {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background: var(--black);
+  }
+
+  .nav__bar {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -47,11 +200,12 @@ const linksRight = [
   .nav__group {
     display: flex;
     align-items: center;
-    gap: clamp(14px, 1.85vw, 30px);
+    gap: clamp(8px, 1.1vw, 18px);
   }
 
   .nav__group--right {
     justify-self: end;
+    gap: clamp(14px, 1.85vw, 30px);
   }
 
   .nav__wordmark {
@@ -65,25 +219,391 @@ const linksRight = [
     width: auto;
   }
 
-  .nav__menu {
+  /* Triggers carry a pill on hover/open, as in the reference. */
+  .nav__trigger {
+    padding: 9px clamp(10px, 1vw, 15px);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.72);
+    transition:
+      background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav__trigger:hover,
+  .nav__trigger[aria-expanded='true'] {
+    background: rgba(255, 255, 255, 0.09);
+    color: var(--white);
+  }
+
+  .nav__group--right a {
+    color: rgba(255, 255, 255, 0.72);
+    transition: color 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav__group--right a:hover {
+    color: var(--red);
+  }
+
+  /* Plain text, same as its neighbours. The class stays only so the mobile
+     rule can keep this one visible while hiding the rest. */
+
+  .nav__burger {
     display: none;
   }
 
-  /* Below this the three-column grid can't hold a centred wordmark
-     without forcing the page wider than the viewport. */
+  /* ---- Mega panel ---- */
+
+  .mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #0b0b0b;
+    isolation: isolate;
+    /* The panel unfolds rather than sliding in: height is set from script to
+       the active panel's measured height, so switching menus morphs between
+       heights instead of re-playing an open animation. */
+    height: 0;
+    overflow: hidden;
+    transition: height 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Borders live on the panel, not the container — on the container they
+     stayed visible as a hairline while the menu was closed. */
+  .panel {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Contents settle in just behind the unfold. */
+  .grp,
+  .panel__foot {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.42s ease,
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav.is-open .grp,
+  .nav.is-open .panel__foot {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav.is-open .grp:nth-child(1) {
+    transition-delay: 0.08s;
+  }
+
+  .nav.is-open .grp:nth-child(2) {
+    transition-delay: 0.14s;
+  }
+
+  .nav.is-open .panel__foot {
+    transition-delay: 0.18s;
+  }
+
+  /* Sits along the bottom edge behind the panel, dimmer than in the footer
+     because link text runs over it here. */
+  .mega__glow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    z-index: 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Top-right, in the gap beside the last column — bottom-right put it
+     directly behind the CTA button. */
+  .mega__mark {
+    position: absolute;
+    right: clamp(-64px, -3.8vw, -20px);
+    top: clamp(26px, 3.4vw, 58px);
+    width: clamp(140px, 14vw, 230px);
+    height: auto;
+    z-index: 0;
+    color: rgba(255, 255, 255, 0.17);
+    pointer-events: none;
+  }
+
+  .mega__dot {
+    fill: var(--red);
+    opacity: 0.42;
+  }
+
+  .panel {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Columns are capped rather than fluid — with the image card gone, equal
+     fractions of 1600px would strand the links in half-empty tracks. */
+  .panel__main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 340px));
+    justify-content: start;
+    gap: clamp(32px, 6vw, 112px);
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(30px, 3.4vw, 54px) clamp(16px, 2.4vw, 40px);
+  }
+
+  .grp h2 {
+    margin: 0 0 clamp(16px, 1.8vw, 26px);
+    font-family: var(--font-head);
+    font-size: clamp(10px, 0.72vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .grp ul {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(11px, 1.15vw, 17px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grp a {
+    position: relative;
+    display: inline-block;
+    padding-left: 0;
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.5vw, 27px);
+    font-weight: 500;
+    line-height: 1.12;
+    color: rgba(255, 255, 255, 0.88);
+    transition: color 0.2s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Red rule slides out of the left edge on hover. */
+  .grp a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -22px;
+    width: 14px;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .grp a:hover {
+    color: var(--white);
+    transform: translateX(22px);
+  }
+
+  .grp a:hover::before {
+    transform: scaleX(1);
+  }
+
+  .panel__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* No scrim over the glow — the text carries its own contrast instead. */
+  .panel__foot p {
+    max-width: 60ch;
+    margin: 0;
+    font-size: clamp(12px, 0.86vw, 15px);
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .panel__foot,
+  .panel__foot > * {
+    box-sizing: border-box;
+  }
+
+  .panel__foot {
+    padding: clamp(14px, 1.5vw, 22px) clamp(16px, 2.4vw, 40px);
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .panel__cta {
+    padding: 11px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    transition:
+      background-color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .panel__cta:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Mobile drawer ---- */
+
   @media (max-width: 860px) {
-    .nav {
+    .nav__bar {
       display: flex;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .nav__group a {
+    /* Apply Now survives — it's the primary action, and hiding it behind
+       the burger is the wrong trade on a phone. */
+    .nav__trigger,
+    .nav__group--right a:not(.nav__apply) {
       display: none;
     }
 
-    .nav__menu {
+    .nav__burger {
       display: inline-block;
+    }
+
+    /* Drawer, not a fold — height is driven by the viewport here. */
+    .mega {
+      position: fixed;
+      top: var(--nav-h);
+      bottom: 0;
+      height: auto !important;
+      overflow-y: auto;
+      transition: none;
+    }
+
+    .nav:not(.is-open) .mega {
+      display: none;
+    }
+
+    .panel {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel__main {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+    }
+
+    .feat {
+      min-height: 150px;
+    }
+
+    .panel__foot {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mega,
+    .feat img {
+      transition: none;
     }
   }
 </style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const mega = document.querySelector<HTMLElement>('[data-mega]');
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-trigger]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+
+  if (nav && mega && triggers.length) {
+    const desktop = () => window.matchMedia('(min-width: 861px)').matches;
+    let closeTimer = 0;
+    let current = '';
+
+    const show = (key: string) => {
+      window.clearTimeout(closeTimer);
+      current = key;
+      for (const p of panels) p.hidden = p.dataset.panel !== key;
+      for (const t of triggers) t.setAttribute('aria-expanded', String(t.dataset.trigger === key));
+      nav.classList.add('is-open');
+
+      // Drive the container to the active panel's height so open and
+      // menu-to-menu switches are the same continuous motion.
+      if (desktop()) {
+        const panel = panels.find((p) => p.dataset.panel === key);
+        if (panel) mega.style.height = `${panel.offsetHeight}px`;
+      }
+    };
+
+    const hide = () => {
+      current = '';
+      nav.classList.remove('is-open');
+      for (const t of triggers) t.setAttribute('aria-expanded', 'false');
+      if (desktop()) mega.style.height = '0px';
+      // Panels stay mounted until the fold finishes, then unmount.
+      window.setTimeout(() => {
+        if (!nav.classList.contains('is-open')) for (const p of panels) p.hidden = true;
+      }, 460);
+    };
+
+    // A resize changes the panel's height; re-measure so it doesn't clip.
+    window.addEventListener('resize', () => {
+      if (!current || !desktop()) return;
+      const panel = panels.find((p) => p.dataset.panel === current);
+      if (panel) mega.style.height = `${panel.offsetHeight}px`;
+    });
+
+    const hideSoon = () => {
+      window.clearTimeout(closeTimer);
+      // Grace period so a diagonal move into the panel doesn't close it.
+      closeTimer = window.setTimeout(hide, 140);
+    };
+
+    for (const t of triggers) {
+      const key = t.dataset.trigger!;
+      t.addEventListener('mouseenter', () => desktop() && show(key));
+      t.addEventListener('focus', () => desktop() && show(key));
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        current === key ? hide() : show(key);
+      });
+    }
+
+    nav.addEventListener('mouseleave', () => desktop() && hideSoon());
+    mega.addEventListener('mouseenter', () => window.clearTimeout(closeTimer));
+    mega.addEventListener('mouseleave', () => desktop() && hideSoon());
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && current) {
+        hide();
+        triggers.find((t) => t.dataset.trigger === current)?.focus();
+      }
+    });
+
+    // Clicking outside closes — covers touch, where there is no mouseleave.
+    document.addEventListener('click', (e) => {
+      if (current && !nav.contains(e.target as Node)) hide();
+    });
+
+    // Mobile: the burger shows every panel stacked in a scrolling drawer.
+    burger?.addEventListener('click', () => {
+      const open = nav.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', String(open));
+      for (const p of panels) p.hidden = !open;
+      current = open ? 'all' : '';
+      // Drawer is full-height, so the measured height must not apply.
+      mega.style.height = '';
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+  }
+</script>

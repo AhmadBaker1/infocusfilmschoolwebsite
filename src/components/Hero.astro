@@ -148,6 +148,10 @@ const intro =
     .reveal {
       animation: none;
     }
+
+    .hero__cta:hover {
+      transform: none;
+    }
   }
 
   .hero {
@@ -230,11 +234,16 @@ const intro =
     font-weight: 700;
     letter-spacing: 0.075em;
     text-transform: uppercase;
-    transition: opacity 0.2s ease;
+    transition:
+      background-color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero__cta:hover {
-    opacity: 0.82;
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
   }
 
   @media (max-width: 860px) {

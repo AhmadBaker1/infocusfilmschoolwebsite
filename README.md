@@ -1,4 +1,4 @@
-# In Focus Film School
+# InFocus Film School
 
 Astro static site. Currently: the homepage hero.
 

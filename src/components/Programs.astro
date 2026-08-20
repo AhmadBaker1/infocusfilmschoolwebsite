@@ -4,15 +4,17 @@
 // per-program artwork when it exists.
 const feature = { n: 1, name: 'Film Production', href: '/programs/film-production' };
 
+// Cinematography Intensive is the last stand-in — every other card has its
+// own photo.
 const rail = [
-  { n: 2, name: '3D Animation Intensive', img: '/images/about-5.jpg' },
-  { n: 3, name: 'Game Design', img: '/images/about-6.jpg' },
-  { n: 4, name: 'Visual Effects Compositing', img: '/images/about-2.jpg' },
-  { n: 5, name: 'Graphic + Digital Design', img: '/images/about-3.jpg' },
+  { n: 2, name: '3D Animation Intensive', img: '/images/program-3d-animation.jpg' },
+  { n: 3, name: 'Game Design', img: '/images/program-game-design.jpg' },
+  { n: 4, name: 'Visual Effects Compositing', img: '/images/program-visual-effects-compositing.jpg' },
+  { n: 5, name: 'Graphic + Digital Design', img: '/images/program-graphic-digital-design.jpg' },
   { n: 6, name: 'Cinematography Intensive', img: '/images/about-4.jpg' },
-  { n: 7, name: 'Documentary Film', img: '/images/herobg-3.jpg' },
-  { n: 8, name: 'Writing for Film + TV', img: '/images/about-1.jpg' },
-  { n: 9, name: 'Acting Program', img: '/images/herobg-1.jpg' },
+  { n: 7, name: 'Documentary Film', img: '/images/program-documentary-film.jpg' },
+  { n: 8, name: 'Writing for Film + TV', img: '/images/program-writing-for-film-tv.jpg' },
+  { n: 9, name: 'Acting Program', img: '/images/program-acting.jpg' },
 ];
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
