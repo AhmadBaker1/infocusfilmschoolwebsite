@@ -47,6 +47,7 @@ const menus = [
       {
         title: 'Applying',
         items: [
+          ['Admissions Overview', '/admissions'],
           ['How to Apply', '/admissions/how-to-apply'],
           ['Finances', '/admissions/finances'],
           ['FAQ', '/admissions/how-to-apply#faq'],
@@ -106,6 +107,12 @@ const rightLinks = [
 ---
 
 <header class="nav" data-nav>
+  {/* One backdrop behind both the bar and the panel, so the glow is a single
+      continuous image rather than two surfaces trying to match. */}
+  <span class="nav__bg" aria-hidden="true">
+    <img src="/images/footer-glow.jpg" alt="" width="1800" height="620" loading="lazy" decoding="async" />
+  </span>
+
   <div class="nav__bar">
     <nav class="nav__group nav__group--left" aria-label="Primary">
       <button class="label nav__burger" type="button" data-burger aria-expanded="false">Menu</button>
@@ -135,17 +142,6 @@ const rightLinks = [
   </div>
 
   <div class="mega" data-mega>
-    {/* Same closing band the footer uses, so menu and footer read as one system. */}
-    <img
-      class="mega__glow"
-      src="/images/footer-glow.jpg"
-      alt=""
-      aria-hidden="true"
-      width="1800"
-      height="620"
-      loading="lazy"
-      decoding="async"
-    />
     {/* Brand mark in the corner, bleeding off the edge — same geometry as
         the footer's, scaled down. */}
     <svg class="mega__mark" viewBox="0 0 100 100" fill="none" aria-hidden="true">
@@ -186,6 +182,47 @@ const rightLinks = [
     top: 0;
     z-index: 80;
     background: var(--black);
+  }
+
+  /* Spans the bar plus the open panel. --mega-h is written by the script and
+     eased on the same curve as the panel, so the backdrop grows in step with
+     the unfold instead of appearing at full size behind a half-open panel. */
+  .nav__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-h);
+    background: #0b0b0b;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition:
+      opacity 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+      height 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav.is-open .nav__bg {
+    height: calc(var(--nav-h) + var(--mega-h, 0px));
+    opacity: 1;
+  }
+
+  /* Anchored to the bottom, as in the footer. Held at half strength — link
+     text runs over this, so it is dimmer here than in the footer. */
+  .nav__bg img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.5;
+  }
+
+  .nav__bar {
+    position: relative;
+    z-index: 2;
   }
 
   .nav__bar {
@@ -258,8 +295,9 @@ const rightLinks = [
     left: 0;
     right: 0;
     top: 100%;
-    background: #0b0b0b;
-    isolation: isolate;
+    z-index: 1;
+    /* Transparent: the backdrop behind supplies the colour and the glow. */
+    background: transparent;
     /* The panel unfolds rather than sliding in: height is set from script to
        the active panel's measured height, so switching menus morphs between
        heights instead of re-playing an open animation. */
@@ -271,7 +309,6 @@ const rightLinks = [
   /* Borders live on the panel, not the container — on the container they
      stayed visible as a hairline while the menu was closed. */
   .panel {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -303,22 +340,6 @@ const rightLinks = [
     transition-delay: 0.18s;
   }
 
-  /* Sits along the bottom edge behind the panel, dimmer than in the footer
-     because link text runs over it here. */
-  .mega__glow {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: auto;
-    z-index: 0;
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  /* Top-right, in the gap beside the last column — bottom-right put it
-     directly behind the CTA button. */
   .mega__mark {
     position: absolute;
     right: clamp(-64px, -3.8vw, -20px);
@@ -541,7 +562,12 @@ const rightLinks = [
       // menu-to-menu switches are the same continuous motion.
       if (desktop()) {
         const panel = panels.find((p) => p.dataset.panel === key);
-        if (panel) mega.style.height = `${panel.offsetHeight}px`;
+        if (panel) {
+          const h = panel.offsetHeight;
+          mega.style.height = `${h}px`;
+          // Backdrop spans the bar plus the panel.
+          nav.style.setProperty('--mega-h', `${h}px`);
+        }
       }
     };
 
@@ -549,7 +575,10 @@ const rightLinks = [
       current = '';
       nav.classList.remove('is-open');
       for (const t of triggers) t.setAttribute('aria-expanded', 'false');
-      if (desktop()) mega.style.height = '0px';
+      if (desktop()) {
+        mega.style.height = '0px';
+        nav.style.setProperty('--mega-h', '0px');
+      }
       // Panels stay mounted until the fold finishes, then unmount.
       window.setTimeout(() => {
         if (!nav.classList.contains('is-open')) for (const p of panels) p.hidden = true;
@@ -560,7 +589,10 @@ const rightLinks = [
     window.addEventListener('resize', () => {
       if (!current || !desktop()) return;
       const panel = panels.find((p) => p.dataset.panel === current);
-      if (panel) mega.style.height = `${panel.offsetHeight}px`;
+      if (panel) {
+        mega.style.height = `${panel.offsetHeight}px`;
+        nav.style.setProperty('--mega-h', `${panel.offsetHeight}px`);
+      }
     });
 
     const hideSoon = () => {

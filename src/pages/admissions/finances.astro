@@ -1,0 +1,618 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+// `url: null` means the address was not verified. Those render without a link
+// rather than as a guessed government address.
+const providers = [
+  ['Canada', 'Canada Student Loan Program', 'https://www.canada.ca/en/services/benefits/education/student-aid.html', '1-888-815-4514'],
+  ['British Columbia', 'StudentAid BC', 'https://studentaidbc.ca', '1-800-561-1818'],
+  ['Alberta', 'Alberta Student Aid', null, '1-855-606-2096'],
+  ['Saskatchewan', 'Saskatchewan Student Loans', null, '1-800-204-1685'],
+  ['Manitoba', 'Manitoba Student Aid', null, '1-800-204-1685'],
+  ['Ontario', 'Ontario Student Assistance Program', null, '1-807-343-7260'],
+  ['Quebec', 'Quebec Student Loans', null, '1-877-643-3750'],
+  ['New Brunswick', 'New Brunswick Student Financial Services', null, '1-800-667-5626'],
+  ['Nova Scotia', 'Nova Scotia Student Loans', null, '1-800-565-8420'],
+  ['Prince Edward Island', 'Prince Edward Island Student Loans', null, '1-902-368-4640'],
+  ['Newfoundland', 'Newfoundland & Labrador Student Aid', null, '1-888-657-0800'],
+  ['Yukon', 'Yukon Student Financial Assistance', null, '1-800-661-0408'],
+  ['Northwest Territories', 'Northwest Territories Student Financial Assistance', null, '1-800-661-0793'],
+  ['Nunavut', 'Financial Assistance for Nunavut Students', null, '1-877-860-0680'],
+];
+
+const contents = [
+  ['payment-plans', 'Flexible Payment Plans'],
+  ['loans-grants', 'Student Loans + Grants'],
+  ['providers', 'Provincial Loan Providers'],
+  ['resps', 'RESPs'],
+  ['living-expenses', 'Living Expenses and Other Funding'],
+  ['program-costs', 'Program Cost Breakdown'],
+];
+---
+
+<Base
+  title="Finances — InFocus Film School"
+  description="Paying for your studies at InFocus Film School: interest-free payment plans, student loans and grants, RESPs, and funding for living expenses."
+>
+  <Nav />
+
+  <main>
+    <header class="hero">
+      <img
+        class="hero__bg"
+        src="/images/about-2.jpg"
+        alt=""
+        aria-hidden="true"
+        width="1200"
+        height="800"
+        loading="eager"
+        decoding="async"
+      />
+      <span class="hero__scrim" aria-hidden="true"></span>
+
+      <div class="hero__inner">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/admissions/how-to-apply">Admissions</a></li>
+            <li aria-current="page">Finances</li>
+          </ol>
+        </nav>
+
+        <h1>Paying for Your Studies</h1>
+        <p class="hero__lede">
+          As a world-class city, moving to and living in Vancouver can be daunting, but options
+          exist to make studying in Vancouver easier and more affordable. With InFocus Film
+          School’s competitive tuition, scholarship opportunities, loans and funding options, and
+          student resources, we make your investment in your education easy and affordable.
+        </p>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="page__inner">
+        <div class="layout">
+        <aside class="toc">
+          <h2 class="toc__title">On this page</h2>
+          <nav aria-label="Table of contents">
+            <ol>
+              {contents.map(([id, label]) => (
+                <li><a href={`#${id}`} data-toc={id}>{label}</a></li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+
+        <article class="body">
+          <section id="payment-plans" data-section>
+            <h2>Flexible Payment Plans</h2>
+            <p>
+              We know that pursuing your filmmaking dreams shouldn’t be held back by financial
+              stress. That’s why we offer interest-free, customizable payment plans — so you can
+              focus on your education, not the upfront cost.
+            </p>
+            <ul class="list">
+              <li>Split your tuition into manageable installments over the duration of your program.</li>
+              <li>Tailor your plan to fit your budget — choose the payments and term that works for you.</li>
+              <li>
+                Combine with financial aid — use payment plans alongside student loans, grants, or
+                scholarships for a seamless funding strategy.
+              </li>
+            </ul>
+            <p>
+              Our team is here to help you design a plan that works for you, so you can start your
+              film journey without financial worry.
+            </p>
+          </section>
+
+          <section id="loans-grants" data-section>
+            <h2>Student Loans + Grants</h2>
+            <p>
+              Many InFocus Film School students use government student loans to fund their
+              education. The agency you apply through depends on your province of residence. For
+              example, if you’ve lived in British Columbia for at least 12 months, you’ll apply
+              through <a href="https://studentaidbc.ca" target="_blank" rel="noopener">StudentAid
+              BC</a>, which offers:
+            </p>
+            <ul class="list">
+              <li>No interest on student loans if you make your payments on time.</li>
+              <li>
+                No repayments required until 7 months after graduation, giving you time to launch
+                your career.
+              </li>
+              <li>
+                Automatic grant assessments when you apply — non-repayable funding that can reduce
+                or even replace your loan amount.
+              </li>
+            </ul>
+            <p>
+              Best of all, applying is free, and approval is based on financial need — not your
+              credit history — making student loans an accessible option for aspiring filmmakers.
+            </p>
+          </section>
+
+          <section id="providers" data-section>
+            <h2>Provincial Loan Providers</h2>
+            <p>
+              Visit <a href="https://studentaidbc.ca" target="_blank" rel="noopener">StudentAid
+              BC</a> to learn more or begin your application, or select your province below.
+            </p>
+
+            <div class="finder">
+              <label class="finder__label" for="province">Province or territory</label>
+              <select id="province" data-province>
+                {providers.map(([province], i) => (
+                  <option value={i} selected={province === 'British Columbia'}>{province}</option>
+                ))}
+              </select>
+
+              <dl class="finder__out" aria-live="polite">
+                <div>
+                  <dt>Provider</dt>
+                  <dd data-name></dd>
+                </div>
+                <div>
+                  <dt>Telephone</dt>
+                  <dd><a data-tel></a></dd>
+                </div>
+                <div data-web-row>
+                  <dt>Website</dt>
+                  <dd><a data-link target="_blank" rel="noopener"></a></dd>
+                </div>
+              </dl>
+
+              <script is:inline define:vars={{ providers }}>
+                (() => {
+                  const sel = document.querySelector('[data-province]');
+                  const name = document.querySelector('[data-name]');
+                  const tel = document.querySelector('[data-tel]');
+                  const link = document.querySelector('[data-link]');
+                  const webRow = document.querySelector('[data-web-row]');
+                  if (!sel || !name || !tel || !link || !webRow) return;
+
+                  const render = () => {
+                    const [, label, url, phone] = providers[Number(sel.value)];
+                    name.textContent = label;
+                    tel.textContent = phone;
+                    tel.href = 'tel:+1' + phone.replace(/\D/g, '').replace(/^1/, '');
+                    // Row is dropped entirely when the address is unverified.
+                    if (url) {
+                      link.textContent = url.replace(/^https?:\/\//, '');
+                      link.href = url;
+                      webRow.hidden = false;
+                    } else {
+                      webRow.hidden = true;
+                    }
+                  };
+
+                  sel.addEventListener('change', render);
+                  render();
+                })();
+              </script>
+
+              <noscript>
+                <ul class="fallback">
+                  {providers.map(([province, label, , phone]) => (
+                    <li><strong>{province}</strong> — {label}, {phone}</li>
+                  ))}
+                </ul>
+              </noscript>
+            </div>
+          </section>
+
+          <section id="resps" data-section>
+            <h2>RESPs</h2>
+            <p>
+              InFocus Film School is a Designated Learning Institution where you may redeem your
+              RESP funding. Please contact your RESP provider or Human Resources and Skills
+              Development Canada (HRSDC) at <a href="tel:+18006226232">1-800-622-6232</a> for
+              further information.
+            </p>
+          </section>
+
+          <section id="living-expenses" data-section>
+            <h2>Living Expenses and Other Funding</h2>
+            <p>
+              For full-time programs, many living expenses can be covered under student loans. Often
+              these are low- or no-interest and a great option for students who require additional
+              funds.
+            </p>
+            <p>
+              As we are an accredited, Designated Learning Institution, many banks will provide
+              student lines of credit to study at InFocus. Talk to your bank to find out if you
+              qualify.
+            </p>
+            <p>
+              If you require assistance budgeting your education, locating affordable housing,
+              applying for loans, grants, or scholarships, or anything else in financing your
+              education, our admissions advisors will be happy to help.
+              <a href="/contact">Contact us</a> for additional resources or assistance.
+            </p>
+          </section>
+
+          <section id="program-costs" data-section>
+            <h2>Program Cost Breakdown</h2>
+            <p>
+              View a complete breakdown of program costs, including tuition, materials and
+              applicable fees for each program.
+            </p>
+            <p><a class="ph" href="#">View the program cost breakdown</a></p>
+          </section>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Hero ---- */
+
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(300px, 34vw, 480px);
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(56px, 7vw, 116px) var(--gutter) clamp(36px, 4.4vw, 68px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 44%;
+    filter: brightness(1.1) saturate(1.04);
+    z-index: 0;
+  }
+
+  /* Same weighting as the How to Apply header, so the two read as a set. */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.86) 0%,
+        rgba(0, 0, 0, 0.68) 36%,
+        rgba(0, 0, 0, 0.44) 70%,
+        rgba(0, 0, 0, 0.34) 100%
+      ),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.2) 42%, rgba(0, 0, 0, 0.62) 100%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    margin: 0;
+    max-width: 20ch;
+    font-size: clamp(32px, 4vw, 66px);
+    font-weight: 600;
+    line-height: 1.04;
+  }
+
+  .hero__lede {
+    margin: clamp(16px, 1.8vw, 26px) 0 0;
+    max-width: 68ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* ---- Breadcrumb ---- */
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .crumbs a {
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s ease;
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  /* ---- Layout ---- */
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 90px);
+    align-items: start;
+  }
+
+  /* ---- Contents ---- */
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .toc__title {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.18);
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* ---- Body ---- */
+
+  .body section + section {
+    margin-top: clamp(34px, 4vw, 62px);
+    padding-top: clamp(30px, 3.6vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .body h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    /* Scroll target clears the sticky bar. */
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+    font-size: clamp(21px, 2vw, 33px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .body p {
+    margin: 0 0 1.05em;
+    max-width: 72ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .body a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .body a:hover {
+    color: var(--red);
+  }
+
+  .list {
+    margin: 0 0 1.15em;
+    padding: 0;
+    max-width: 72ch;
+    list-style: none;
+  }
+
+  .list li {
+    position: relative;
+    padding: 0 0 0 22px;
+    margin-bottom: 0.6em;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 8px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  /* ---- Provider finder ---- */
+
+  .finder {
+    max-width: 560px;
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    padding: clamp(18px, 2vw, 26px);
+    border: 1px solid rgba(51, 51, 51, 0.2);
+  }
+
+  .finder__label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6d6d6d;
+  }
+
+  .finder select {
+    width: 100%;
+    padding: 11px 38px 11px 12px;
+    border: 1px solid rgba(51, 51, 51, 0.34);
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: inherit;
+    font-size: 16px;
+    /* Keeps the control the same height across platforms. */
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #333 50%),
+      linear-gradient(135deg, #333 50%, transparent 50%);
+    background-position: calc(100% - 19px) 50%, calc(100% - 13px) 50%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  .finder select:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 1px;
+  }
+
+  .finder__out {
+    margin: 18px 0 0;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .finder__out > div {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+  }
+
+  .finder__out dt {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+    padding-top: 3px;
+  }
+
+  .finder__out dd {
+    margin: 0;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.45;
+    word-break: break-word;
+  }
+
+  .fallback {
+    margin: 16px 0 0;
+    padding-left: 18px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  /* Destination not supplied yet. */
+  .ph {
+    opacity: 0.5;
+    text-decoration: underline dotted !important;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    }
+
+    .toc ol {
+      column-count: 2;
+      column-gap: 24px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .toc ol {
+      column-count: 1;
+    }
+
+    .finder__out > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+  }
+</style>
+
+<script>
+  // Highlights the contents entry for whichever section is in view.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+  if (sections.length && links.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links.values()) a.removeAttribute('aria-current');
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      // Band near the top of the viewport, so the current section is the one
+      // being read rather than whichever is merely visible.
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+
+    for (const s of sections) io.observe(s);
+  }
+</script>

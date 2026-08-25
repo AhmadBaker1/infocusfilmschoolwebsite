@@ -1,0 +1,765 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+// Grouped link lists, in the manner of an institutional admissions hub:
+// this page routes, the sub-pages explain.
+const findYourFit = [
+  ['Browse all programs', '/programs'],
+  ['Book a free info session', '/contact'],
+  ['See student work', '/student-work'],
+];
+
+// Same grouping as the mega menu, so the IA reads consistently.
+const programGroups = [
+  {
+    title: 'Film & Television',
+    items: [
+      ['Film Production', '/programs/film-production'],
+      ['Cinematography Intensive', '/programs/cinematography-intensive'],
+      ['Documentary Film', '/programs/documentary-film'],
+      ['Writing for Film + TV', '/programs/writing-for-film-tv'],
+      ['Acting Program', '/programs/acting-program'],
+    ],
+  },
+  {
+    title: 'Animation, VFX & Games',
+    items: [
+      ['3D Animation Intensive', '/programs/3d-animation-intensive'],
+      ['Visual Effects Compositing', '/programs/visual-effects-compositing'],
+      ['Game Design', '/programs/game-design'],
+      ['Graphic + Digital Design', '/programs/graphic-digital-design'],
+    ],
+  },
+];
+
+const groups = [
+  {
+    title: 'Student support',
+    intro: 'Resources for living in Vancouver and for our student communities.',
+    links: [
+      ['Housing', '/admissions/housing'],
+      ['International students', '/admissions/international-students'],
+      ['Indigenous students', '/admissions/indigenous-students'],
+      ['LGBTQ2SAI+ students', '/admissions/lgbtq2sai-students'],
+    ],
+  },
+  {
+    title: 'Questions',
+    intro: 'Computers and equipment, scholarships, work permits and student policies.',
+    links: [
+      ['Frequently asked questions', '/admissions/how-to-apply#faq'],
+      ['Equipment and facilities (PDF)', '/docs/IFFS_Amenities_Equipment-Services.pdf'],
+    ],
+  },
+];
+
+---
+
+<Base
+  title="Admissions — InFocus Film School"
+  description="Apply to InFocus Film School. Application steps and fees, finances and funding, student support, and how to reach an admissions advisor."
+>
+  <Nav />
+
+  <main>
+    <header class="hero">
+      <img class="hero__bg" src="/images/herobg-2.jpg" alt="" aria-hidden="true"
+           width="4864" height="3648" loading="eager" decoding="async" />
+      <span class="hero__scrim" aria-hidden="true"></span>
+
+      <div class="hero__inner">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li aria-current="page">Admissions</li>
+          </ol>
+        </nav>
+
+        <h1>Admissions</h1>
+        <p class="hero__lede">
+          Ready for the next step in your education and a move toward a career in film? Everything
+          you need to apply to InFocus is here.
+        </p>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="page__inner">
+        {/* Two columns: routing links left, the primary action card right. */}
+        <div class="split">
+          <div class="split__side">
+            <h2>Find your fit</h2>
+            <p>Unsure which path is right for you?</p>
+            <p>We have several ways to help — consider one of the following:</p>
+
+            <ul class="cards">
+              {findYourFit.map(([label, href]) => (
+                <li>
+                  <a href={href}>
+                    <span>{label}</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <section class="promo">
+            <div class="promo__body">
+              <h2>Applying to InFocus</h2>
+              <p>
+                Three steps: decide on your program, complete the application and pay the
+                application fee, then secure your position. Application fees are $150 for domestic
+                students and $250 for international students.
+              </p>
+              <p>
+                Our advisors are available at every stage, in person or virtually, so the process
+                stays clear and straightforward.
+              </p>
+              <a class="pill" href="/admissions/how-to-apply">
+                How to apply<span aria-hidden="true">›</span>
+              </a>
+            </div>
+          </section>
+        </div>
+
+        {/* Dark band between the routing links and tuition — the page runs
+            white from here otherwise, and "which program" is the next
+            question after finding your fit. */}
+        <section class="programs">
+          <div class="programs__head">
+            <p class="kicker">Nine programs</p>
+            <h2>Choose your program</h2>
+            <p>
+              Diploma and certificate programs in film production, animation, visual effects,
+              games and design — taught by working industry professionals.
+            </p>
+            <a class="programs__all" href="/programs">
+              Compare all programs<span aria-hidden="true">›</span>
+            </a>
+          </div>
+
+          <div class="programs__cols">
+            {programGroups.map((g) => (
+              <div>
+                <h3>{g.title}</h3>
+                <ul>
+                  {g.items.map(([label, href]) => (
+                    <li><a href={href}>{label}</a></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Tuition card — photo left, copy right, on a light panel. */}
+        <section class="tuition">
+          <figure class="tuition__media">
+            <img src="/images/herobg-3.jpg" alt="Student setting up a camera on location in Vancouver"
+                 width="2048" height="1365" loading="lazy" decoding="async" />
+          </figure>
+          <div class="tuition__body">
+            <h2>Tuition and financial aid</h2>
+            <p>
+              InFocus offers interest-free payment plans that split tuition into instalments over
+              the length of your program, and can be combined with student loans, grants or
+              scholarships.
+            </p>
+            <p>
+              As a Designated Learning Institution, InFocus students are eligible for government
+              student loans, grants, bursaries and RESP redemption across Canada.
+            </p>
+            <a class="tuition__link" href="/admissions/finances">
+              Tuition and financial aid<span aria-hidden="true">›</span>
+            </a>
+          </div>
+        </section>
+
+        {
+          groups.map((g) => (
+            <section class="group">
+              <div class="group__head">
+                <h2>{g.title}</h2>
+                <p>{g.intro}</p>
+              </div>
+              <ul class="cards cards--grid">
+                {g.links.map(([label, href]) => (
+                  <li>
+                    <a
+                      href={href}
+                      target={href.endsWith('.pdf') ? '_blank' : undefined}
+                      rel={href.endsWith('.pdf') ? 'noopener' : undefined}
+                    >
+                      <span>{label}</span>
+                      <span class="chev" aria-hidden="true">›</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+
+        <section class="contact">
+          <h2>Contact admissions</h2>
+          <div class="contact__grid">
+            <div>
+              <h3>Admissions</h3>
+              <p>
+                <a href="tel:+16047791145">604-779-1145</a><br />
+                <a href="mailto:admissions@infocusfilmschool.com">admissions@infocusfilmschool.com</a>
+              </p>
+            </div>
+            <div>
+              <h3>General enquiries</h3>
+              <p>
+                <a href="tel:+16049156900">604-915-6900</a><br />
+                <a href="mailto:info@infocusfilmschool.com">info@infocusfilmschool.com</a>
+              </p>
+            </div>
+            <div>
+              <h3>Campus</h3>
+              <p>554 Seymour Street<br />Vancouver, BC V6B 3J5</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  /* ---- Hero ---- */
+
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(300px, 34vw, 480px);
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(56px, 7vw, 116px) var(--gutter) clamp(36px, 4.4vw, 68px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 42% 46%;
+    filter: brightness(1.1) saturate(1.04);
+    z-index: 0;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to right, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.68) 36%, rgba(0,0,0,0.44) 70%, rgba(0,0,0,0.34) 100%),
+      linear-gradient(to bottom, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.2) 42%, rgba(0,0,0,0.62) 100%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(34px, 4.4vw, 74px);
+    font-weight: 600;
+    line-height: 1.02;
+  }
+
+  .hero__lede {
+    margin: clamp(16px, 1.8vw, 26px) 0 0;
+    max-width: 62ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .crumbs a {
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s ease;
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  /* ---- Page ---- */
+
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Featured card ---- */
+
+  .promo {
+    position: relative;
+    height: 100%;
+    border-radius: clamp(14px, 1.4vw, 22px);
+    overflow: hidden;
+    /* Charcoal base with a red bloom bottom-left and the brand blue
+       bottom-right, so the card is warm on one side and cool on the other. */
+    background:
+      radial-gradient(85% 130% at -2% 108%, rgba(214, 52, 52, 0.95) 0%, rgba(189, 47, 47, 0.55) 32%, rgba(189, 47, 47, 0) 68%),
+      radial-gradient(75% 115% at 104% 96%, rgba(44, 96, 150, 0.95) 0%, rgba(34, 68, 102, 0.5) 34%, rgba(34, 68, 102, 0) 70%),
+      radial-gradient(60% 80% at 78% 6%, rgba(70, 70, 82, 0.5) 0%, rgba(40, 40, 48, 0) 70%),
+      linear-gradient(150deg, #2a2a2e 0%, #16161a 55%, #0d0d10 100%);
+    color: var(--white);
+  }
+
+  /* Grain, so the gradient does not band on wide screens. */
+  .promo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .promo__body {
+    position: relative;
+    z-index: 1;
+    padding: clamp(26px, 3vw, 48px);
+  }
+
+  .promo h2 {
+    margin: 0 0 clamp(14px, 1.6vw, 24px);
+    font-size: clamp(24px, 2.4vw, 40px);
+    font-weight: 600;
+    line-height: 1.06;
+  }
+
+  .promo p {
+    margin: 0 0 1.05em;
+    font-size: clamp(14px, 1.02vw, 17px);
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* White pill, as in the reference. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(12px, 1.6vw, 22px);
+    padding: clamp(13px, 1.3vw, 19px) clamp(24px, 2.4vw, 36px);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1vw, 17px);
+    font-weight: 600;
+    letter-spacing: 0;
+    transition:
+      background-color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pill span {
+    font-size: 1.25em;
+    line-height: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pill:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .pill:hover span {
+    transform: translateX(4px);
+  }
+
+  /* ---- Two-column split ---- */
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+    gap: clamp(28px, 4vw, 72px);
+    align-items: start;
+    padding-bottom: clamp(34px, 4vw, 62px);
+  }
+
+  .split__side h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-size: clamp(24px, 2.6vw, 44px);
+    font-weight: 600;
+    line-height: 1.06;
+  }
+
+  .split__side p {
+    margin: 0 0 0.85em;
+    max-width: 46ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.65;
+    color: #3f3f3f;
+  }
+
+  /* ---- Link cards ---- */
+
+  .cards {
+    margin: clamp(16px, 2vw, 26px) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .cards--grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin-top: 0;
+  }
+
+  .cards a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: clamp(15px, 1.5vw, 21px) clamp(18px, 1.8vw, 26px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-radius: 10px;
+    background: var(--white);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.02vw, 17px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--charcoal);
+    transition:
+      border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cards a:hover {
+    border-color: rgba(189, 47, 47, 0.55);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .chev {
+    flex: none;
+    font-size: 1.4em;
+    line-height: 0;
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cards a:hover .chev {
+    transform: translateX(4px);
+  }
+
+  /* ---- Programs band ---- */
+
+  .programs {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+    gap: clamp(28px, 4vw, 76px);
+    /* True full-bleed. Cancelling the gutter alone is not enough — the
+       container is also centred inside a 1320px max-width, so the break-out
+       is measured from the viewport, and the padding puts the content back
+       on the same line as the rest of the page. */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-top: clamp(10px, 1.4vw, 22px);
+    margin-bottom: clamp(24px, 3vw, 44px);
+    padding: clamp(34px, 4.4vw, 72px) max(var(--gutter), calc(50vw - 660px));
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .programs .kicker {
+    color: var(--red);
+  }
+
+  .programs h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 18px);
+    font-size: clamp(24px, 2.6vw, 44px);
+    font-weight: 600;
+    line-height: 1.06;
+  }
+
+  .programs__head p:not(.kicker) {
+    margin: 0 0 clamp(16px, 2vw, 26px);
+    max-width: 42ch;
+    font-size: clamp(14px, 1vw, 17px);
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .programs__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--white);
+    transition: color 0.25s ease;
+  }
+
+  .programs__all span {
+    font-size: 1.3em;
+    line-height: 0;
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .programs__all:hover {
+    color: var(--red);
+  }
+
+  .programs__all:hover span {
+    transform: translateX(4px);
+  }
+
+  .programs__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: clamp(22px, 3vw, 52px);
+  }
+
+  .programs__cols h3 {
+    margin: 0 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .programs__cols ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .programs__cols a {
+    display: block;
+    padding: 8px 0;
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.02vw, 17px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.86);
+    transition: color 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .programs__cols a:hover {
+    color: var(--red);
+    transform: translateX(5px);
+  }
+
+  /* ---- Tuition card ---- */
+
+  .tuition {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    gap: clamp(20px, 3vw, 48px);
+    align-items: center;
+    margin-bottom: clamp(6px, 1vw, 14px);
+    padding: clamp(18px, 2vw, 30px);
+    background: #f5f5f4;
+    border-radius: clamp(12px, 1.2vw, 18px);
+  }
+
+  .tuition__media {
+    margin: 0;
+    border-radius: clamp(8px, 0.9vw, 14px);
+    overflow: hidden;
+  }
+
+  .tuition__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .tuition__body {
+    padding: clamp(4px, 1vw, 18px) clamp(4px, 1.4vw, 24px) clamp(4px, 1vw, 18px) 0;
+  }
+
+  .tuition h2 {
+    margin: 0 0 clamp(10px, 1.2vw, 16px);
+    font-size: clamp(20px, 2vw, 34px);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .tuition p {
+    margin: 0 0 0.9em;
+    max-width: 58ch;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.65;
+    color: #3f3f3f;
+  }
+
+  .tuition__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 600;
+    color: var(--charcoal);
+    transition: color 0.25s ease;
+  }
+
+  .tuition__link span {
+    font-size: 1.3em;
+    line-height: 0;
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tuition__link:hover {
+    color: var(--red);
+  }
+
+  .tuition__link:hover span {
+    transform: translateX(4px);
+  }
+
+  /* ---- Groups below the split ---- */
+
+  .group {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: clamp(20px, 4vw, 72px);
+    padding: clamp(30px, 3.6vw, 54px) 0;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .group__head h2 {
+    margin: 0 0 10px;
+    font-size: clamp(20px, 1.9vw, 31px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .group__head p {
+    margin: 0;
+    max-width: 40ch;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.6;
+    color: #6d6d6d;
+  }
+
+  /* ---- Contact ---- */
+
+  .contact {
+    padding-top: clamp(30px, 3.6vw, 54px);
+  }
+
+  .contact > h2 {
+    margin: 0 0 clamp(18px, 2vw, 30px);
+    font-size: clamp(20px, 1.9vw, 31px);
+    font-weight: 600;
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(20px, 3vw, 48px);
+  }
+
+  .contact h3 {
+    margin: 0 0 10px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .contact p {
+    margin: 0;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.65;
+    color: #3f3f3f;
+  }
+
+  .contact a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .contact a:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 900px) {
+    .split,
+    .group,
+    .tuition,
+    .programs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tuition__body {
+      padding: 0 clamp(4px, 2vw, 14px) clamp(8px, 2vw, 16px);
+    }
+
+    .group__head p {
+      max-width: none;
+    }
+  }
+</style>
