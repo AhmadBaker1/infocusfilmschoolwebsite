@@ -1,0 +1,297 @@
+{
+  "slug": "documentary-film",
+  "oldPath": "/documentary-film-program",
+  "title": "Documentary Film Program",
+  "shortTitle": "Documentary Film",
+  "group": "film",
+  "summary": "An 8-month, in-person certificate in documentary storytelling, pitching and funding, ending with a project ready for festivals or broadcasters.",
+  "hero": {
+    "image": "/images/program-documentary-film.jpg",
+    "imageAlt": "Documentary Film student filming an interview"
+  },
+  "intro": {
+    "heading": "Tell real stories",
+    "paras": [
+      "The demand for documentary films and series is skyrocketing. Learn documentary filmmaking and refine your storytelling skills by developing multiple projects, all while perfecting your business, presentation, and sales acumen. Gain the experience and skills necessary to get your ideas commissioned, funded, and produced. By the end of three terms, you will have earned an extensive skill set and developed a marketable project ready for festivals or broadcasters."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "In-person"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "8 months"
+    }
+  ],
+  "about": {
+    "heading": "About InFocus Documentary Program",
+    "cards": [
+      {
+        "title": "Know the biz",
+        "text": "As a documentary filmmaker, shooting your film is the easy part. Gain not only the technical and storytelling skills required of a documentarian, but also a deep understanding of the business of factual entertainment through hands-on practice completing financing research and budgeting, sourcing funding through grant applications, planning and implementing crowdfunding campaigns, and identifying and selling your ideas to broadcasters and investors.",
+        "link": {
+          "label": "Read curriculum breakdown",
+          "href": "https://infocusfilmschool.com/documentary-program/course-descriptions/"
+        }
+      },
+      {
+        "title": "Learn from industry pros",
+        "text": "Your mentors in the Documentary Film Program are all industry pros and some of the best documentary filmmakers in Canada. You’ll learn from multi-award-winning directors and producers who are able to provide the most up-to-date instruction on the techniques and state of the film industry, networking opportunities, references, and job opening intel, right in the classroom!",
+        "link": {
+          "label": "See instructor profiles",
+          "href": "https://infocusfilmschool.com/documentary-film-program/documentary-instructors/"
+        }
+      },
+      {
+        "title": "Sell your projects",
+        "text": "Pitching is a core element of the program, providing you with real-world experience presenting your work to industry professionals. You’ll gain the experience and skills necessary to get your ideas commissioned, funded, and produced. Build connections with top documentary professionals and learn how to access distribution channels to successfully deliver your projects to an audience.",
+        "link": {
+          "label": "View student projects",
+          "href": "https://www.youtube.com/playlist?list=PLHb7xljCn6xEXBYTcG2jutfzvBo4YGxXp"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Become a doc filmmaker",
+      "paras": [
+        "Refine your storytelling skills through the development of multiple films, all the while perfecting your business, presentation, and sales acumen. Hone your creative talent and master your pitching skills to produce a short-form documentary. Shoot multiple projects that range from Cinema Vérité to investigative journalism. Master the technical fundamentals of camera, light, and sound. Become a well-rounded documentary filmmaker and bring your stories to the limelight."
+      ],
+      "image": "/images/about-6.jpg",
+      "imageAlt": "Interview subject framed on a field monitor during a documentary shoot"
+    },
+    {
+      "heading": "Today’s award-winners teaching tomorrow’s",
+      "paras": [
+        "InFocus alumni work on everything from massive Marvel superhero films to Oscar-winning dramas to critically acclaimed TV to indie gems. Workshops with Vancouver film unions give students the inside scoop on entering the industry, networking events provide contacts and job leads, and classes on starting a production studio provide insight on how to pursue a more entrepreneurial path in Vancouver’s booming film industry."
+      ],
+      "image": "/images/about-3.jpg",
+      "imageAlt": "Students operating a cinema camera on set"
+    }
+  ],
+  "stats": {
+    "heading": "Our students win awards",
+    "text": "With InFocus, you are more than just a student. We are dedicated to your success, both during the program and in launching your professional career after graduation. InFocus alumni win awards, receive grants, and often make the selection of prestigious festivals right out of school. In addition, the producers and industry mentors you work with will be your best references after graduation and will help connect you to broadcasters, buyers, and commissioners, greatly accelerating your career in film, television, and streaming.",
+    "items": [
+      {
+        "value": "100+",
+        "label": "Festival selections"
+      },
+      {
+        "value": "87%",
+        "label": "Employment rate"
+      }
+    ]
+  },
+  "alumni": [
+    {
+      "name": "Alex K.",
+      "image": "/images/programs/documentary-film/alex.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work on",
+      "credits": [
+        {
+          "text": "DC’s Legends of Tomorrow"
+        }
+      ]
+    },
+    {
+      "name": "Dhun S.",
+      "image": "/images/programs/documentary-film/dhun.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Hallmark Studios"
+        }
+      ]
+    },
+    {
+      "name": "Hiba I.",
+      "image": "/images/programs/documentary-film/hiba.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Netflix"
+        },
+        {
+          "text": "Hallmark"
+        }
+      ]
+    },
+    {
+      "name": "Janalee B.",
+      "image": "/images/programs/documentary-film/janalee.jpg",
+      "program": "Documentary Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Canada Shorts",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "CBC Television + more"
+        }
+      ]
+    },
+    {
+      "name": "Janice M.",
+      "image": "/images/programs/documentary-film/janice.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Black Truth Film Festival",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "Independent Short Awards + more"
+        }
+      ]
+    },
+    {
+      "name": "Ray P.",
+      "image": "/images/programs/documentary-film/ray.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "CW Network"
+        }
+      ]
+    },
+    {
+      "name": "Rebekah W.",
+      "image": "/images/programs/documentary-film/rebekah.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work on",
+      "credits": [
+        {
+          "text": "CW’s Batwoman"
+        }
+      ]
+    },
+    {
+      "name": "Ross L.",
+      "image": "/images/programs/documentary-film/ross.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "20th Century Fox"
+        },
+        {
+          "text": "NBC Universal"
+        }
+      ]
+    },
+    {
+      "name": "Timothy C.",
+      "image": "/images/programs/documentary-film/tim.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "New York Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Chicago Indie Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Indie Short Fest + more"
+        }
+      ]
+    },
+    {
+      "name": "Vinicius S.",
+      "image": "/images/programs/documentary-film/vinicius.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Art Without Limit Film Fest",
+          "winner": true
+        },
+        {
+          "text": "Rome Prisma Film Festival"
+        },
+        {
+          "text": "Doku Film Festival + more"
+        }
+      ]
+    }
+  ],
+  "costs": {
+    "heading": "Launch your future without mortgaging it",
+    "text": "InFocus Film School is one of the most financially-competitive schools in North America. We offer program costs comparable to public institutions, but with the high quality and expediency of private education. That said, financial assistance is always available, and all programs are eligible for student loans. Interest-free payment plans tailored to your specific financial needs can be arranged, and scholarships are available to qualified students. Plus, what you see is what you pay. We don’t believe in obfuscating program costs by charging by credit or adding additional fees and surcharges. The listed price is the full cost of the program and includes all tuition, material, and application fees.",
+    "domestic": "$15,950",
+    "international": "$25,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-5"
+  },
+  "accreditation": {
+    "heading": "Accredited documentary education",
+    "paras": [
+      "The Documentary Film Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "660 hours delivered over 33 weeks of instruction. Delivery is over two terms with a 1-week break. The program consists of 16 required courses."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "On-campus"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full-time, Monday – Friday 9:00am – 5:00pm. Students can expect to be in class at least 20 hours per week. Occasional weekends will be required for film shoots. Students should expect 1 hour of homework per hour of class."
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 500 hours for graduation eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies and meet all assignment deadlines. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 50%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Documentary Film Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-advanced-doc-step-1/",
+    "studentWork": "https://www.youtube.com/playlist?list=PLHb7xljCn6xEXBYTcG2jutfzvBo4YGxXp",
+    "curriculum": "https://infocusfilmschool.com/documentary-program/course-descriptions/"
+  }
+}

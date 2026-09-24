@@ -1,0 +1,388 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+// Content from infocusfilmschool.com/standardized-traffic-control-training
+// (2026-09-24). TODO: add dates to `dates` when sessions are scheduled.
+const dates: { date: string; href?: string }[] = [];
+
+const facts = [
+  { label: 'Duration', value: '2 days' },
+  { label: 'Time', value: '9:00am – 5:00pm' },
+  { label: 'Capacity', value: '13 students' },
+  { label: 'Course fee', value: '$269' },
+];
+
+const learn = [
+  'Roles and responsibilities of TCPs, employers, and supervisors',
+  'Regulations and standards, including those set out by Ministry of Transportation, WorkSafeBC and the Motor Vehicle Act',
+  'Traffic control equipment and devices, including personal protective equipment',
+  'Setting up, maintaining and removing work zones',
+  'Working around equipment',
+  'Basic and advanced traffic control skills',
+];
+
+const remember = [
+  'Your certificate will be issued in your name and mailed to you upon successful completion of the course.',
+  'When registering, please ensure that you provide the name of the person who will be attending the course, along with a current and complete mailing address; failure to do so may lead to a significant delay in receiving your certificate.',
+  'You must provide CSA-certified footwear. They can be either steel toed or safety-toed, and must have over-the-ankle coverage. These requirements must be met or will result in an automatic fail. All additional safety gear will be provided.',
+  'Being a TCP is a physical job. You must be in good physical shape, able to stand for long periods of time, and able to see and hear possibly dangerous situations clearly.',
+];
+---
+
+<Base
+  title="Standardized Traffic Control Training — InFocus Film School"
+  description="BCCSA's two-day Traffic Control Person course at InFocus Film School. Required for the DGC permittee logbook and for on-set PAs with traffic control duties."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Standardized Traffic Control Training"
+      eyebrow="Continuing studies"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Programs', href: '/programs' }, { label: 'Traffic Control Training' }]}
+    >
+      <p>Required for the DGC permittee logbook, and for all on-set PAs given traffic control duties.</p>
+    </PageHero>
+
+    <section class="info">
+      <div class="wrap">
+        <dl class="facts">
+          {facts.map((f) => (
+            <div>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div class="grid">
+          <div class="copy">
+            <h2 class="h2">Course information</h2>
+            <p>
+              The BCCSA’s comprehensive, two-day standardized course for Traffic Control Persons
+              (TCPs) consists of classroom and practical training and is the only program of its kind
+              accepted by WorkSafeBC under Section 18 of the Occupational Health and Safety
+              Regulation for high-risk traffic control. This two-day training session has been
+              designed to qualify those who work as high-risk TCPs throughout the province of BC.
+              Upon successful completion, TCPs are provided with a three year record of completion.
+            </p>
+            <p><strong>This course is required by all on-set PAs given traffic control duties.</strong></p>
+
+            <h3 class="h3">What you’ll learn</h3>
+            <p>Participants who successfully complete the training will understand the following:</p>
+            <ul class="checks">
+              {learn.map((l) => <li>{l}</li>)}
+            </ul>
+
+            <h3 class="h3">A few details to remember</h3>
+            <ul class="list">
+              {remember.map((r) => <li>{r}</li>)}
+            </ul>
+
+            <h3 class="h3">Certificates</h3>
+            <p>
+              Certificates are issued by <a href="https://www.bccsa.ca/" target="_blank" rel="noopener">BCCSA</a>
+              and will be mailed to you within 10 weeks of completion of the course. To avoid delays,
+              please ensure you register the name of the person attending and provide an accurate
+              mailing address.
+            </p>
+            <p>
+              For additional questions, please refer to
+              <a href="https://www.bccsa.ca/index.php?id=290" target="_blank" rel="noopener">BCCSA’s FAQ</a>.
+            </p>
+            <p class="note">
+              This program does not require approval by the Private Training Institutions Regulatory
+              Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills. As such,
+              PTIRU did not review this program.
+              <a href="https://infocusfilmschool.com/workshop-refunds/" target="_blank" rel="noopener">Read refund policy</a>.
+            </p>
+          </div>
+
+          <aside class="side">
+            <div class="card card--req">
+              <h3>Before you register</h3>
+              <ol>
+                <li>
+                  <strong>BCCSA registration is required.</strong>
+                  <a href="https://tcpgateway.bccsa.ca/" target="_blank" rel="noopener">Register here ↗</a>
+                </li>
+                <li><strong>CSA-certified footwear</strong> is required on Day 2.</li>
+              </ol>
+            </div>
+
+            <div class="card card--dark">
+              <h3>Upcoming dates</h3>
+              {
+                dates.length ? (
+                  <ul class="dates">
+                    {dates.map((d) => (
+                      <li>{d.href ? <a href={d.href}>{d.date}</a> : d.date}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No dates available right now. Contact us to be notified when the next session is scheduled.</p>
+                )
+              }
+              <a class="btn" href="/contact">Get notified <span aria-hidden="true">→</span></a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .info {
+    padding: clamp(48px, 6vw, 100px) var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0 0 clamp(40px, 5vw, 72px);
+    background: rgba(51, 51, 51, 0.14);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .facts > div {
+    padding: clamp(18px, 2vw, 28px);
+    background: var(--white);
+  }
+
+  .facts dt {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .facts dd {
+    margin: 6px 0 0;
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2.2vw, 36px);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .facts > div:last-child dd {
+    color: var(--red);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+    gap: clamp(28px, 5vw, 88px);
+    align-items: start;
+  }
+
+  .h2 {
+    margin: 0 0 18px;
+    font-size: clamp(28px, 3vw, 48px);
+    line-height: 1;
+  }
+
+  .h3 {
+    margin: 2em 0 0.6em;
+    font-size: clamp(18px, 1.5vw, 24px);
+  }
+
+  .copy p,
+  .copy li {
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .copy p {
+    margin: 0 0 1em;
+    max-width: 70ch;
+  }
+
+  .copy a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+  }
+
+  .copy a:hover {
+    color: var(--red);
+  }
+
+  .checks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 1em;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checks li {
+    position: relative;
+    padding: 12px 14px 12px 42px;
+    border: 1px solid rgba(51, 51, 51, 0.12);
+    border-radius: 10px;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  .checks li::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 19px;
+    width: 12px;
+    height: 6px;
+    border-left: 2px solid var(--red);
+    border-bottom: 2px solid var(--red);
+    transform: rotate(-45deg);
+  }
+
+  .list {
+    margin: 0 0 1em;
+    padding-left: 1.2em;
+    max-width: 70ch;
+  }
+
+  .list li {
+    margin-bottom: 0.5em;
+  }
+
+  .list li::marker {
+    color: var(--red);
+  }
+
+  .note {
+    margin-top: 2em !important;
+    padding: 14px 18px;
+    border-left: 2px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px !important;
+    color: #555 !important;
+  }
+
+  .side {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    display: grid;
+    gap: 14px;
+  }
+
+  .card {
+    padding: clamp(22px, 2.4vw, 30px);
+    border-radius: 14px;
+  }
+
+  .card h3 {
+    margin: 0 0 14px;
+    font-size: 20px;
+  }
+
+  .card--req {
+    border: 2px solid var(--red);
+  }
+
+  .card--req ol {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding-left: 1.2em;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .card--req li::marker {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .card--req a {
+    display: inline-block;
+    margin-top: 4px;
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .card--dark {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .card--dark p {
+    margin: 0 0 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .dates {
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dates li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .btn {
+    display: inline-flex;
+    gap: 10px;
+    padding: 13px 22px;
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .btn:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .side {
+      position: static;
+      order: -1;
+    }
+
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .checks {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

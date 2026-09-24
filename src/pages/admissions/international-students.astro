@@ -1,0 +1,1655 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+const contents = [
+  ['orientation', 'Orientation'],
+  ['getting-started', 'Getting Started'],
+  ['arriving', 'Arriving in Canada'],
+  ['medical-insurance', 'Medical Insurance'],
+  ['what-to-expect', 'What to Expect'],
+  ['learning-supports', 'Learning Supports'],
+  ['community-supports', 'Community Supports'],
+  ['pathways', 'Pathways'],
+];
+
+const GUIDE_URL = '/docs/IFFS_Student-Orientation_2526-1.pdf';
+
+const IRCC_FUNDS =
+  'https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html';
+const TRV_CHECK =
+  'https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada/check-visa-eta.html';
+
+// Checked against IRCC on 2026-09-24 (single applicant, outside Quebec).
+// IRCC revises this every year; update it when they do.
+const FUNDS_MIN = '$23,448';
+
+const funding = [
+  'Proof of a Canadian bank account in your name, if you’ve transferred money to Canada',
+  'A Guaranteed Investment Certificate (GIC) from a participating Canadian financial institution',
+  'Proof of a student or education loan from a bank',
+  'Your bank statements for the past 4 months',
+  'A bank draft that can be converted to Canadian dollars',
+  'Proof you paid tuition and housing fees',
+  'A letter from the person giving you money, such as a parent’s or grandparent’s bank statement and letter of financial support',
+];
+
+const progress = [
+  'Complete all class assignments',
+  'Hand in homework and deliverables on schedule',
+  'Participate in group projects',
+  'Maintain regular attendance',
+  'Ask your Instructor or Program Manager for help if you are struggling',
+];
+
+const POLICIES_URL: string | null = '/policies';
+const policies = [
+  'Student Statement of Rights',
+  'Tuition Refund Policy',
+  'English Proficiency Policy',
+  'Accessibility Policy',
+  'Grade Appeal Policy',
+  'Attendance Policy',
+  'Student Code of Conduct',
+  'Discipline & Dismissal Policy',
+  'Dispute Resolution Policy',
+  'Harassment, Violence & Sexual Misconduct Policy',
+  'Critical Incident & Crisis Policy',
+];
+
+const supports = [
+  {
+    title: 'Access to instructors',
+    text: 'Our instructors are experienced industry professionals who are passionate about teaching. Connect with them during class, after class or online to ask questions, get feedback and explore creative ideas.',
+  },
+  {
+    title: 'One-on-one tutoring',
+    text: 'Need extra help with a scene, script or edit? Tutoring gives you focused attention and personalized advice so you can build skills and confidence at your own pace.',
+  },
+  {
+    title: 'Assisted lab sessions',
+    text: 'During lab sessions, our teaching assistants help troubleshoot technical issues, guide you through complex tasks and offer practical tips drawn from real experience.',
+  },
+  {
+    title: 'After-hours facility access',
+    text: 'Creativity doesn’t keep office hours. Our computer labs and campus facilities stay open after hours so you can work on projects, practise techniques and make the most of professional equipment.',
+  },
+  {
+    title: 'Gear library',
+    text: 'Sign out cameras, lighting, audio equipment and other filmmaking tools to work on projects outside of class, and sharpen your skills with professional gear in your own time.',
+  },
+  {
+    title: 'Accessibility accommodations',
+    text: 'If you have a disability or learning difference, we can arrange accommodations so you can participate fully in classes and projects. Our team works with you to understand your needs and provide the right support.',
+  },
+];
+
+const community = [
+  {
+    title: 'Daily life in BC',
+    text: 'Practical information for everyday life, from housing and transportation to healthcare, banking and more, so you know what to expect and can settle in with ease.',
+    link: 'WelcomeBC: Daily Life',
+    url: 'https://www.welcomebc.ca/start-your-life-in-b-c/living-in-bc',
+  },
+  {
+    title: 'Indigenous Peoples of British Columbia',
+    text: 'Learn about the rich cultures, histories and contributions of the First Peoples of this land. An essential resource for respectful living and learning.',
+    link: 'WelcomeBC: Indigenous Peoples in BC',
+    url: 'https://www.welcomebc.ca/choose-b-c/about-british-columbia-canada',
+  },
+  {
+    title: 'Canadian culture and systems',
+    text: 'Adjusting to a new country takes time. This resource explains workplace norms, government systems and social values in BC and Canada, so you feel more connected to your new home.',
+    link: 'WelcomeBC: Culture and Systems',
+    url: 'https://www.welcomebc.ca/choose-b-c/about-british-columbia-canada',
+  },
+  {
+    title: 'Services for 2SLGBTQIA+ newcomers and refugees',
+    text: 'MOSAIC offers a welcoming, affirming space with support programs, peer connections and legal guidance to help you feel safe, seen and supported as you build a new life in Canada.',
+    link: 'MOSAIC BC',
+    url: 'https://mosaicbc.org/our-programs/services-for-newcomer-lqbtq-refugees/',
+  },
+  {
+    title: 'Indigenous students coming to Vancouver',
+    text: 'VAFCS supports Indigenous youth and students with cultural programming, community services and a sense of belonging in the heart of Vancouver.',
+    link: 'Vancouver Aboriginal Friendship Centre Society',
+    url: 'https://vafcs.org/',
+  },
+];
+
+const living = [
+  ['Housing', '/admissions/housing#housing'],
+  ['Cost of Living', '/admissions/housing#cost-of-living'],
+  ['Tenancy Rights', '/admissions/housing#tenancy-rights'],
+  ['Employment Rights', '/admissions/housing#employment-rights'],
+];
+---
+
+<Base
+  title="International Students — InFocus Film School"
+  description="Studying at InFocus Film School as an international student: study permits, visas, arriving in Canada, medical insurance, supports and pathways."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="International Students"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Admissions', href: '/admissions/how-to-apply' }, { label: 'International Students' }]}
+    >
+      <p>
+        InFocus Film School welcomes a very diverse student body. As a Designated Learning
+        Institution (DLI) recognized by Immigration, Refugees and Citizenship Canada, we accept
+        international students, and every class brings together domestic and international
+        students from around the world. We strive to make studying abroad as simple and enjoyable
+        as possible.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="page__inner">
+        <div class="layout">
+          <aside class="toc">
+            <h2 class="toc__title">On this page</h2>
+            <nav aria-label="Table of contents">
+              <ol>
+                {contents.map(([id, label]) => (
+                  <li><a href={`#${id}`} data-toc={id}>{label}</a></li>
+                ))}
+              </ol>
+            </nav>
+          </aside>
+
+          <article class="body">
+            <section id="orientation" data-section>
+              <h2>Orientation</h2>
+              <p class="note">
+                This information should not be considered legal immigration advice. We have
+                compiled a few important things to know for students looking to study in Canada.
+              </p>
+
+              <div class="orient">
+                <div class="orient__copy">
+                  <span class="orient__label">2025/26</span>
+                  <p class="orient__date">Student Orientation Guide</p>
+                  <p class="orient__text">
+                    International students are invited to an online orientation session ahead of
+                    the Fall term. Watch your inbox for your orientation date, and read the
+                    orientation guide before you arrive.
+                  </p>
+                  <div class="orient__actions">
+                    <a class="orient__btn" href={GUIDE_URL} download>
+                      Download the guide <span aria-hidden="true">↓</span>
+                    </a>
+                    <a class="orient__view" href={GUIDE_URL} target="_blank" rel="noopener">
+                      View online <span aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                  <span class="orient__meta">PDF · 10 pages · 15 MB</span>
+                </div>
+
+                {/* First three pages fanned like a deck; they spread on hover. */}
+                <a class="deck" href={GUIDE_URL} target="_blank" rel="noopener" aria-label="Open the 2025/26 Student Orientation Guide (PDF)">
+                  <img class="deck__page deck__page--3" src="/images/orientation-p3.jpg" alt="" width="1200" height="675" loading="lazy" decoding="async" />
+                  <img class="deck__page deck__page--2" src="/images/orientation-p2.jpg" alt="" width="1200" height="675" loading="lazy" decoding="async" />
+                  <img class="deck__page deck__page--1" src="/images/orientation-cover.jpg" alt="" width="1200" height="675" loading="lazy" decoding="async" />
+                  <span class="deck__tag">2025/26 Guide</span>
+                </a>
+              </div>
+            </section>
+
+            <section id="getting-started" data-section>
+              <h2>Getting Started</h2>
+
+              <h3 class="sub">Language proficiency</h3>
+              <p>
+                All classes at InFocus Film School are taught in English. If English is not your
+                primary language, you may be required to provide proof of English proficiency by
+                completing a recognized English language proficiency exam. You may have other
+                options if you haven’t completed an exam, so <a href="/contact">contact us</a>
+                for more details.
+              </p>
+              <p><a href="/policies#english-proficiency-policy">View our English Proficiency Policy</a></p>
+
+              <h3 class="sub">Study permits</h3>
+              <p>
+                International students need a study permit for programs longer than 6 months.
+                Study permits are issued by Immigration, Refugees and Citizenship Canada (IRCC),
+                and InFocus may be able to offer resources to help with your application. If visas
+                can be difficult to obtain from your country, we highly recommend working with an
+                accredited immigration consultant or lawyer before you apply.
+              </p>
+              <p>
+                <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html" target="_blank" rel="noopener">More information on study permits</a>
+              </p>
+
+              <h3 class="sub">Visa requirements</h3>
+              <p>
+                Citizens of certain countries and territories need a Temporary Resident Visa (TRV)
+                to visit Canada. <a href={TRV_CHECK} target="_blank" rel="noopener">Find out if you
+                need a TRV</a>. Again, we highly recommend working with an accredited immigration
+                consultant or lawyer before applying for your visa.
+              </p>
+              <p>
+                If you’re travelling to Canada from a country where you don’t hold citizenship, you
+                may need additional documents. Check with an immigration agent or consular
+                official before you leave.
+              </p>
+            </section>
+
+            <section id="arriving" data-section>
+              <h2>Arriving in Canada</h2>
+              <p>
+                Before you depart, make sure you have all the documents you need to enter Canada.
+                This list may not be complete, so check with a consular official before you leave.
+              </p>
+
+              <ol class="docs">
+                <li class="doc">
+                  <span class="doc__n" aria-hidden="true">01</span>
+                  <div>
+                    <h3 class="doc__title">A valid passport</h3>
+                    <p>
+                      Your passport must be valid for your entire stay in Canada. Check the
+                      expiry date and leave enough time to renew your travel documents if needed.
+                    </p>
+                  </div>
+                </li>
+                <li class="doc">
+                  <span class="doc__n" aria-hidden="true">02</span>
+                  <div>
+                    <h3 class="doc__title">Your InFocus acceptance letter</h3>
+                    <p>
+                      You’ll need to present the original acceptance letter you received from
+                      InFocus Film School.
+                    </p>
+                  </div>
+                </li>
+                <li class="doc">
+                  <span class="doc__n" aria-hidden="true">03</span>
+                  <div>
+                    <h3 class="doc__title">Proof of financial support</h3>
+                    <p>
+                      IRCC requires proof of at least <strong>{FUNDS_MIN} CAD</strong> to cover
+                      living expenses for your first year in Canada, in addition to your first
+                      year’s tuition and travel costs.
+                      <a href={IRCC_FUNDS} target="_blank" rel="noopener">See IRCC’s current amounts</a>.
+                    </p>
+                    <p class="doc__lead">Examples of financial support:</p>
+                    <ul class="list">
+                      {funding.map((f) => <li>{f}</li>)}
+                    </ul>
+                  </div>
+                </li>
+                <li class="doc">
+                  <span class="doc__n" aria-hidden="true">04</span>
+                  <div>
+                    <h3 class="doc__title">Your Temporary Resident Visa (TRV)</h3>
+                    <p>
+                      A TRV is a document placed in your passport that allows you to enter Canada.
+                      If you’re from a country that requires a visa, you’ll need a TRV in addition
+                      to your study permit. <a href={TRV_CHECK} target="_blank" rel="noopener">Find
+                      out if you need a TRV</a>.
+                    </p>
+                    <dl class="pair">
+                      <div>
+                        <dt>TRV</dt>
+                        <dd>Lets you enter Canada</dd>
+                      </div>
+                      <div>
+                        <dt>Study permit</dt>
+                        <dd>Lets you study and stay in Canada</dd>
+                      </div>
+                    </dl>
+                    <p>
+                      You need a valid TRV each time you enter Canada, so keep it up to date if you
+                      plan to travel during your studies.
+                    </p>
+                  </div>
+                </li>
+                <li class="doc">
+                  <span class="doc__n" aria-hidden="true">05</span>
+                  <div>
+                    <h3 class="doc__title">Your Port of Entry (POE) letter</h3>
+                    <p>
+                      This letter shows you’ve been approved for a study permit, and allows border
+                      officers to issue it to you when you arrive.
+                      <a href="https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=845&top=15" target="_blank" rel="noopener">Learn more</a>.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <section id="medical-insurance" data-section>
+              <h2>Medical Insurance</h2>
+              <p>
+                All international students should have their own medical insurance while studying
+                in Canada. Make sure you’re privately covered for your first three months in
+                British Columbia. After three months living in BC, you can qualify for BC’s Medical
+                Services Plan (MSP).
+              </p>
+              <p class="alert">
+                Students must have medical insurance while studying at InFocus, or you will not be
+                eligible for services from us.
+              </p>
+
+              <h3 class="sub">How insurance works</h3>
+              <div class="split">
+                <div class="split__card">
+                  <span class="split__tag">International students</span>
+                  <p>
+                    All international students must have medical insurance for the length of their
+                    studies at InFocus. We’ve partnered with
+                    <a href="https://www.guard.me/" target="_blank" rel="noopener">guard.me</a>, a
+                    Canadian insurance provider offering coverage to international students at
+                    affordable rates, estimated at $2.00 CAD per day. Guard.me covers you from the
+                    time you leave home (up to seven days before arrival) until a week after your
+                    program end date. InFocus does not accept insurance from companies outside of
+                    Canada.
+                  </p>
+                </div>
+                <div class="split__card">
+                  <span class="split__tag">Canadian students</span>
+                  <p>
+                    Canadian students can stay on their home province’s medical plan. You must
+                    notify your provincial health provider that you’ll be away from home studying
+                    at a post-secondary school in BC.
+                  </p>
+                </div>
+              </div>
+
+              <h3 class="sub">Living in BC for 3 months or more</h3>
+              <p>
+                Enrol in MSP as soon as you arrive in Canada. Coverage usually starts three months
+                after your arrival date, and students who have lived in BC for more than three
+                months are eligible.
+              </p>
+              <p>
+                <a href="https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents/eligibility-and-enrolment/how-to-enrol" target="_blank" rel="noopener">Apply for MSP</a>
+              </p>
+            </section>
+
+            <section id="what-to-expect" data-section>
+              <h2>What to Expect</h2>
+
+              <h3 class="sub">Attendance requirements</h3>
+              <div class="stat">
+                <span class="stat__figure">85–90%</span>
+                <span class="stat__text">Typical minimum attendance per course. Your Course Outline lists the exact requirement.</span>
+              </div>
+              <p>
+                Regular attendance is expected. Many of our programs are built around
+                collaboration, peer feedback and group projects, so your presence and participation
+                make the learning experience better for everyone. Every course has a minimum
+                attendance requirement to make sure students receive enough guidance and
+                instruction to meet the program’s learning objectives.
+              </p>
+              <p>
+                There are also minimum attendance hours to be eligible for a certificate or
+                diploma. You’ll find these on the Program Outline in your student enrolment
+                contract, under “Completion Requirements”.
+              </p>
+              <p>
+                For on-campus programs, attendance is taken at the beginning of class and again
+                after the break. Students not present for the attendance call are marked absent.
+                Chronic absence or lateness may result in penalties; see the Attendance Policy for
+                full details.
+              </p>
+              <p>
+                Keep track of your own attendance and any absences, and let the school know in
+                advance whenever possible. In an emergency, notify the school as soon as you can.
+              </p>
+
+              <h3 class="sub">Academic progression requirements</h3>
+              <p>
+                Students are expected to make reasonable academic progress, which means keeping up
+                with in-class work, homework and projects. To stay on track, we encourage you to:
+              </p>
+              <ul class="checks">
+                {progress.map((p) => <li>{p}</li>)}
+              </ul>
+              <p>
+                Not all courses are offered every term, so failing a course can significantly delay
+                your program completion. Support outside class time can be arranged for students
+                who need extra help.
+              </p>
+
+              <h3 class="sub">School policies</h3>
+              <p>InFocus Film School has several policies in place to support the student experience:</p>
+              <ul class="policies">
+                {policies.map((p) => <li>{p}</li>)}
+              </ul>
+              <p>
+                {POLICIES_URL ? (
+                  <a href={POLICIES_URL}>Read all school policies</a>
+                ) : (
+                  <a class="ph" href="#">Read all school policies</a>
+                )}
+              </p>
+
+              <h3 class="sub">School amenities</h3>
+              <p>
+                InFocus Film School facilities are clean, modern and have everything you need to
+                get started.
+              </p>
+              <p>
+                <a href="/facilities">Explore our campus and equipment</a>
+              </p>
+            </section>
+
+            <section id="learning-supports" data-section>
+              <h2>Learning Supports</h2>
+              <p>
+                At InFocus Film School, your success is our focus. Whether you’re crafting your
+                first short film or refining your skills for the big screen, we make sure you have
+                the guidance, tools and time you need to excel. To access learning supports,
+                contact Student Services.
+              </p>
+              <ul class="supports">
+                {supports.map((s, i) => (
+                  <li class="support">
+                    <span class="support__n">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="support__title">{s.title}</h3>
+                    <p>{s.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section id="community-supports" data-section>
+              <h2>Community Integration Supports</h2>
+              <p>
+                Start your journey in British Columbia, where world-class education meets vibrant
+                culture, stunning natural beauty and inclusive communities. Whether you’re
+                exploring new academic pathways or discovering life in Canada, BC is a place to
+                grow, connect and thrive.
+              </p>
+              <ul class="resources">
+                {community.map((c) => (
+                  <li class="resource">
+                    <h3 class="resource__title">{c.title}</h3>
+                    <p>{c.text}</p>
+                    <a class="resource__link" href={c.url} target="_blank" rel="noopener">
+                      {c.link} <span aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section id="pathways" data-section>
+              <h2>Pathways</h2>
+
+              <h3 class="sub">Post-Graduation Work Permits</h3>
+              <p>
+                InFocus Film School does not offer programs that are eligible for the
+                Post-Graduation Work Permit (PGWP) Program. If you’re seeking a PGWP or another
+                way to work in Canada after your studies, we recommend consulting a certified
+                immigration consultant to explore your options.
+              </p>
+              <p>
+                <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation/about.html" target="_blank" rel="noopener">More information on the PGWP</a>
+              </p>
+
+              <a class="yorkville" href="/#partnership">
+                <span class="yorkville__logo">
+                  <img src="/images/logo-yorkville.jpg" alt="Yorkville University" loading="lazy" decoding="async" />
+                </span>
+                <span class="yorkville__body">
+                  <span class="yorkville__tag">Yorkville University Pathway</span>
+                  <span class="yorkville__title">A bachelor’s degree in as little as 15 months</span>
+                  <span class="yorkville__text">
+                    Graduates of our Film Production Program are eligible for placement into a
+                    pathway with Yorkville University to earn a Bachelor of Creative Arts, and may
+                    be eligible for a Post-Graduation Work Permit.
+                  </span>
+                  <span class="yorkville__cta">Learn more <span aria-hidden="true">→</span></span>
+                </span>
+                <span class="yorkville__stat" aria-hidden="true">
+                  <strong>15</strong>
+                  <span>months</span>
+                </span>
+              </a>
+            </section>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hand-off to the housing page for students already here. -->
+    <section class="local" aria-labelledby="local-title">
+      <span class="local__corner local__corner--tl" aria-hidden="true"></span>
+      <span class="local__corner local__corner--tr" aria-hidden="true"></span>
+      <span class="local__corner local__corner--bl" aria-hidden="true"></span>
+      <span class="local__corner local__corner--br" aria-hidden="true"></span>
+
+      {/* Line sketch of the Vancouver waterfront: Canada Place, Harbour
+          Centre, the downtown towers, Science World, a harbour bridge and
+          BC Place, with the North Shore mountains and the Lions behind. The
+          red sun is the brand mark's dot. Scales by width and is never
+          cropped vertically. */}
+      <svg class="local__art" viewBox="0 0 1600 356" aria-hidden="true">
+        <defs>
+          <radialGradient id="local-glow">
+            <stop offset="0" stop-color="#bd2f2f" stop-opacity="0.45" />
+            <stop offset="1" stop-color="#bd2f2f" stop-opacity="0" />
+          </radialGradient>
+          <pattern id="local-win" width="6" height="7" patternUnits="userSpaceOnUse">
+            <rect x="1.5" y="2" width="3" height="3" />
+          </pattern>
+          <clipPath id="local-dome">
+            <circle cx="950" cy="286" r="34" />
+          </clipPath>
+        </defs>
+
+        <circle cx="1250" cy="92" r="300" fill="url(#local-glow)" />
+        <circle class="local__sun" cx="1250" cy="92" r="26" />
+
+        <path
+          class="local__ridge local__ridge--far"
+          d="M0 236L70 214L140 226L230 186L300 204L390 170L470 196L560 158L640 184L730 150L820 176L900 146L980 172L1070 150L1140 168L1170 128L1188 150L1206 124L1236 164L1320 146L1400 172L1480 150L1560 176L1600 164"
+        />
+        <path
+          class="local__ridge"
+          d="M0 262L90 240L180 254L280 222L380 246L480 224L580 250L700 226L820 252L940 230L1060 256L1180 232L1300 254L1420 228L1520 250L1600 238"
+        />
+
+        <g class="local__city">
+          {/* Canada Place sails */}
+          <path d="M80 320V300H280V320M84 300L100 256L120 284L140 254L160 284L180 252L200 284L220 254L240 284L260 256L276 300M100 256V248M140 254V246M180 252V244M220 254V246M260 256V248" />
+          {/* Harbour Centre */}
+          <path d="M336 320V176H352V320M344 162V118" />
+          <rect x="320" y="162" width="48" height="14" rx="7" />
+          {/* Towers */}
+          <path d="M300 320V232H332V320" />
+          <path d="M372 320V196H412V320" />
+          <rect class="win" x="377" y="206" width="30" height="106" />
+          <path d="M416 320V164L446 150V320" />
+          <path d="M450 320V210H496V320" />
+          <rect class="win" x="455" y="220" width="36" height="92" />
+          <path d="M500 320V190H506V170H528V190H534V320" />
+          <path d="M538 320V150H566V320M552 150V120" />
+          <path d="M570 320V236H622V320" />
+          <rect class="win" x="575" y="246" width="42" height="66" />
+          <path d="M626 320V186H662V320" />
+          <rect class="win" x="631" y="196" width="26" height="116" />
+          <path d="M666 320V150L692 136V320" />
+          <path d="M696 320V88L726 72V320M720 74V52" />
+          <rect class="win" x="701" y="82" width="20" height="230" />
+          <path d="M730 320V200H774V320" />
+          <rect class="win" x="735" y="210" width="34" height="102" />
+          <path d="M778 320V180H784V160H804V180H810V320" />
+          <path d="M814 320V226H864V320" />
+          <rect class="win" x="819" y="236" width="40" height="76" />
+          <path d="M868 320V190L898 176V320" />
+          <path d="M1000 320V196H1034V320" />
+          <rect class="win" x="1005" y="206" width="24" height="106" />
+          <path d="M1038 320V180H1064V320M1051 180V150" />
+          <path d="M1068 320V214H1110V320" />
+          <rect class="win" x="1073" y="224" width="32" height="88" />
+          <path d="M1440 320V190H1476V320" />
+          <rect class="win" x="1445" y="200" width="26" height="112" />
+          <path d="M1480 320V164L1508 150V320" />
+          <path d="M1512 320V214H1556V320" />
+          <rect class="win" x="1517" y="224" width="34" height="88" />
+          <path d="M1560 320V256H1566V236H1584V256H1590V320" />
+          {/* Science World */}
+          <circle cx="950" cy="286" r="34" />
+          <g class="open" clip-path="url(#local-dome)">
+            <path d="M910 266H990M910 286H990M910 306H990M916 266L926 252L936 266L946 252L956 266L966 252L976 266L986 252M910 286L920 266L930 286L940 266L950 286L960 266L970 286L980 266L990 286M910 306L920 286L930 306L940 286L950 306L960 286L970 306L980 286L990 306" />
+          </g>
+          <path d="M930 314V320M970 314V320" />
+          {/* Harbour bridge */}
+          <path class="open" d="M1100 300H1300M1110 300Q1200 236 1290 300M1110 300V320M1290 300V320M1122 292.0V300M1134 285.2V300M1146 279.5V300M1158 275.0V300M1170 271.6V300M1182 269.3V300M1194 268.1V300M1206 268.1V300M1218 269.3V300M1230 271.6V300M1242 275.0V300M1254 279.5V300M1266 285.2V300M1278 292.0V300" />
+          {/* BC Place */}
+          <path d="M1310 320V282Q1370 262 1430 282V320M1320 278.9V246M1346 273.6V246M1370 272.0V246M1394 273.6V246M1420 278.9V246" />
+        </g>
+
+        <path class="local__water" d="M0 320H1600" />
+        <path class="local__ripple" d="M120 332H260M400 332H620M760 332H900M1080 332H1300M1420 332H1540M200 344H300M520 344H600M1150 344H1240" />
+      </svg>
+
+      <div class="local__inner">
+        <p class="local__eyebrow"><span aria-hidden="true"></span>Already here?</p>
+        <h2 id="local-title" class="local__title">Already living in Vancouver?</h2>
+        <p class="local__text">
+          Find housing, plan your budget, and get to know your rights as a tenant and employee in
+          BC.
+        </p>
+        <ul class="local__topics">
+          {living.map(([label, href]) => (
+            <li><a href={href}>{label}</a></li>
+          ))}
+        </ul>
+        <a class="local__link" href="/admissions/housing">
+          Explore Studying in Vancouver <span class="local__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Layout + contents: same as Finances and Housing. ---- */
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 90px);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .toc__title {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.18);
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* ---- Body ---- */
+
+  /* Contents links target the sections; land them below the sticky nav. */
+  .body section {
+    scroll-margin-top: calc(var(--nav-h) + 8px);
+  }
+
+  .body section + section {
+    margin-top: clamp(34px, 4vw, 62px);
+    padding-top: clamp(30px, 3.6vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .body h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+    font-size: clamp(21px, 2vw, 33px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .body p {
+    margin: 0 0 1.05em;
+    max-width: 72ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .body a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .body a:hover {
+    color: var(--red);
+  }
+
+  .sub {
+    margin: clamp(28px, 3vw, 44px) 0 12px;
+    font-size: clamp(15px, 1.15vw, 19px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .list {
+    margin: 0 0 1.15em;
+    padding: 0;
+    max-width: 72ch;
+    list-style: none;
+  }
+
+  .list li {
+    position: relative;
+    padding: 0 0 0 22px;
+    margin-bottom: 0.5em;
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.65;
+    color: #3f3f3f;
+  }
+
+  .list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 8px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .body .note {
+    padding: 14px 18px;
+    border-left: 2px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  .body .alert {
+    padding: 14px 18px;
+    border: 1px solid rgba(189, 47, 47, 0.35);
+    background: rgba(189, 47, 47, 0.05);
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  /* Destination not supplied yet. */
+  .body .ph {
+    opacity: 0.5;
+    text-decoration: underline dotted;
+    cursor: not-allowed;
+  }
+
+  /* ---- Orientation card ---- */
+
+  .orient {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(28px, 3.4vw, 56px);
+    margin-top: clamp(18px, 2vw, 28px);
+    padding: clamp(26px, 3vw, 48px);
+    overflow: hidden;
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(189, 47, 47, 0.3), transparent 60%),
+      radial-gradient(60% 100% at 0% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .orient__label {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .body .orient__date {
+    margin: 8px 0 10px;
+    font-family: var(--font-head);
+    font-size: clamp(26px, 2.6vw, 40px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .orient__date strong {
+    color: var(--red);
+  }
+
+  .body .orient__text {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .orient__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    margin-top: clamp(20px, 2.2vw, 30px);
+  }
+
+  .body .orient__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .body .orient__btn:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .body .orient__view {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .body .orient__view:hover {
+    color: var(--white);
+  }
+
+  .orient__meta {
+    display: block;
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  /* ---- Guide preview: cover on top, two pages fanned behind. ---- */
+
+  .body .deck {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    /* Room for the fanned pages so they aren't clipped by the card. */
+    margin: 6% 8% 6% 4%;
+    text-decoration: none;
+  }
+
+  .deck__page {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.65);
+    transform-origin: 50% 100%;
+    transition:
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.6s ease;
+  }
+
+  .deck__page--3 {
+    transform: translate(9%, -7%) rotate(5deg) scale(0.94);
+    filter: brightness(0.7);
+  }
+
+  .deck__page--2 {
+    transform: translate(4.5%, -3.5%) rotate(2.5deg) scale(0.97);
+    filter: brightness(0.85);
+  }
+
+  .deck:hover .deck__page--3 {
+    transform: translate(16%, -12%) rotate(9deg) scale(0.94);
+  }
+
+  .deck:hover .deck__page--2 {
+    transform: translate(8%, -6%) rotate(4.5deg) scale(0.97);
+  }
+
+  .deck:hover .deck__page--1 {
+    transform: translate(-2%, 1%) rotate(-1.5deg);
+    box-shadow: 0 28px 60px -20px rgba(0, 0, 0, 0.75);
+  }
+
+  .deck__tag {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .deck:hover .deck__tag {
+    transform: translate(-2%, 1%);
+  }
+
+  /* ---- Arrival documents ---- */
+
+  .docs {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .doc {
+    display: grid;
+    grid-template-columns: clamp(44px, 4vw, 64px) minmax(0, 1fr);
+    gap: clamp(12px, 1.6vw, 24px);
+    padding: clamp(18px, 2vw, 28px) 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .doc__n {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2vw, 32px);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--red);
+  }
+
+  .doc__title {
+    margin: 0 0 8px;
+    font-size: clamp(16px, 1.25vw, 20px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .body .doc p:last-child {
+    margin-bottom: 0;
+  }
+
+  .body .doc__lead {
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 560px;
+    margin: 0 0 1em;
+  }
+
+  .pair > div {
+    padding: 12px 14px;
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    background: #fafafa;
+  }
+
+  .pair dt {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .pair dd {
+    margin: 4px 0 0;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  /* ---- Insurance split ---- */
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+  }
+
+  .split__card {
+    padding: clamp(20px, 2vw, 28px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-top: 3px solid var(--red);
+    background: #fafafa;
+  }
+
+  .split__tag {
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .body .split__card p {
+    margin: 0;
+    font-size: clamp(14px, 0.98vw, 16px);
+    line-height: 1.65;
+  }
+
+  /* ---- What to expect ---- */
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 560px;
+    margin: 0 0 1.2em;
+    padding: 16px 20px;
+    border-left: 3px solid var(--red);
+    background: #f6f6f6;
+  }
+
+  .stat__figure {
+    flex: none;
+    font-family: var(--font-head);
+    font-size: clamp(28px, 2.6vw, 40px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .stat__text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+  }
+
+  .checks {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 1.2em;
+    padding: 0;
+    max-width: 72ch;
+    list-style: none;
+  }
+
+  .checks li {
+    position: relative;
+    padding: 12px 14px 12px 44px;
+    border: 1px solid rgba(51, 51, 51, 0.12);
+    font-size: clamp(14px, 1vw, 16px);
+    line-height: 1.45;
+    color: #3f3f3f;
+  }
+
+  .checks li::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    width: 12px;
+    height: 6px;
+    border-left: 2px solid var(--red);
+    border-bottom: 2px solid var(--red);
+    transform: translateY(-70%) rotate(-45deg);
+  }
+
+  .policies {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+    max-width: 760px;
+    margin: 0 0 1em;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .policies li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+    font-size: 14px;
+    line-height: 1.4;
+    color: #3f3f3f;
+  }
+
+  /* ---- Learning supports ---- */
+
+  .supports {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    padding: 0;
+    list-style: none;
+    background: rgba(51, 51, 51, 0.14);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .support {
+    padding: clamp(18px, 2vw, 28px);
+    background: var(--white);
+    transition: background-color 0.25s ease;
+  }
+
+  .support:hover {
+    background: #fafafa;
+  }
+
+  .support__n {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--red);
+  }
+
+  .support__title {
+    margin: 8px 0 8px;
+    font-size: clamp(15px, 1.15vw, 18px);
+    font-weight: 600;
+  }
+
+  .body .support p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ---- Community resources ---- */
+
+  .resources {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resource {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(20px, 2vw, 28px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .resource:hover {
+    border-color: rgba(189, 47, 47, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .resource__title {
+    margin: 0 0 8px;
+    font-size: clamp(15px, 1.15vw, 18px);
+    font-weight: 600;
+  }
+
+  .body .resource p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .body .resource__link {
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--red);
+  }
+
+  .body .resource__link:hover {
+    text-decoration: underline;
+  }
+
+  /* ---- Yorkville pathway ---- */
+
+  .body .yorkville {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(18px, 2.4vw, 36px);
+    margin-top: clamp(26px, 3vw, 40px);
+    padding: clamp(20px, 2.4vw, 34px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-left: 4px solid var(--red);
+    background: linear-gradient(100deg, #fff 55%, rgba(34, 68, 102, 0.07));
+    color: var(--charcoal);
+    text-decoration: none;
+    transition: box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .body .yorkville:hover {
+    color: var(--charcoal);
+    box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .yorkville__logo {
+    display: grid;
+    place-items: center;
+    width: clamp(120px, 12vw, 180px);
+  }
+
+  .yorkville__logo img {
+    width: 100%;
+    height: auto;
+  }
+
+  .yorkville__body {
+    display: grid;
+    gap: 6px;
+  }
+
+  .yorkville__tag {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .yorkville__title {
+    font-family: var(--font-head);
+    font-size: clamp(19px, 1.7vw, 27px);
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .yorkville__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .yorkville__cta {
+    margin-top: 4px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .yorkville__cta span {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .yorkville:hover .yorkville__cta span {
+    transform: translateX(5px);
+  }
+
+  .yorkville__stat {
+    display: grid;
+    justify-items: center;
+    padding-left: clamp(18px, 2.4vw, 36px);
+    border-left: 1px solid rgba(51, 51, 51, 0.14);
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  .yorkville__stat strong {
+    font-size: clamp(44px, 4.6vw, 72px);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--red);
+  }
+
+  .yorkville__stat span {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: #6d6d6d;
+  }
+
+  /* ---- Already living in Vancouver ---- */
+
+  .local {
+    --inset: clamp(14px, 1.8vw, 30px);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --art-w: max(100vw, 820px);
+    /* The copy clears the tallest tower, whose tip is ~15% down the art. */
+    padding: clamp(64px, 8vw, 130px) var(--gutter) calc(var(--art-w) * 0.2225 * 0.86 + 24px);
+    background:
+      /* Blue kept up top so the skyline sits on flat charcoal, matching the
+         buildings' fill. */
+      radial-gradient(60% 90% at 0% 0%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  /* Scales by width only, so nothing is cropped. On narrow screens it keeps
+     a minimum width (centred, sides trimmed) so the detail stays legible. */
+  .local__art {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    z-index: -1;
+    width: var(--art-w);
+    height: auto;
+    transform: translateX(-50%);
+    overflow: visible;
+  }
+
+  .local__sun {
+    fill: var(--red);
+  }
+
+  .local__ridge {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .local__ridge--far {
+    stroke: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Solid fill so the towers stand as silhouettes against the ridges and
+     the sunset glow behind them. */
+  .local__city {
+    fill: var(--charcoal);
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 1.1;
+    stroke-linejoin: round;
+  }
+
+  .local__city :global(*) {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .local__city .open {
+    fill: none;
+  }
+
+  .local__city .win {
+    fill: url(#local-win);
+    stroke: none;
+  }
+
+  #local-win rect {
+    fill: rgba(255, 255, 255, 0.16);
+  }
+
+  .local__water {
+    stroke: rgba(255, 255, 255, 0.5);
+    stroke-width: 1.2;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .local__ripple {
+    stroke: rgba(255, 255, 255, 0.16);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .local__corner {
+    position: absolute;
+    width: clamp(18px, 1.8vw, 30px);
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.5);
+  }
+
+  .local__corner--tl { top: var(--inset); left: var(--inset); border-top-width: 2px; border-left-width: 2px; }
+  .local__corner--tr { top: var(--inset); right: var(--inset); border-top-width: 2px; border-right-width: 2px; }
+  .local__corner--bl { bottom: var(--inset); left: var(--inset); border-bottom-width: 2px; border-left-width: 2px; }
+  .local__corner--br { bottom: var(--inset); right: var(--inset); border-bottom-width: 2px; border-right-width: 2px; }
+
+  .local__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .local__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .local__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .local__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(34px, 4.6vw, 78px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .local__text {
+    margin: clamp(16px, 1.8vw, 24px) 0 0;
+    max-width: 52ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .local__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: clamp(22px, 2.4vw, 34px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .local__topics a {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(4px);
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .local__topics a:hover {
+    border-color: var(--red);
+    background: rgba(189, 47, 47, 0.18);
+    color: var(--white);
+  }
+
+  /* Same hairline + red rule treatment as the About link on the homepage. */
+  .local__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: clamp(30px, 3.2vw, 48px);
+    padding-bottom: 12px;
+    font-family: var(--font-head);
+    font-size: clamp(13px, 1vw, 16px);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  .local__link::before,
+  .local__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .local__link::before {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .local__link::after {
+    bottom: -0.5px;
+    height: 2px;
+    background: var(--red);
+    transform-origin: left;
+  }
+
+  .local__link:hover {
+    color: var(--red);
+  }
+
+  .local__link:hover::after {
+    animation: wipe 0.75s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  @keyframes wipe {
+    0% { transform: scaleX(1); transform-origin: right; }
+    50% { transform: scaleX(0); transform-origin: right; }
+    50.01% { transform: scaleX(0); transform-origin: left; }
+    100% { transform: scaleX(1); transform-origin: left; }
+  }
+
+  .local__arrow {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .local__link:hover .local__arrow {
+    transform: translateX(6px);
+  }
+
+  @media (max-width: 1100px) {
+    .orient {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .deck {
+      order: -1;
+      max-width: 560px;
+    }
+
+    .supports {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    }
+
+    .toc ol {
+      column-count: 2;
+      column-gap: 24px;
+    }
+
+    .body .yorkville {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .yorkville__logo {
+      grid-column: 1 / -1;
+      justify-items: start;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .toc ol {
+      column-count: 1;
+    }
+
+    .split,
+    .supports,
+    .resources,
+    .policies,
+    .pair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .body .yorkville {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .yorkville__stat {
+      justify-items: start;
+      padding: 14px 0 0;
+      border-left: 0;
+      border-top: 1px solid rgba(51, 51, 51, 0.14);
+    }
+  }
+</style>
+
+<script>
+  // Highlights the contents entry for whichever section is in view.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+  if (sections.length && links.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links.values()) a.removeAttribute('aria-current');
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+
+    for (const s of sections) io.observe(s);
+  }
+</script>

@@ -1,0 +1,795 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+const contents = [
+  ['housing', 'Housing'],
+  ['other-resources', 'Other Accommodation Resources'],
+  ['cost-of-living', 'Cost of Living'],
+  ['tenancy-rights', 'BC Tenancy Rights'],
+  ['employment-rights', 'BC Employment Rights'],
+];
+
+// TODO: partner sites not supplied yet. Add `url` once confirmed.
+const partners = [
+  {
+    name: 'Van Sweet Home',
+    url: null,
+    text: 'Affordable, hassle-free housing for students travelling from out of town. Services include furnished accommodations, flexible lease terms and dedicated support to help you settle in quickly and comfortably.',
+  },
+  {
+    name: 'VLE Limited',
+    url: null,
+    text: 'Student housing specialists with rental options across Vancouver. Whether you need short- or long-term accommodation, VLE Limited matches you with a place that fits your needs and budget, taking the stress out of finding housing on your own.',
+  },
+];
+
+// `url: null` means the address was not verified, so it renders unlinked.
+const homestays = [
+  { name: 'Canada Homestay Network', url: 'https://canadahomestaynetwork.ca' },
+  { name: 'Canada Homestay Organization', url: 'https://canadahomestaynetwork.ca/' },
+  { name: 'Homestay', url: 'https://www.homestay.com' },
+];
+
+const listings = [
+  { name: 'Craigslist', url: 'https://vancouver.craigslist.org' },
+  { name: 'PadMapper', url: 'https://www.padmapper.com' },
+];
+
+const costs = [
+  {
+    title: 'Housing',
+    figure: '$700–$2,500',
+    unit: '/month',
+    text: 'Vancouver housing can be pricey, but students have options. Shared apartments or student housing start around $700–$1,200/month, depending on location and number of roommates. Studio or one-bedroom rentals range from $1,500–$2,500/month. Utilities (heat, electricity, water) can add $50–$150/month, and are often included in shared housing.',
+  },
+  {
+    title: 'Food + Groceries',
+    figure: '$250–$450',
+    unit: '/month',
+    text: 'Groceries usually cost $250–$450/month, depending on how much you cook at home. Buying in bulk, meal prepping and shopping at discount grocers can help you save. A cheap meal out is around $12–$18, while a casual meal with friends might be $20–$30.',
+  },
+  {
+    title: 'Transportation',
+    figure: '$107.30',
+    unit: '/month pass',
+    text: 'Vancouver’s transit system is affordable and easy to use. A Compass Card gives you discounted fares: $2.60 per 1-zone trip, or $107.30/month. If you’re under 19, you may qualify for concession fares ($2.15/trip or $61.35/month). Biking is also a popular, low-cost option, and Vancouver has great bike lanes.',
+  },
+  {
+    title: 'Medical Insurance',
+    figure: '$75–$120',
+    unit: '/month, first 3 months',
+    text: 'Students in BC must enrol in the Medical Services Plan (MSP) after 3 months, which is free for most. During the waiting period, temporary private insurance is needed, typically costing $75–$120/month.',
+  },
+  {
+    title: 'Other Expenses',
+    figure: '$150–$320',
+    unit: '/month',
+    text: 'Internet in a shared apartment usually costs about $20–$40/month per person. Phone plans can be as low as $30/month with student discounts or prepaid options. Expect $100–$250/month for toiletries, clothes, study supplies and entertainment. Gym memberships, events and streaming services are often discounted or free for students.',
+  },
+];
+
+const TENANCY_URL = 'https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies';
+const EMPLOYMENT_URL =
+  'https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards';
+
+// Each group renders as a labelled list of facts under its own subheading.
+const employment: { title: string; facts: [string, string][] }[] = [
+  {
+    title: 'Before you start working',
+    facts: [
+      ['Social Insurance Number', 'To work in Canada you need a SIN. Apply online or at a Service Canada Centre.'],
+      ['Work permits', 'Make sure your study or work permit allows you to work.'],
+      ['Employment standards', 'Most workers in BC are protected by the Employment Standards Act, but some exceptions apply.'],
+    ],
+  },
+  {
+    title: 'Wages and pay',
+    facts: [
+      ['Minimum wage', 'As of June 1, 2025, the minimum wage in BC is $17.85 per hour for most types of employment.'],
+      ['Paydays', 'Employers must pay you at least twice a month, with no more than 16 days between paydays.'],
+      ['Pay statements', 'You should receive a written pay statement showing your hours worked, wage rate and deductions.'],
+    ],
+  },
+  {
+    title: 'Hours of work and breaks',
+    facts: [
+      ['Meal breaks', 'If you work more than 5 hours in a row, you’re entitled to a 30-minute unpaid meal break.'],
+      ['Minimum daily pay', 'If you’re scheduled for more than 8 hours and report to work, you’re entitled to at least 4 hours of pay, even if no work is available.'],
+      ['Overtime', 'Hours over 8 in a day or 40 in a week are paid at 1.5 times your regular wage. Hours over 12 in a day are paid at 2 times your regular wage.'],
+    ],
+  },
+  {
+    title: 'Time off and leaves',
+    facts: [
+      ['Vacation', 'After one year of employment, you’re entitled to 2 weeks of paid vacation.'],
+      ['Sick leave', 'You’re entitled to 5 days of paid sick leave and 3 days of unpaid sick leave each year.'],
+      ['Pregnancy leave', 'Pregnant employees are entitled to up to 17 weeks of unpaid leave.'],
+    ],
+  },
+  {
+    title: 'A safe working environment',
+    facts: [
+      ['Safe conditions', 'Your employer must make sure your workplace is safe and follows health and safety laws.'],
+      ['Training', 'You must be trained to do your job safely, including how to use equipment and what to do in an emergency.'],
+      ['Protective gear', 'If your job requires safety equipment, like gloves or helmets, your employer must provide it and train you to use it.'],
+      ['Refusing unsafe work', 'If you believe something at work is dangerous, you have the right to refuse the task until it’s safe. Your employer must investigate and fix the issue before asking you to do it again.'],
+    ],
+  },
+  {
+    title: 'Ending your employment',
+    facts: [
+      ['Notice', 'If you’re dismissed after 3 consecutive months of employment, you’re entitled to written notice or compensation.'],
+      ['Filing a complaint', 'If you believe your rights have been violated, you can file a complaint with the Employment Standards Branch within 6 months.'],
+    ],
+  },
+];
+---
+
+<Base
+  title="Housing + Living in Vancouver — InFocus Film School"
+  description="Studying in Vancouver: partnered student housing, homestays, rental resources, the cost of living for students, and your rights as a tenant and employee in BC."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Studying in Vancouver"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Admissions', href: '/admissions/how-to-apply' }, { label: 'Housing' }]}
+    >
+      <p>
+        Vancouver, on Canada’s stunning west coast, is a vibrant hub for media and storytelling.
+        Known as “Hollywood North,” it hosts North America’s third-largest film and TV production
+        industry and world-class festivals like VIFF and DOXA. The city also excels in 3D, gaming
+        and visual effects, home to top studios like ILM, Sony Imageworks and Scanline. Surrounded
+        by ocean and mountains, Vancouver blends natural beauty with a dynamic arts scene and an
+        active lifestyle.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="page__inner">
+        <div class="layout">
+          <aside class="toc">
+            <h2 class="toc__title">On this page</h2>
+            <nav aria-label="Table of contents">
+              <ol>
+                {contents.map(([id, label]) => (
+                  <li><a href={`#${id}`} data-toc={id}>{label}</a></li>
+                ))}
+              </ol>
+            </nav>
+          </aside>
+
+          <article class="body">
+            <section id="housing" data-section>
+              <h2>Housing</h2>
+              <p>
+                The Vancouver rental market can be daunting, but there are resources available for
+                both domestic and international students. If you don’t already have a place to
+                stay, we have partnered with two trusted housing providers to help make your
+                transition smoother.
+              </p>
+
+              <ul class="partners">
+                {partners.map((p) => (
+                  <li class="partner">
+                    <span class="partner__tag">InFocus partner</span>
+                    <h3 class="partner__name">
+                      {p.url ? <a href={p.url} target="_blank" rel="noopener">{p.name}</a> : p.name}
+                    </h3>
+                    <p>{p.text}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <h3 class="sub">Homestay</h3>
+              <p>
+                Prefer to live with a local host family? These organizations arrange homestays for
+                students in Vancouver.
+              </p>
+              <ul class="chips">
+                {homestays.map((h) => (
+                  <li>
+                    {h.url ? (
+                      <a href={h.url} target="_blank" rel="noopener">{h.name} <span aria-hidden="true">↗</span></a>
+                    ) : (
+                      <span>{h.name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section id="other-resources" data-section>
+              <h2>Other Accommodation Resources</h2>
+              <p>Listings sites where you can search for rentals and shared housing on your own.</p>
+              <ul class="chips">
+                {listings.map((l) => (
+                  <li>
+                    <a href={l.url} target="_blank" rel="noopener">{l.name} <span aria-hidden="true">↗</span></a>
+                  </li>
+                ))}
+              </ul>
+              <p class="note">
+                InFocus is not affiliated with the companies listed outside our partnered list, and
+                does not inspect or vet any of the accommodations advertised on them. All students
+                seeking accommodation should know their tenancy rights and exercise due caution
+                when making independent housing arrangements.
+              </p>
+            </section>
+
+            <section id="cost-of-living" data-section>
+              <h2>Cost of Living</h2>
+              <p>
+                The cost of living for college students in British Columbia varies with location,
+                living situation and lifestyle.
+              </p>
+
+              <div class="total">
+                <span class="total__label">Typical monthly spend in Vancouver</span>
+                <span class="total__figure">$2,350–$5,000</span>
+                <span class="total__note">
+                  Including tuition, housing, groceries, transportation and other expenses.
+                </span>
+              </div>
+
+              <h3 class="sub">Example breakdown of costs</h3>
+              <ul class="costs">
+                {costs.map((c) => (
+                  <li class="cost">
+                    <h4 class="cost__title">{c.title}</h4>
+                    <p class="cost__figure">
+                      {c.figure}<span>{c.unit}</span>
+                    </p>
+                    <p class="cost__text">{c.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section id="tenancy-rights" data-section>
+              <h2>BC Tenancy Rights</h2>
+              <p>
+                As you settle into your new home, it’s important to understand your rights and
+                responsibilities as a tenant. Here are a few tips to help you navigate tenancy
+                laws in BC. For more detailed information, visit the BC Government’s
+                <a href={TENANCY_URL} target="_blank" rel="noopener">Residential Tenancies</a> page.
+              </p>
+
+              <h3 class="sub">Your tenancy agreement</h3>
+              <dl class="facts">
+                <div>
+                  <dt>Written agreement</dt>
+                  <dd>
+                    Your landlord must provide a written tenancy agreement. Even if one isn’t
+                    provided, the standard terms still apply once you pay a security deposit.
+                  </dd>
+                </div>
+                <div>
+                  <dt>Review carefully</dt>
+                  <dd>
+                    Before signing, read the agreement thoroughly and ask for clarification on any
+                    points you don’t understand.
+                  </dd>
+                </div>
+                <div>
+                  <dt>Keep a copy</dt>
+                  <dd>
+                    Both you and your landlord should sign and date the agreement, and the landlord
+                    must give you a copy. Keep it safe, as it serves as proof of your tenancy.
+                  </dd>
+                </div>
+              </dl>
+
+              <h3 class="sub">Security (damage) deposit</h3>
+              <dl class="facts">
+                <div>
+                  <dt>Amount</dt>
+                  <dd>The security deposit cannot exceed half of one month’s rent.</dd>
+                </div>
+                <div>
+                  <dt>Return</dt>
+                  <dd>
+                    At the end of your tenancy, the landlord must return the deposit within 15 days
+                    of the tenancy ending and receiving your forwarding address in writing,
+                    provided there is no damage beyond normal wear and tear.
+                  </dd>
+                </div>
+              </dl>
+
+              <h3 class="sub">Repairs and maintenance</h3>
+              <dl class="facts">
+                <div>
+                  <dt>Landlord</dt>
+                  <dd>
+                    Must maintain the rental unit in a state of good repair that complies with
+                    health and safety standards.
+                  </dd>
+                </div>
+                <div>
+                  <dt>You</dt>
+                  <dd>
+                    Keep the unit clean and report any needed repairs promptly, in writing. If they
+                    aren’t addressed within a reasonable time, you can apply for dispute resolution
+                    through the Residential Tenancy Branch.
+                  </dd>
+                </div>
+              </dl>
+
+              <h3 class="sub">Landlord access to your unit</h3>
+              <dl class="facts">
+                <div>
+                  <dt>Notice required</dt>
+                  <dd>
+                    Your landlord must give you at least 24 hours’ written notice before entering
+                    your rental unit, except in emergencies.
+                  </dd>
+                </div>
+                <div>
+                  <dt>Emergencies</dt>
+                  <dd>In an emergency, such as a fire or flood, the landlord can enter without notice.</dd>
+                </div>
+              </dl>
+
+              <h3 class="sub">Where to get help</h3>
+              <dl class="facts">
+                <div>
+                  <dt>
+                    <a href={TENANCY_URL} target="_blank" rel="noopener">Residential Tenancy Branch</a>
+                  </dt>
+                  <dd>Provides information and dispute resolution services.</dd>
+                </div>
+                <div>
+                  <dt>
+                    <a href="https://tenants.bc.ca" target="_blank" rel="noopener">Tenant Resource &amp; Advisory Centre</a>
+                  </dt>
+                  <dd>Offers legal education and information about residential tenancy law.</dd>
+                </div>
+                <div>
+                  <dt>Local settlement agencies</dt>
+                  <dd>May help with tenancy-related questions or concerns.</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section id="employment-rights" data-section>
+              <h2>BC Employment Rights</h2>
+              <p>
+                To protect yourself in the workplace, get familiar with British Columbia’s
+                employment laws so you understand your rights. Keep records such as your employment
+                contract, pay stubs and any correspondence with your employer, as these can be
+                essential if issues arise. If you have concerns, speak up: discuss them with your
+                employer or seek advice from trusted resources to make sure your rights are
+                respected.
+              </p>
+              <p>
+                For more detailed information, visit the BC Government’s
+                <a href={EMPLOYMENT_URL} target="_blank" rel="noopener">Employment Standards</a> page.
+              </p>
+
+              {employment.map((g) => (
+                <Fragment>
+                  <h3 class="sub">{g.title}</h3>
+                  <dl class="facts">
+                    {g.facts.map(([k, v]) => (
+                      <div>
+                        <dt>{k}</dt>
+                        <dd>{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </Fragment>
+              ))}
+            </section>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Layout + contents: same as Finances, so the two read as a set. ---- */
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 90px);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .toc__title {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.18);
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* ---- Body ---- */
+
+  /* Contents links target the sections; land them below the sticky nav. */
+  .body section {
+    scroll-margin-top: calc(var(--nav-h) + 8px);
+  }
+
+  .body section + section {
+    margin-top: clamp(34px, 4vw, 62px);
+    padding-top: clamp(30px, 3.6vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .body h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+    font-size: clamp(21px, 2vw, 33px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .body p {
+    margin: 0 0 1.05em;
+    max-width: 72ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .body a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .body a:hover {
+    color: var(--red);
+  }
+
+  .sub {
+    margin: clamp(28px, 3vw, 44px) 0 12px;
+    font-size: clamp(15px, 1.15vw, 19px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---- Partners ---- */
+
+  .partners {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: clamp(20px, 2.2vw, 30px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .partner {
+    position: relative;
+    padding: clamp(22px, 2.2vw, 32px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-top: 3px solid var(--red);
+    background: #fafafa;
+  }
+
+  .partner__tag {
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .partner__name {
+    margin: 0 0 10px;
+    font-size: clamp(20px, 1.7vw, 28px);
+    line-height: 1.1;
+  }
+
+  .body .partner__name a {
+    text-decoration: none;
+  }
+
+  .body .partner p {
+    margin: 0;
+    font-size: clamp(14px, 0.98vw, 16px);
+    line-height: 1.65;
+  }
+
+  /* ---- Link chips ---- */
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 1.2em;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips a,
+  .chips span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid rgba(51, 51, 51, 0.24);
+    border-radius: 999px;
+    font-size: 14px;
+    line-height: 1.2;
+    color: var(--charcoal);
+  }
+
+  .body .chips a {
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .body .chips a:hover {
+    border-color: var(--red);
+    background: rgba(189, 47, 47, 0.05);
+    color: var(--red);
+  }
+
+  .chips a span {
+    padding: 0;
+    border: 0;
+    font-size: 12px;
+  }
+
+  .body .note {
+    margin-top: clamp(18px, 2vw, 26px);
+    padding: 14px 18px;
+    border-left: 2px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  /* ---- Cost of living ---- */
+
+  .total {
+    display: grid;
+    gap: 6px;
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    padding: clamp(22px, 2.6vw, 38px);
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(189, 47, 47, 0.28), transparent 60%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .total__label {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .total__figure {
+    font-family: var(--font-head);
+    font-size: clamp(38px, 4.6vw, 72px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .total__note {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .costs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .cost {
+    padding: clamp(18px, 2vw, 28px) clamp(0px, 1.6vw, 26px) clamp(18px, 2vw, 28px) 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .cost:nth-child(even) {
+    padding-left: clamp(0px, 1.6vw, 26px);
+    border-left: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .cost__title {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: #6d6d6d;
+  }
+
+  .body .cost__figure {
+    margin: 0 0 10px;
+    font-family: var(--font-head);
+    font-size: clamp(24px, 2.1vw, 34px);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--charcoal);
+  }
+
+  .cost__figure span {
+    margin-left: 6px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: #8a8a8a;
+  }
+
+  .body .cost__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ---- Tenancy facts ---- */
+
+  .facts {
+    margin: 0;
+    max-width: 80ch;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .facts > div {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+  }
+
+  .facts dt {
+    padding-top: 3px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .body .facts dt a {
+    color: var(--red);
+    text-decoration-color: rgba(189, 47, 47, 0.4);
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: clamp(15px, 1.02vw, 16px);
+    line-height: 1.65;
+    color: #3f3f3f;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    }
+
+    .toc ol {
+      column-count: 2;
+      column-gap: 24px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .toc ol {
+      column-count: 1;
+    }
+
+    .partners,
+    .costs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cost,
+    .cost:nth-child(even) {
+      padding-left: 0;
+      padding-right: 0;
+      border-left: 0;
+    }
+
+    .facts > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+  }
+</style>
+
+<script>
+  // Highlights the contents entry for whichever section is in view.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+  if (sections.length && links.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links.values()) a.removeAttribute('aria-current');
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+
+    for (const s of sections) io.observe(s);
+  }
+</script>

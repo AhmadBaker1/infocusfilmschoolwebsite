@@ -1,6 +1,7 @@
 @import '@fontsource-variable/oswald';
 @import '@fontsource-variable/open-sans';
 @import '@fontsource-variable/bodoni-moda/opsz-italic.css';
+@import '@fontsource-variable/montserrat';
 
 :root {
   /* Brand palette. Black is avoided — charcoal stands in for it. */
@@ -30,6 +31,8 @@
   --font-body: 'Avenir Next', 'Avenir', 'Open Sans Variable', 'Open Sans', sans-serif;
   /* Display-only accent face for the hero slogan. */
   --font-accent: 'Bodoni Moda Variable', 'Didot', 'Times New Roman', serif;
+  /* Testimonial quotes. */
+  --font-quote: 'Montserrat Variable', 'Montserrat', sans-serif;
 }
 
 *,
@@ -46,6 +49,12 @@ body {
 
 html {
   -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

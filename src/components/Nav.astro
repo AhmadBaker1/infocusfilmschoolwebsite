@@ -3,8 +3,9 @@
 // bar, moving between triggers swaps panels instantly, and a short close delay
 // lets the pointer travel diagonally into the panel without it collapsing.
 //
-// Programs is real data. Admissions and Resources are placeholder link sets —
-// those pages don't exist yet.
+// All three menus are the real link sets. Some destinations (program pages,
+// Project Funding, Careers in Film, Blog) aren't built yet. Student Login is
+// the external AMP Educator portal.
 const menus = [
   {
     key: 'programs',
@@ -28,6 +29,14 @@ const menus = [
           ['Visual Effects Compositing', '/programs/visual-effects-compositing'],
           ['Game Design', '/programs/game-design'],
           ['Graphic + Digital Design', '/programs/graphic-digital-design'],
+        ],
+      },
+      {
+        title: 'Pathways + Continuing Studies',
+        items: [
+          ['All Programs', '/programs'],
+          ['Yorkville University Pathway', '/programs/yorkville-university-pathway'],
+          ['Traffic Control Training', '/programs/standardized-traffic-control-training'],
         ],
       },
     ],
@@ -73,21 +82,21 @@ const menus = [
     label: 'Resources',
     href: '/resources',
     groups: [
+      // The real Resources list, in its original order, split across the
+      // panel's two columns.
       {
         title: 'For Students',
         items: [
-          ['Student Work', '/student-work'],
-          ['Career Services', '/resources/careers'],
-          ['Alumni', '/resources/alumni'],
-          ['FAQ', '/resources/faq'],
+          ['Student Login', 'https://infocus.ampeducator.ca/'],
+          ['Tutorials', '/resources/tutorials'],
+          ['Project Funding', '/resources/project-funding'],
         ],
       },
       {
-        title: 'News',
+        title: 'Industry',
         items: [
+          ['Careers in Film', '/resources/careers-in-film'],
           ['Blog', '/resources/blog'],
-          ['Press', '/resources/press'],
-          ['Events', '/events'],
         ],
       },
     ],
@@ -98,12 +107,39 @@ const menus = [
   },
 ];
 
-// Events drops out of the bar — it still sits in the Resources panel and
-// the footer, so nothing is orphaned.
-const rightLinks = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
-];
+// About Us opens a panel like the menus above, but its trigger sits in the
+// right-hand group. Same order as the source menu, Instructors left out.
+const aboutMenu = {
+  key: 'about',
+  label: 'About Us',
+  href: '/about',
+  groups: [
+    {
+      title: 'Who We Are',
+      items: [
+        ['About InFocus', '/about'],
+        ['Our Campus and City', '/facilities'],
+        ['Student Success', '/student-success'],
+      ],
+    },
+    {
+      title: 'More',
+      items: [
+        ['Student Work', '/#student-work'],
+        ['Policies', '/policies'],
+        ['Careers', '/careers'],
+      ],
+    },
+  ],
+  foot: {
+    text: 'Designated by the B.C. Private Training Institutions Regulatory Unit (PTIRU).',
+    cta: ['Contact Us', '/contact'],
+  },
+};
+
+const panelMenus = [...menus, aboutMenu];
+
+const rightLinks = [{ label: 'Contact Us', href: '/contact' }];
 ---
 
 <header class="nav" data-nav>
@@ -136,6 +172,15 @@ const rightLinks = [
     </a>
 
     <nav class="nav__group nav__group--right" aria-label="Secondary">
+      <button
+        class="label nav__trigger"
+        type="button"
+        data-trigger={aboutMenu.key}
+        aria-expanded="false"
+        aria-controls={`panel-${aboutMenu.key}`}
+      >
+        {aboutMenu.label}
+      </button>
       {rightLinks.map((l) => <a class="label" href={l.href}>{l.label}</a>)}
       <a class="label nav__apply" href="/apply">Apply Now</a>
     </nav>
@@ -149,7 +194,7 @@ const rightLinks = [
       <circle cx="30.25" cy="30.69" r="11.55" class="mega__dot" />
     </svg>
     {
-      menus.map((m) => (
+      panelMenus.map((m) => (
         <div class="panel" id={`panel-${m.key}`} data-panel={m.key} hidden>
           <div class="panel__main">
             {m.groups.map((g) => (

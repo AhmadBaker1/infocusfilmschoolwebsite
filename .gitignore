@@ -8,3 +8,7 @@ dist/
 # derivatives live in public/. Track these with git-lfs if they need to
 # be in the repo — committing them plainly bloats history permanently.
 source-photos/
+
+# Local env (backend endpoints etc.)
+.env
+.env.*

@@ -1,0 +1,296 @@
+---
+// Phone number with a searchable country-calling-code picker (all countries).
+// Submits `phone_country` (e.g. "CA +1") and `phone`.
+import { COUNTRIES, PINNED } from '../lib/countries';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'phone' } = Astro.props;
+const pinned = PINNED.map((iso) => COUNTRIES.find((c) => c.iso === iso)!);
+const rest = COUNTRIES.filter((c) => !PINNED.includes(c.iso));
+---
+
+<div class="phone" data-dial>
+  <input type="hidden" name="phone_country" value="CA +1" data-dial-value />
+  <button type="button" class="dial" aria-haspopup="listbox" aria-expanded="false" aria-label="Country calling code" data-dial-btn>
+    <span class="dial__iso" data-dial-iso>CA</span>
+    <span class="dial__code" data-dial-code>+1</span>
+    <span class="dial__caret" aria-hidden="true"></span>
+  </button>
+  <input id={id} name="phone" type="tel" autocomplete="tel-national" placeholder="000-000-0000" required />
+  <div class="dial__pop" data-dial-pop hidden>
+    <div class="dial__search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+      <input type="text" placeholder="Search country or code" aria-label="Search countries" autocomplete="off" data-dial-search />
+    </div>
+    <ul class="dial__list" role="listbox" data-dial-list>
+      {[...pinned, null, ...rest].map((c) =>
+        c ? (
+          <li role="option" tabindex="-1" data-iso={c.iso} data-code={c.dial} data-text={`${c.name} ${c.iso} ${c.dial}`.toLowerCase()} aria-selected={c.iso === 'CA' ? 'true' : 'false'}>
+            <span class="dial__name">{c.name}</span>
+            <span class="dial__num">{c.dial}</span>
+          </li>
+        ) : (
+          <li class="dial__sep" aria-hidden="true" />
+        )
+      )}
+    </ul>
+    <p class="dial__none" data-dial-none hidden>No matches</p>
+  </div>
+</div>
+
+<style>
+.phone {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  width: 100%;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 12px;
+  background: var(--white);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.phone:focus-within {
+  border-color: var(--charcoal);
+  box-shadow: 0 0 0 4px rgba(189, 47, 47, 0.12);
+}
+
+.phone.is-invalid {
+  border-color: var(--red);
+  background-color: rgba(189, 47, 47, 0.03);
+}
+
+.phone > input[type='tel'] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 0 11px 11px 0;
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  color: var(--charcoal);
+  outline: none;
+}
+
+.phone > input[type='tel']::placeholder {
+  color: #b5b5b5;
+}
+
+.dial__caret {
+  display: inline-block;
+}
+
+.phone {
+  position: relative;
+  overflow: visible;
+}
+
+.dial {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  border-right: 1.5px solid #e2e2e2;
+  border-radius: 11px 0 0 11px;
+  background: #f6f6f6;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dial:hover,
+.dial[aria-expanded='true'] {
+  background: #eee;
+}
+
+.dial__iso {
+  font-weight: 700;
+}
+
+.dial__caret {
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #777;
+  transition: transform 0.2s ease;
+}
+
+.dial[aria-expanded='true'] .dial__caret {
+  transform: rotate(180deg);
+}
+
+.dial__pop {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  width: min(360px, 100%);
+  overflow: hidden;
+  border: 1.5px solid #e2e2e2;
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.35);
+  animation: pop-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.dial__search {
+  position: relative;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.dial__search svg {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #999;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform: translateY(-50%);
+}
+
+.dial__search input {
+  width: 100%;
+  padding: 11px 12px 11px 36px !important;
+  border: 1.5px solid #e2e2e2 !important;
+  border-radius: 10px !important;
+  font-size: 15px;
+}
+
+.dial__list {
+  max-height: 280px;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.dial__list li[role='option'] {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.dial__list li[role='option']:hover,
+.dial__list li.is-active {
+  background: #f4f4f4;
+}
+
+.dial__list li[aria-selected='true'] {
+  background: rgba(189, 47, 47, 0.08);
+  font-weight: 600;
+}
+
+.dial__list li[hidden] {
+  display: none !important;
+}
+
+.dial__num {
+  color: #8a8a8a;
+  font-variant-numeric: tabular-nums;
+}
+
+.dial__sep {
+  height: 1px;
+  margin: 6px 8px;
+  background: #eee;
+}
+
+.dial__none {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+</style>
+
+<script>
+// ---- Country calling-code picker ----
+document.querySelectorAll<HTMLElement>('[data-dial]').forEach((root) => {
+  const btn = root.querySelector<HTMLButtonElement>('[data-dial-btn]')!;
+  const pop = root.querySelector<HTMLElement>('[data-dial-pop]')!;
+  const search = root.querySelector<HTMLInputElement>('[data-dial-search]')!;
+  const value = root.querySelector<HTMLInputElement>('[data-dial-value]')!;
+  const iso = root.querySelector<HTMLElement>('[data-dial-iso]')!;
+  const code = root.querySelector<HTMLElement>('[data-dial-code]')!;
+  const none = root.querySelector<HTMLElement>('[data-dial-none]')!;
+  const phone = root.querySelector<HTMLInputElement>('input[type=tel]')!;
+  const items = [...root.querySelectorAll<HTMLLIElement>('li[role=option]')];
+  const seps = [...root.querySelectorAll<HTMLLIElement>('.dial__sep')];
+  let active = -1;
+
+  const visible = () => items.filter((li) => !li.hidden);
+  const setActive = (i: number) => {
+    const vis = visible();
+    items.forEach((li) => li.classList.remove('is-active'));
+    active = Math.max(0, Math.min(i, vis.length - 1));
+    const li = vis[active];
+    if (li) {
+      li.classList.add('is-active');
+      li.scrollIntoView({ block: 'nearest' });
+    }
+  };
+
+  const open = () => {
+    pop.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    search.value = '';
+    filter();
+    const sel = items.findIndex((li) => li.getAttribute('aria-selected') === 'true');
+    setActive(Math.max(0, visible().indexOf(items[sel])));
+    search.focus();
+  };
+  const close = (focusBtn = false) => {
+    pop.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (focusBtn) btn.focus();
+  };
+  const choose = (li: HTMLLIElement) => {
+    items.forEach((x) => x.setAttribute('aria-selected', String(x === li)));
+    iso.textContent = li.dataset.iso!;
+    code.textContent = li.dataset.code!;
+    value.value = `${li.dataset.iso} ${li.dataset.code}`;
+    close();
+    phone.focus();
+  };
+  const filter = () => {
+    const q = search.value.trim().toLowerCase().replace(/^\+/, '+');
+    items.forEach((li) => (li.hidden = !!q && !li.dataset.text!.includes(q)));
+    seps.forEach((sp) => (sp.hidden = !!q));
+    none.hidden = visible().length > 0;
+    setActive(0);
+  };
+
+  btn.addEventListener('click', () => (pop.hidden ? open() : close()));
+  search.addEventListener('input', filter);
+  search.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+    else if (e.key === 'Enter') { e.preventDefault(); const li = visible()[active]; if (li) choose(li); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+  });
+  items.forEach((li) => li.addEventListener('click', () => choose(li)));
+  document.addEventListener('click', (e) => {
+    if (!pop.hidden && !root.contains(e.target as Node)) close();
+  });
+});
+</script>

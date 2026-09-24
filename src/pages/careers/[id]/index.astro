@@ -1,0 +1,700 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import { jobs, DEPTS, EMAIL, type Job } from '../../../lib/jobs';
+
+export function getStaticPaths() {
+  return jobs.map((job) => ({ params: { id: job.id }, props: { job } }));
+}
+
+const { job } = Astro.props as { job: Job };
+const others = jobs.filter((j) => j.id !== job.id).slice(0, 3);
+const url = new URL(`/careers/${job.id}`, Astro.site).toString();
+---
+
+<Base
+  title={`${job.title} — Careers at InFocus Film School`}
+  description={`${job.title} at InFocus Film School. ${job.location}, ${job.type}, ${job.pay}.`}
+>
+  <Nav />
+
+  <main>
+    <!-- ===== Header ===== -->
+    <section class="top">
+      <div class="top__grain" aria-hidden="true"></div>
+      <div class="wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li aria-current="page">{job.title}</li>
+          </ol>
+        </nav>
+        <p class="top__dept"><span aria-hidden="true"></span>{DEPTS[job.dept]}</p>
+        <h1 class="top__title">{job.title}</h1>
+        <dl class="top__facts">
+          <div>
+            <dt>Location</dt>
+            <dd>{job.location}</dd>
+          </div>
+          <div>
+            <dt>Type</dt>
+            <dd>{job.type}</dd>
+          </div>
+          <div>
+            <dt>Pay</dt>
+            <dd>{job.pay}</dd>
+          </div>
+        </dl>
+        <div class="top__actions">
+          <a class="btn btn--light" href={`/careers/${job.id}/apply`}>Apply for this role <span aria-hidden="true">→</span></a>
+          <button type="button" class="copy" data-copy={url}>Copy link</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Posting ===== -->
+    <section class="post">
+      <div class="wrap post__grid">
+        <article class="post__body" set:html={job.html} />
+
+        <aside class="card">
+          <p class="card__label">At a glance</p>
+          <dl>
+            <div><dt>Team</dt><dd>{DEPTS[job.dept]}</dd></div>
+            <div><dt>Location</dt><dd>{job.location}</dd></div>
+            <div><dt>Type</dt><dd>{job.type}</dd></div>
+            <div><dt>Pay</dt><dd class="card__pay">{job.pay}</dd></div>
+          </dl>
+          <a class="btn btn--dark btn--block" href={`/careers/${job.id}/apply`}>Apply now <span aria-hidden="true">→</span></a>
+          <a class="card__mail" href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Question: ${job.title}`)}`}>Questions? {EMAIL}</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Apply CTA ===== -->
+    <section class="apply" aria-labelledby="apply-title">
+      <div class="wrap apply__grid">
+        <div>
+          <p class="apply__eyebrow"><span aria-hidden="true"></span>Interested?</p>
+          <h2 id="apply-title" class="apply__title">Apply for<br /><em>{job.title}</em></h2>
+        </div>
+        <div>
+          <ol class="steps">
+            <li><span>01</span>Fill in the application. It takes about five minutes.</li>
+            <li><span>02</span>Our team reviews applications on a rolling basis.</li>
+            <li><span>03</span>Shortlisted candidates are contacted for an interview.</li>
+          </ol>
+          <a class="btn btn--light apply__btn" href={`/careers/${job.id}/apply`}>Start your application <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Other roles ===== -->
+    {
+      others.length > 0 && (
+        <section class="more">
+          <div class="wrap">
+            <div class="more__head">
+              <h2 class="more__title">Other open roles</h2>
+              <a class="more__all" href="/careers">All roles <span aria-hidden="true">→</span></a>
+            </div>
+            <ul class="more__list">
+              {others.map((o) => (
+                <li>
+                  <a href={`/careers/${o.id}`}>
+                    <span class="more__dept">{DEPTS[o.dept]}</span>
+                    <span class="more__name">{o.title}</span>
+                    <span class="more__meta">{o.location} · {o.pay}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Mobile apply bar -->
+    <a class="bar" href={`/careers/${job.id}/apply`} data-bar>
+      <span>{job.title}</span>
+      <span class="bar__cta">Apply →</span>
+    </a>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--light {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .btn--light:hover,
+  .btn--dark:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .btn--dark {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .btn--block {
+    justify-content: center;
+  }
+
+  /* ===== Header ===== */
+
+  .top {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(40px, 5vw, 80px) var(--gutter) clamp(44px, 5.5vw, 84px);
+    background:
+      radial-gradient(50% 80% at 90% 20%, rgba(189, 47, 47, 0.3), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .top__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(24px, 3vw, 44px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  .top__dept {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .top__dept span {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .top__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(42px, 6vw, 100px);
+    line-height: 0.92;
+  }
+
+  .top__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, max-content));
+    gap: 0;
+    margin: clamp(28px, 3.4vw, 48px) 0 0;
+  }
+
+  .top__facts > div {
+    padding: 0 clamp(18px, 2.6vw, 44px);
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .top__facts > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .top__facts dt {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .top__facts dd {
+    margin: 6px 0 0;
+    font-family: var(--font-head);
+    font-size: clamp(18px, 1.6vw, 26px);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .top__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: clamp(28px, 3.4vw, 44px);
+  }
+
+  .copy {
+    padding: 13px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .copy:hover {
+    border-color: var(--white);
+  }
+
+  .copy.is-done {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  /* ===== Posting ===== */
+
+  .post {
+    padding: clamp(48px, 6vw, 100px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .post__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    gap: clamp(28px, 5vw, 88px);
+    align-items: start;
+  }
+
+  .post__body {
+    max-width: 70ch;
+  }
+
+  .post__body :global(p),
+  .post__body :global(li) {
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.75;
+    color: #3f3f3f;
+  }
+
+  .post__body :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .post__body :global(strong) {
+    color: var(--charcoal);
+  }
+
+  .post__body :global(ul),
+  .post__body :global(ol) {
+    margin: 0 0 1.3em;
+    padding-left: 1.3em;
+  }
+
+  .post__body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .post__body :global(li::marker) {
+    color: var(--red);
+  }
+
+  /* Each posting uses a bold one-line paragraph as a section title. */
+  .post__body :global(p:has(> strong:only-child)) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2em 0 0.8em;
+    padding-top: 1.4em;
+    border-top: 1px solid rgba(51, 51, 51, 0.12);
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.3vw, 20px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .post__body :global(p:has(> strong:only-child))::before {
+    content: '';
+    width: 22px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .post__body :global(p:first-child) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: 0 !important;
+  }
+
+  .card {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    display: grid;
+    gap: 16px;
+    padding: 26px;
+    border-radius: 16px;
+    background: #f4f4f2;
+  }
+
+  .card__label {
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .card dl {
+    margin: 0;
+  }
+
+  .card dl > div {
+    display: grid;
+    gap: 2px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .card dt {
+    font-size: 12px;
+    color: #8a8a8a;
+  }
+
+  .card dd {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .card__pay {
+    font-family: var(--font-head);
+    font-size: 17px !important;
+  }
+
+  .card__mail {
+    font-size: 13px;
+    color: #6d6d6d;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.5);
+  }
+
+  /* ===== Apply ===== */
+
+  .apply {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.25), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+    scroll-margin-top: var(--nav-h);
+  }
+
+  .apply__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 4vw, 72px);
+    align-items: start;
+  }
+
+  .apply__btn {
+    margin-top: 28px;
+  }
+
+  .apply__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .apply__eyebrow span {
+    width: 36px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .apply__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 56px);
+    line-height: 1;
+  }
+
+  .apply__title em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .steps {
+    display: grid;
+    gap: 14px;
+    margin: clamp(24px, 3vw, 36px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .steps span {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    font-family: var(--font-head);
+    font-size: 13px;
+    color: var(--white);
+  }
+
+  .apply__eq {
+    margin: 28px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* ===== Other roles ===== */
+
+  .more {
+    padding: clamp(48px, 6vw, 96px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .more__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .more__title {
+    margin: 0;
+    font-size: clamp(24px, 2.4vw, 40px);
+    line-height: 1;
+  }
+
+  .more__all {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .more__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .more__list a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 22px;
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-radius: 14px;
+    transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .more__list a:hover {
+    border-color: var(--red);
+    transform: translateY(-3px);
+  }
+
+  .more__dept {
+    font-family: var(--font-head);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .more__name {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .more__meta {
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  /* ===== Mobile bar ===== */
+
+  .bar {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .post__grid,
+    .apply__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .card {
+      position: static;
+    }
+
+    .card {
+      order: -1;
+    }
+
+    .top__facts {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    .top__facts > div {
+      padding: 0;
+      border-left: 0;
+    }
+
+    .more__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bar {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(20, 20, 20, 0.94);
+      color: var(--white);
+      font-family: var(--font-head);
+      font-size: 14px;
+      text-transform: uppercase;
+      box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+      transform: translateY(160%);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bar.is-on {
+      transform: none;
+    }
+
+    .bar__cta {
+      color: var(--red);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        btn.textContent = 'Link copied';
+        btn.classList.add('is-done');
+        setTimeout(() => {
+          btn.textContent = 'Copy link';
+          btn.classList.remove('is-done');
+        }, 1800);
+      } catch {
+        // Clipboard unavailable.
+      }
+    })
+  );
+
+  // Mobile apply bar: between the header and the application form.
+  const bar = document.querySelector<HTMLElement>('[data-bar]');
+  const top = document.querySelector('.top');
+  const apply = document.querySelector('.apply');
+  if (bar && top && apply && window.IntersectionObserver) {
+    let past = false;
+    let atForm = false;
+    const sync = () => bar.classList.toggle('is-on', past && !atForm);
+    new IntersectionObserver(([e]) => ((past = !e.isIntersecting), sync())).observe(top);
+    new IntersectionObserver(([e]) => ((atForm = e.isIntersecting), sync())).observe(apply);
+  }
+</script>

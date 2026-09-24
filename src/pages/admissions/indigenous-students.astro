@@ -1,0 +1,1006 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+const contents = [
+  ['funding', 'Funding Your Education'],
+  ['band-funding', 'Band Funding'],
+  ['scholarships', 'Scholarships + Other Funding'],
+  ['reconciliation', 'Truth and Reconciliation'],
+];
+
+const programs = ['Film Production', 'Screenwriting', '3D Animation', 'Visual Effects', 'Documentary', 'Graphic Design'];
+
+// Links checked 2026-09-24. Irving K. Barber is now the BC Scholarship
+// Society; its old bcscholarship.ca domain no longer belongs to it.
+const resources = [
+  { name: 'Congress of Aboriginal Peoples', url: 'https://abo-peoples.org/' },
+  { name: 'Future Generations Foundation', url: 'https://fgfoundation.ca/programs/individual-funding/' },
+  { name: 'First Peoples’ Cultural Council', url: 'https://fpcc.ca/' },
+  { name: 'BC Association of Aboriginal Friendship Centres', url: 'https://bcaafc.com/' },
+  { name: 'BC Scholarship Society (Irving K. Barber)', url: 'https://www.ikbbc.ca/' },
+  { name: 'Indspire Bursaries and Scholarships', url: 'https://indspire.ca/for-students/bursaries-scholarships/' },
+  { name: 'New Relationship Trust', url: 'https://www.newrelationshiptrust.ca/' },
+];
+
+const nations = [
+  { name: 'xʷməθkʷəy̓əm', en: 'Musqueam', url: 'https://www.musqueam.bc.ca/' },
+  { name: 'Sḵwx̱wú7mesh', en: 'Squamish', url: 'https://www.squamish.net/' },
+  { name: 'səl̓ílwətaɬ', en: 'Tsleil-Waututh', url: 'https://twnation.ca/' },
+];
+---
+
+<Base
+  title="Indigenous Students — InFocus Film School"
+  description="Funding for First Nations, Métis and Inuit students at InFocus Film School: band funding, scholarships and bursaries, and our commitment to Truth and Reconciliation."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Indigenous Students"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Admissions', href: '/admissions/how-to-apply' }, { label: 'Indigenous Students' }]}
+    >
+      <p>
+        Indigenous students can receive up to 100% non-repayable financial support to study Film
+        Production, Screenwriting, 3D Animation, Visual Effects, Documentary or Graphic Design in
+        Vancouver, Canada.
+      </p>
+    </PageHero>
+
+    <!-- Land acknowledgement. The motif is topographic contour lines, the
+         land and water itself, rather than borrowed Nations' artwork. -->
+    <section class="land" aria-labelledby="land-title">
+      <svg class="land__topo" viewBox="0 0 1400 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g>
+          <path d="M1219 150L1221 153L1221 155L1219 158L1216 160L1213 162L1211 163L1209 165L1207 167L1205 168L1202 170L1199 170L1196 171L1194 171L1191 172L1189 174L1186 175L1183 176L1180 176L1177 175L1174 174L1172 173L1169 172L1166 173L1162 173L1158 173L1155 172L1152 171L1150 169L1148 167L1146 164L1145 162L1144 160L1144 157L1145 155L1147 152L1149 150L1151 148L1152 146L1151 144L1150 142L1150 140L1150 137L1151 135L1153 133L1155 132L1157 130L1159 128L1161 126L1164 124L1167 124L1170 123L1174 124L1177 124L1180 124L1183 123L1187 122L1190 122L1193 124L1195 125L1197 128L1199 130L1200 132L1202 134L1204 135L1206 137L1207 138L1209 140L1210 142L1212 144L1214 146L1217 148Z" />
+          <path d="M1261 150L1263 155L1261 161L1257 165L1251 169L1245 172L1240 176L1236 179L1233 183L1229 186L1224 189L1218 191L1213 192L1207 193L1202 195L1197 198L1192 200L1186 201L1180 201L1174 199L1169 197L1163 196L1158 196L1151 197L1143 198L1135 197L1128 196L1123 192L1119 188L1116 183L1114 178L1112 174L1110 169L1110 164L1113 159L1117 154L1121 150L1123 146L1123 143L1121 138L1119 134L1118 128L1118 124L1121 119L1125 116L1130 113L1134 109L1138 105L1142 102L1148 99L1154 97L1161 97L1168 98L1174 98L1180 97L1186 96L1193 95L1200 95L1206 98L1210 102L1213 108L1216 112L1219 116L1222 119L1227 121L1231 123L1235 126L1239 130L1242 133L1246 137L1251 141L1256 145Z" />
+          <path d="M1303 150L1304 158L1300 166L1292 172L1283 178L1274 182L1267 187L1263 193L1258 199L1253 204L1246 208L1238 211L1229 213L1221 215L1213 218L1206 222L1198 225L1189 226L1180 226L1171 223L1163 221L1155 220L1145 221L1134 223L1122 224L1111 223L1101 220L1094 214L1090 206L1086 199L1083 191L1081 184L1079 177L1080 170L1083 163L1088 156L1093 150L1094 144L1093 139L1089 132L1085 124L1083 117L1085 109L1090 103L1097 98L1104 94L1111 89L1117 83L1124 78L1132 74L1141 71L1151 71L1161 71L1171 71L1180 70L1190 68L1200 67L1209 69L1217 74L1223 81L1228 89L1232 95L1237 100L1243 103L1251 106L1259 109L1266 113L1272 118L1277 124L1283 129L1291 136L1298 142Z" />
+          <path d="M1345 150L1344 161L1336 170L1325 179L1312 186L1302 192L1294 199L1289 207L1284 215L1277 222L1268 228L1257 231L1245 234L1235 237L1225 241L1215 245L1204 249L1192 251L1180 250L1168 248L1157 246L1145 246L1132 247L1117 250L1101 252L1086 250L1074 244L1066 234L1061 224L1058 213L1055 203L1052 194L1051 185L1052 175L1055 166L1060 158L1064 150L1064 142L1060 134L1054 125L1048 115L1047 104L1051 95L1059 87L1069 81L1079 75L1088 68L1096 61L1105 54L1116 48L1129 45L1142 45L1155 45L1167 44L1180 42L1193 41L1206 41L1218 45L1228 52L1236 62L1241 72L1247 79L1254 84L1265 87L1276 90L1288 94L1298 99L1307 106L1315 114L1323 122L1332 130L1340 140Z" />
+          <path d="M1384 150L1381 163L1370 175L1355 185L1340 193L1328 201L1321 210L1316 221L1311 231L1302 241L1290 247L1276 252L1262 255L1248 258L1236 263L1223 269L1210 274L1195 276L1180 276L1165 274L1151 272L1135 273L1118 276L1098 280L1078 280L1061 276L1048 267L1040 254L1036 240L1033 226L1030 214L1027 203L1024 192L1024 181L1027 170L1031 160L1033 150L1031 140L1024 130L1016 117L1010 104L1010 91L1017 80L1029 72L1042 64L1054 57L1065 48L1075 39L1086 29L1100 23L1116 19L1132 18L1149 18L1164 17L1180 16L1196 15L1212 16L1226 22L1238 32L1247 44L1254 55L1262 63L1273 68L1288 70L1305 73L1321 77L1334 84L1345 93L1354 103L1364 114L1373 125L1381 137Z" />
+          <path d="M1421 150L1414 165L1400 179L1383 190L1366 200L1355 210L1349 222L1344 235L1338 248L1328 259L1312 267L1295 271L1277 275L1261 279L1247 285L1232 293L1215 299L1198 302L1180 302L1162 301L1144 301L1125 303L1103 307L1079 310L1056 309L1037 302L1023 288L1016 271L1013 254L1011 238L1007 224L1003 211L999 199L997 186L999 174L1001 162L1000 150L995 138L985 125L976 109L971 94L973 79L984 66L999 56L1015 48L1030 39L1042 28L1053 16L1067 5L1083 -4L1103 -8L1123 -9L1142 -8L1161 -9L1180 -10L1199 -10L1217 -7L1234 1L1247 14L1257 27L1267 39L1278 46L1294 49L1314 51L1336 53L1356 59L1372 68L1384 79L1394 92L1404 106L1413 120L1420 134Z" />
+          <path d="M1455 150L1445 167L1429 182L1409 196L1393 207L1382 220L1377 234L1373 250L1366 266L1353 278L1334 286L1313 291L1293 294L1274 300L1258 308L1240 317L1222 325L1201 330L1180 331L1159 330L1137 331L1113 334L1087 339L1060 341L1034 337L1014 326L1001 308L996 287L994 266L991 248L986 233L979 219L972 206L969 192L968 178L967 164L964 150L956 135L945 119L935 101L931 83L937 66L952 52L971 41L990 32L1005 21L1018 7L1031 -7L1047 -21L1067 -30L1089 -34L1113 -35L1136 -34L1158 -33L1180 -33L1202 -32L1222 -27L1241 -17L1255 -3L1268 11L1280 22L1296 27L1317 29L1343 29L1370 32L1394 39L1412 51L1425 66L1434 81L1443 98L1452 115L1457 132Z" />
+          <path d="M1486 150L1474 169L1455 186L1436 201L1420 215L1411 230L1407 247L1403 266L1394 283L1378 296L1355 305L1331 309L1307 314L1287 320L1269 331L1250 342L1228 352L1205 359L1180 361L1155 362L1129 363L1102 367L1072 370L1041 370L1014 363L994 347L983 324L978 299L977 276L973 257L966 242L955 228L944 213L937 198L934 182L931 166L925 150L915 133L902 114L893 93L892 72L902 54L921 39L943 27L964 16L980 2L994 -14L1008 -32L1027 -47L1050 -57L1077 -60L1104 -59L1131 -57L1156 -56L1180 -55L1204 -53L1227 -46L1247 -35L1264 -20L1279 -7L1295 3L1316 6L1344 6L1376 5L1407 9L1433 19L1452 34L1464 52L1472 71L1480 90L1487 110L1490 130Z" />
+          <path d="M1515 150L1501 171L1482 189L1462 206L1448 222L1441 240L1438 260L1434 282L1422 300L1402 314L1375 322L1347 327L1322 332L1301 341L1281 355L1259 370L1235 382L1208 390L1180 394L1151 395L1121 397L1090 400L1056 401L1024 398L996 386L977 365L967 338L964 310L962 285L956 266L944 251L928 237L914 222L903 205L896 187L891 169L884 150L872 130L860 108L852 85L855 62L869 42L891 26L916 13L938 -1L955 -17L969 -36L985 -56L1006 -73L1034 -83L1064 -85L1096 -83L1126 -79L1153 -76L1180 -74L1206 -71L1231 -64L1253 -53L1273 -38L1291 -26L1312 -19L1339 -18L1373 -21L1411 -21L1446 -15L1474 -2L1491 17L1501 39L1507 62L1513 84L1519 106L1521 128Z" />
+          <path d="M1543 150L1529 173L1509 193L1491 212L1478 230L1473 251L1470 274L1464 297L1449 317L1424 331L1394 339L1364 344L1337 351L1314 364L1293 381L1270 399L1243 415L1212 424L1180 428L1147 429L1113 430L1078 431L1042 430L1008 423L981 406L963 380L955 349L952 319L948 294L938 276L920 261L899 247L879 231L865 213L856 192L850 171L841 150L829 127L818 103L813 77L819 53L837 31L862 14L889 -1L911 -17L928 -37L943 -59L961 -82L986 -99L1018 -108L1053 -108L1088 -103L1121 -98L1151 -94L1180 -92L1208 -89L1235 -82L1260 -71L1282 -58L1305 -49L1332 -45L1366 -46L1406 -49L1448 -49L1486 -40L1513 -23L1528 1L1535 27L1539 53L1543 78L1548 102L1549 126Z" />
+          <path d="M223 420L221 423L219 425L216 427L214 429L214 432L213 434L213 437L211 439L208 441L205 442L201 443L198 443L195 445L193 446L190 448L187 450L184 451L180 451L176 451L172 452L168 452L164 452L160 452L156 450L154 447L153 444L152 440L152 437L151 435L150 433L148 431L146 429L144 427L144 425L143 422L142 420L140 417L139 415L138 412L138 409L140 406L143 404L146 402L149 401L151 399L153 396L155 394L158 391L161 390L165 390L169 390L173 391L177 391L180 391L183 392L187 393L189 394L192 396L194 397L197 398L201 398L205 398L210 398L214 399L218 400L220 403L221 406L222 409L223 412L223 414L224 417Z" />
+          <path d="M263 420L260 425L255 430L252 434L249 439L248 443L247 449L246 454L242 459L236 462L229 463L222 465L216 466L211 470L206 474L201 478L195 482L188 484L180 485L172 485L165 485L156 485L148 485L141 482L135 478L131 472L129 465L128 458L127 453L124 449L120 446L115 443L110 439L106 435L104 430L103 425L101 420L98 415L96 409L95 403L97 398L101 393L107 389L113 385L118 381L122 377L125 371L129 366L135 363L143 361L151 361L159 362L167 364L173 364L180 365L186 365L193 367L198 369L204 372L209 374L216 374L224 374L233 373L243 373L251 376L257 380L260 386L261 392L262 398L263 404L264 409L264 415Z" />
+          <path d="M301 420L297 428L292 435L287 441L284 448L283 456L282 464L279 471L272 477L263 481L252 484L243 486L235 490L228 496L221 504L213 511L203 517L192 520L180 520L168 519L157 518L145 517L133 515L123 510L116 503L111 493L109 483L107 474L103 468L97 463L88 459L79 455L71 450L65 443L62 435L61 428L58 420L55 412L53 403L52 395L56 387L63 380L72 374L80 368L86 362L91 354L96 346L103 339L113 334L125 333L138 334L150 337L161 339L171 340L180 340L189 340L199 341L208 343L217 346L226 347L237 347L250 346L265 345L279 347L290 352L296 360L299 369L299 379L299 388L300 396L302 404L303 412Z" />
+          <path d="M339 420L335 430L329 439L324 448L320 458L319 468L317 478L311 488L301 495L289 501L275 504L264 509L254 516L246 525L237 537L226 547L212 554L196 556L180 556L164 553L149 550L134 547L120 542L108 534L99 524L94 511L90 499L86 490L78 483L67 479L53 474L39 469L28 461L22 451L19 441L18 431L15 420L12 409L10 398L11 386L16 376L25 367L36 358L46 350L53 341L60 331L67 320L78 312L92 308L109 308L126 311L142 315L156 317L168 317L180 316L193 314L205 314L218 315L231 316L245 317L261 316L279 315L298 316L315 320L327 329L332 341L333 354L332 367L332 379L335 389L338 399L340 410Z" />
+          <path d="M378 420L373 433L366 444L360 456L356 468L354 480L350 493L342 504L330 513L315 520L300 526L287 533L277 544L267 558L255 573L240 585L221 592L200 593L180 589L161 583L142 578L125 572L109 565L95 555L85 542L77 529L71 516L63 507L50 501L32 497L13 492L-5 484L-17 473L-23 460L-24 447L-25 433L-27 420L-30 406L-33 392L-31 378L-24 365L-13 353L-1 343L11 332L20 320L28 308L39 296L55 287L74 284L96 286L117 291L135 295L151 296L165 294L180 289L196 285L213 282L230 282L247 283L266 283L287 283L310 283L332 286L349 295L360 308L364 324L363 342L362 357L364 370L369 383L375 395L379 407Z" />
+          <path d="M418 420L412 435L403 449L396 463L391 477L388 492L383 507L374 520L359 531L342 540L326 549L313 561L302 576L290 594L274 612L254 624L230 629L204 626L180 618L158 609L137 601L117 593L99 585L83 574L71 560L60 546L50 534L37 526L17 521L-6 517L-31 510L-50 500L-62 485L-66 469L-65 452L-65 436L-68 420L-72 404L-75 387L-74 370L-65 354L-52 340L-38 327L-25 314L-13 300L-2 286L14 273L34 266L59 264L84 268L108 274L128 276L145 274L162 267L180 258L200 251L221 246L243 246L265 247L289 248L314 249L339 252L363 259L380 272L390 290L392 310L390 330L390 347L395 362L404 376L413 390L419 405Z" />
+          <path d="M458 420L450 437L439 454L430 470L425 486L422 504L417 521L406 537L390 551L373 563L356 575L342 591L329 611L314 633L293 651L267 661L238 662L208 654L180 642L155 630L132 620L111 612L90 604L71 593L55 580L41 567L26 556L6 549L-20 544L-49 539L-76 529L-96 515L-105 497L-107 477L-105 457L-105 438L-109 420L-115 401L-120 381L-117 361L-107 343L-92 326L-74 311L-59 296L-44 281L-28 266L-8 254L17 247L46 248L74 252L100 256L121 256L139 248L158 236L180 222L205 211L231 206L257 206L284 209L311 212L339 216L366 223L390 234L407 252L415 274L416 298L415 319L418 338L427 353L441 368L454 384L460 402Z" />
+        </g>
+      </svg>
+
+      <div class="land__inner">
+        <p class="land__eyebrow"><span aria-hidden="true"></span>Land acknowledgement</p>
+        <h2 id="land-title" class="land__lede">
+          InFocus Film School is located on the unceded traditional territories of the
+          Musqueam, Squamish and Tsleil-Waututh Nations.
+        </h2>
+
+        <ul class="nations">
+          {nations.map((n) => (
+            <li>
+              <a href={n.url} target="_blank" rel="noopener">
+                <span class="nations__name" lang="und">{n.name}</span>
+                <span class="nations__en">{n.en} Nation <span aria-hidden="true">↗</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <p class="land__text">
+          We are grateful to learn, create and tell stories on this land, and we recognize the
+          enduring relationship its peoples have with it.
+        </p>
+      </div>
+    </section>
+
+    <div class="page">
+      <div class="page__inner">
+        <div class="layout">
+          <aside class="toc">
+            <h2 class="toc__title">On this page</h2>
+            <nav aria-label="Table of contents">
+              <ol>
+                {contents.map(([id, label]) => (
+                  <li><a href={`#${id}`} data-toc={id}>{label}</a></li>
+                ))}
+              </ol>
+            </nav>
+          </aside>
+
+          <article class="body">
+            <section id="funding" data-section>
+              <h2>Funding Your Education</h2>
+              <p>
+                InFocus Film School’s dedication to inclusive education includes supporting First
+                Nations, Métis and Inuit students in reaching their artistic and career goals in
+                the creative industries. We’re here to help you navigate and access support
+                programs that lower the barriers to a quality education.
+              </p>
+
+              <div class="stat">
+                <div class="stat__figure">
+                  <span class="stat__up">Up to</span>
+                  <strong>100%</strong>
+                  <span class="stat__sub">of tuition subsidized</span>
+                </div>
+                <div class="stat__body">
+                  <p>
+                    Eligible students accepted into these programs can have their film school
+                    tuition subsidized up to 100%, with non-repayable funding.
+                  </p>
+                  <ul class="stat__programs">
+                    {programs.map((p) => <li>{p}</li>)}
+                  </ul>
+                </div>
+              </div>
+
+              <p>
+                There are many routes and funding opportunities for Indigenous students to access
+                a film education. For further information or guidance,
+                <a href="/contact">contact our Admissions team</a>.
+              </p>
+            </section>
+
+            <section id="band-funding" data-section>
+              <h2>Band Funding</h2>
+              <p>
+                If you are a First Nations band member, your band may offer scholarships,
+                bursaries or other funding that partially or even fully covers your tuition. Each
+                band has its own application process to access these funds, and may have deadlines
+                or timelines for when you can apply.
+              </p>
+
+              <ol class="steps">
+                <li>
+                  <span class="steps__n">01</span>
+                  <span>Contact your band’s post-secondary funding administrator for their application requirements and deadlines.</span>
+                </li>
+                <li>
+                  <span class="steps__n">02</span>
+                  <span>Gather the documents they ask for. Our admissions advisors can help with any paperwork from InFocus.</span>
+                </li>
+                <li>
+                  <span class="steps__n">03</span>
+                  <span>Apply ahead of your program start date, so funding is in place before classes begin.</span>
+                </li>
+              </ol>
+            </section>
+
+            <section id="scholarships" data-section>
+              <h2>Scholarships + Other Funding</h2>
+              <p>
+                If you are Inuit, Métis or non-status, there are options available to you as well.
+                Many sources of external funding and financial support exist for all Indigenous
+                students, offered by governments and non-profits across Canada.
+              </p>
+
+              <a class="feature" href="https://www.sac-isc.gc.ca/eng/1351185180120/1351685455328" target="_blank" rel="noopener">
+                <span class="feature__tag">Start here</span>
+                <span class="feature__title">Indigenous Bursaries Search Tool</span>
+                <span class="feature__text">
+                  Indigenous Services Canada’s database of bursaries and scholarships. Search for
+                  the awards that apply to you.
+                </span>
+                <span class="feature__cta">Open the search tool <span aria-hidden="true">↗</span></span>
+              </a>
+
+              <h3 class="sub">Other resources to explore</h3>
+              <ul class="resources">
+                {resources.map((r) => (
+                  <li>
+                    <a href={r.url} target="_blank" rel="noopener">
+                      <span>{r.name}</span>
+                      <span class="resources__arrow" aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- Truth and Reconciliation. Orange is Orange Shirt Day's colour, used
+         only here. -->
+    <section class="trc" id="reconciliation" data-section aria-labelledby="trc-title">
+      <div class="trc__inner">
+        <div class="trc__head">
+          <p class="trc__eyebrow"><span aria-hidden="true"></span>Every Child Matters</p>
+          <h2 id="trc-title" class="trc__title">Truth and Reconciliation</h2>
+          <p class="trc__text">
+            From 2008 to 2015, the Truth and Reconciliation Commission of Canada documented the
+            history and lasting impacts of the residential school system on Indigenous children,
+            families and communities. Its final report issued 94 Calls to Action to redress that
+            legacy and advance reconciliation.
+          </p>
+        </div>
+
+        <div class="trc__num" aria-hidden="true">
+          <span class="trc__94">94</span>
+          <span class="trc__label">Calls to<br />Action</span>
+        </div>
+
+        <figure class="trc__quote">
+          <span class="trc__qlabel">Call to Action 86</span>
+          <blockquote>
+            <p>
+              We call upon Canadian journalism programs and media schools to require education for
+              all students on the history of Aboriginal peoples, including the history and legacy
+              of residential schools, the United Nations Declaration on the Rights of Indigenous
+              Peoples, Treaties and Aboriginal rights, Indigenous law, and Aboriginal–Crown
+              relations.
+            </p>
+          </blockquote>
+          <figcaption>
+            Truth and Reconciliation Commission of Canada. As storytellers, media schools like ours
+            are called on directly.
+          </figcaption>
+        </figure>
+
+        <ul class="trc__cards">
+          <li class="trc__card">
+            <span class="trc__date">
+              <strong>30</strong>
+              <span>September</span>
+            </span>
+            <h3>National Day for Truth and Reconciliation</h3>
+            <p>
+              Also known as Orange Shirt Day, it honours residential school Survivors, their
+              families and communities, and the children who never came home.
+            </p>
+            <a href="https://www.orangeshirtday.org/" target="_blank" rel="noopener">Orange Shirt Society <span aria-hidden="true">↗</span></a>
+          </li>
+          <li class="trc__card">
+            <span class="trc__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3V5Z M18 8h2v11" /></svg>
+            </span>
+            <h3>Learn the history</h3>
+            <p>
+              Read the Commission’s reports and follow Canada’s progress on the Calls to Action.
+            </p>
+            <a href="https://nctr.ca/records/reports/" target="_blank" rel="noopener">NCTR reports <span aria-hidden="true">↗</span></a>
+            <a href="https://www.rcaanc-cirnac.gc.ca/eng/1524494530110/1557511412801" target="_blank" rel="noopener">Progress on the Calls to Action <span aria-hidden="true">↗</span></a>
+          </li>
+          <li class="trc__card">
+            <span class="trc__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
+            </span>
+            <h3>Support is available</h3>
+            <p>Free, confidential support for Survivors and their families, 24 hours a day.</p>
+            <dl>
+              <div>
+                <dt>National Residential School Crisis Line</dt>
+                <dd><a href="tel:+18669254419">1-866-925-4419</a></dd>
+              </div>
+              <div>
+                <dt>KUU-US Crisis Line (BC)</dt>
+                <dd><a href="tel:+18005888717">1-800-588-8717</a></dd>
+              </div>
+            </dl>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Land acknowledgement ---- */
+
+  .land {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(48px, 6vw, 96px) var(--gutter);
+    background: #f4f4f2;
+    color: var(--charcoal);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+  }
+
+  .land__topo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+  }
+
+  .land__topo path {
+    fill: none;
+    stroke: rgba(51, 51, 51, 0.11);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* One ring in each set picks up the brand red, like an index contour. */
+  .land__topo path:nth-child(5),
+  .land__topo path:nth-child(14) {
+    stroke: rgba(189, 47, 47, 0.35);
+  }
+
+  .land__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .land__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .land__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* A statement, not a heading in the usual sense: sentence case, quote face. */
+  .land__lede {
+    margin: 0;
+    max-width: 30ch;
+    font-family: var(--font-quote);
+    font-size: clamp(22px, 2.2vw, 38px);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .nations {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.2vw, 18px);
+    max-width: 980px;
+    margin: clamp(26px, 3vw, 44px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nations a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: clamp(16px, 1.8vw, 24px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-top: 3px solid var(--charcoal);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px);
+    transition:
+      border-color 0.3s ease,
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nations a:hover {
+    border-top-color: var(--red);
+    transform: translateY(-3px);
+  }
+
+  /* The site fonts lack some of these characters (ʷ, ɬ, combining marks), and
+     a mixed-font fallback misplaces the diacritics. System UI faces carry the
+     full set, so the whole name renders in one font and the marks sit right. */
+  .nations__name {
+    font-family: system-ui, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue', sans-serif;
+    font-size: clamp(20px, 1.9vw, 30px);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .nations__en {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6d6d6d;
+  }
+
+  .land__text {
+    margin: clamp(20px, 2.2vw, 30px) 0 0;
+    max-width: 62ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #4a4a4a;
+  }
+
+  /* ---- Layout + contents: same as the other admissions pages. ---- */
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 90px);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .toc__title {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.18);
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* ---- Body ---- */
+
+  .body section,
+  .trc {
+    scroll-margin-top: calc(var(--nav-h) + 8px);
+  }
+
+  .body section + section {
+    margin-top: clamp(34px, 4vw, 62px);
+    padding-top: clamp(30px, 3.6vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .body h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-size: clamp(21px, 2vw, 33px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .body p {
+    margin: 0 0 1.05em;
+    max-width: 72ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .body a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .body a:hover {
+    color: var(--red);
+  }
+
+  .sub {
+    margin: clamp(28px, 3vw, 44px) 0 12px;
+    font-size: clamp(15px, 1.15vw, 19px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---- 100% funding stat ---- */
+
+  .stat {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(20px, 3vw, 48px);
+    margin: clamp(20px, 2.2vw, 30px) 0 clamp(22px, 2.4vw, 32px);
+    padding: clamp(24px, 2.8vw, 40px);
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(189, 47, 47, 0.28), transparent 60%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .stat__figure {
+    display: grid;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  .stat__up,
+  .stat__sub {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat__figure strong {
+    font-size: clamp(64px, 7vw, 116px);
+    font-weight: 600;
+    line-height: 0.95;
+    color: var(--white);
+  }
+
+  .body .stat__body p {
+    margin: 0 0 16px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .stat__programs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stat__programs li {
+    padding: 7px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* ---- Band funding steps ---- */
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    padding: 0;
+    list-style: none;
+    background: rgba(51, 51, 51, 0.14);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .steps li {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: clamp(18px, 2vw, 26px);
+    background: var(--white);
+    font-size: 15px;
+    line-height: 1.6;
+    color: #3f3f3f;
+  }
+
+  .steps__n {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--red);
+  }
+
+  /* ---- Scholarships ---- */
+
+  .body .feature {
+    display: grid;
+    gap: 6px;
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    padding: clamp(22px, 2.4vw, 32px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-left: 4px solid var(--red);
+    background: #fafafa;
+    text-decoration: none;
+    transition:
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .body .feature:hover {
+    color: var(--charcoal);
+    box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .feature__tag {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .feature__title {
+    font-family: var(--font-head);
+    font-size: clamp(20px, 1.8vw, 28px);
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .feature__text {
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .feature__cta {
+    margin-top: 4px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .resources {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .body .resources a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 2px;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+    font-size: 15px;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .resources__arrow {
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .resources a:hover .resources__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* ---- Truth and Reconciliation ---- */
+
+  .trc {
+    --orange: #f07f2d;
+    position: relative;
+    overflow: hidden;
+    padding: clamp(60px, 7.5vw, 124px) var(--gutter);
+    background:
+      radial-gradient(55% 80% at 100% 0%, rgba(240, 127, 45, 0.16), transparent 65%),
+      var(--black);
+    color: var(--white);
+    border-top: 6px solid var(--orange);
+  }
+
+  .trc__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: clamp(28px, 4vw, 72px);
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .trc__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  .trc__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--orange);
+  }
+
+  .trc__title {
+    margin: 0;
+    font-size: clamp(36px, 4.8vw, 82px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .trc__text {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    max-width: 58ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .trc__num {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 14px;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  /* Outlined numeral, so it reads as a mark rather than a statistic. */
+  .trc__94 {
+    font-size: clamp(120px, 15vw, 260px);
+    font-weight: 700;
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--orange);
+  }
+
+  .trc__label {
+    padding-bottom: 6px;
+    font-size: clamp(14px, 1.2vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    color: var(--orange);
+  }
+
+  .trc__quote {
+    grid-column: 1 / -1;
+    margin: clamp(8px, 1.4vw, 20px) 0 0;
+    padding: clamp(24px, 3vw, 44px);
+    border-left: 3px solid var(--orange);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .trc__qlabel {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  .trc__quote blockquote {
+    margin: 12px 0 0;
+  }
+
+  .trc__quote blockquote p {
+    margin: 0;
+    max-width: 60ch;
+    font-family: var(--font-quote);
+    font-size: clamp(18px, 1.6vw, 26px);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .trc__quote figcaption {
+    margin-top: 16px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .trc__cards {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trc__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: clamp(22px, 2.2vw, 30px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .trc__card h3 {
+    margin: 4px 0 0;
+    font-size: clamp(17px, 1.3vw, 21px);
+    line-height: 1.15;
+  }
+
+  .trc__card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .trc__card a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--orange);
+  }
+
+  .trc__card a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .trc__card > a:first-of-type {
+    margin-top: auto;
+  }
+
+  .trc__date {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  .trc__date strong {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--orange);
+  }
+
+  .trc__date span {
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .trc__icon svg {
+    width: 36px;
+    height: 36px;
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+
+  .trc__card dl {
+    display: grid;
+    gap: 10px;
+    margin: auto 0 0;
+  }
+
+  .trc__card dt {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .trc__card dd {
+    margin: 2px 0 0;
+  }
+
+  .trc__card dd a {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 1000px) {
+    .trc__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .trc__num {
+      justify-content: flex-start;
+      order: -1;
+    }
+
+    .trc__cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    }
+
+    .toc ol {
+      column-count: 2;
+      column-gap: 24px;
+    }
+
+    .nations {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stat {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .toc ol {
+      column-count: 1;
+    }
+
+    .steps,
+    .resources {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  // Highlights the contents entry for whichever section is in view.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+  if (sections.length && links.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links.values()) a.removeAttribute('aria-current');
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+
+    for (const s of sections) io.observe(s);
+  }
+</script>

@@ -1,0 +1,1676 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { getPrograms, renderInline, mapHref, type Program } from '../../lib/programs';
+
+export function getStaticPaths() {
+  return getPrograms().map((program) => ({ params: { slug: program.slug }, props: { program } }));
+}
+
+const { program: p } = Astro.props as { program: Program };
+const others = getPrograms().filter((o) => o.slug !== p.slug && o.group !== undefined).slice(0, 8);
+const pad = (n: number) => String(n).padStart(2, '0');
+const ext = (href: string) => /^https?:\/\//.test(href);
+// Apply goes to our own application page with this program preselected.
+const apply = `/apply?program=${p.slug}`;
+---
+
+<Base title={`${p.title} — InFocus Film School`} description={p.summary} image={p.hero.image}>
+  <Nav />
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="hero" aria-labelledby="prog-title">
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/programs">Programs</a></li>
+              <li aria-current="page">{p.shortTitle}</li>
+            </ol>
+          </nav>
+          <p class="hero__eyebrow"><span aria-hidden="true"></span>{p.facts.find((f) => f.label === 'Credential')?.value ?? 'Program'}</p>
+          <h1 id="prog-title" class="hero__title">{p.title}</h1>
+          <p class="hero__lede">{p.summary}</p>
+          <div class="hero__actions">
+            <a class="btn btn--light" href={apply} target={ext(apply) ? '_blank' : undefined} rel={ext(apply) ? 'noopener' : undefined}>
+              Apply now <span aria-hidden="true">↗</span>
+            </a>
+            <a class="link" href="#details">Program details <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+
+        {
+          p.hero.image && (
+            <figure class:list={['viewfinder', { 'viewfinder--cutout': p.hero.image.endsWith('.png') }]}>
+              <img src={p.hero.image} alt={p.hero.imageAlt ?? ''} loading="eager" decoding="async" />
+              <span class="vf vf--tl" aria-hidden="true" />
+              <span class="vf vf--tr" aria-hidden="true" />
+              <span class="vf vf--bl" aria-hidden="true" />
+              <span class="vf vf--br" aria-hidden="true" />
+              <span class="viewfinder__rec" aria-hidden="true"><i />Rec</span>
+            </figure>
+          )
+        }
+      </div>
+
+      <dl class="facts">
+        {p.facts.map((f) => (
+          <div>
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+        {p.costs && (
+          <div>
+            <dt>Tuition from</dt>
+            <dd>{p.costs.domestic}</dd>
+          </div>
+        )}
+      </dl>
+    </section>
+
+    <!-- ===== Intro ===== -->
+    <section class="intro">
+      <div class="wrap intro__grid">
+        <h2 class="intro__heading">{p.intro.heading}</h2>
+        <div class="intro__body">
+          {p.intro.paras.map((t, i) => <p class={i === 0 ? 'intro__lede' : ''} set:html={renderInline(t)} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== About cards ===== -->
+    <section class="about" aria-labelledby="about-title">
+      <div class="wrap">
+        <p class="eyebrow"><span aria-hidden="true"></span>Why this program</p>
+        <h2 id="about-title" class="h2">{p.about.heading}</h2>
+        <ol class="about__cards">
+          {p.about.cards.map((c, i) => (
+            <li class="card">
+              <span class="card__n">{pad(i + 1)}</span>
+              <h3 class="card__title">{c.title}</h3>
+              <p set:html={renderInline(c.text)} />
+              {c.link && (
+                <a class="card__link" href={mapHref(c.link.href)} target={ext(mapHref(c.link.href)) ? '_blank' : undefined} rel={ext(mapHref(c.link.href)) ? 'noopener' : undefined}>
+                  {c.link.label} <span aria-hidden="true">→</span>
+                </a>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== Feature sections ===== -->
+    {p.sections.map((s, i) => (
+      <section class:list={['feature', { 'feature--flip': i % 2 === 1, 'feature--noimg': !s.image }]}>
+        <div class="wrap feature__grid">
+          {s.image && (
+            <div class="feature__media">
+              <img src={s.image} alt={s.imageAlt ?? ''} loading="lazy" decoding="async" />
+            </div>
+          )}
+          <div class="feature__copy">
+            <p class="eyebrow"><span aria-hidden="true"></span>{pad(i + 1)}</p>
+            <h2 class="h2">{s.heading}</h2>
+            {s.paras.map((t) => <p set:html={renderInline(t)} />)}
+            {s.link && (
+              <a class="link link--dark" href={mapHref(s.link.href)}>{s.link.label} <span aria-hidden="true">→</span></a>
+            )}
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <!-- ===== Curriculum ===== -->
+    {
+      p.curriculum && (
+        <section class="curr" aria-labelledby="curr-title">
+          <div class="wrap">
+            <div class="curr__head">
+              <div>
+                <p class="eyebrow eyebrow--light"><span aria-hidden="true" />Curriculum</p>
+                <h2 id="curr-title" class="h2">{p.curriculum.heading}</h2>
+              </div>
+              {p.curriculum.intro && <p class="curr__intro" set:html={renderInline(p.curriculum.intro)} />}
+            </div>
+            {p.curriculum.software && p.curriculum.software.length > 0 && (
+              <ul class="curr__software" aria-label="Software you’ll learn">
+                {p.curriculum.software.map((sw) => <li>{sw}</li>)}
+              </ul>
+            )}
+            <ol class="modules">
+              {p.curriculum.modules.map((m, i) => (
+                <li class="module">
+                  <span class="module__n">{pad(i + 1)}</span>
+                  <h3 class="module__title">{m.title}</h3>
+                  <p set:html={renderInline(m.text)} />
+                </li>
+              ))}
+            </ol>
+            {p.links.curriculum && (
+              <a class="link" href={p.links.curriculum} target="_blank" rel="noopener">
+                Full curriculum breakdown <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Outcomes ===== -->
+    {
+      (p.stats || p.alumni) && (
+        <section class="outcomes" aria-labelledby="out-title">
+          <div class="wrap">
+            {p.stats && (
+              <div class="outcomes__top">
+                <div>
+                  <p class="eyebrow eyebrow--light"><span aria-hidden="true" />Outcomes</p>
+                  <h2 id="out-title" class="h2">{p.stats.heading ?? 'Graduate outcomes'}</h2>
+                  {p.stats.text && <p class="outcomes__text" set:html={renderInline(p.stats.text)} />}
+                </div>
+                {p.stats.items.length > 0 && <dl class="bigstats">
+                  {p.stats.items.map((s) => (
+                    <div>
+                      <dt>{s.value}</dt>
+                      <dd>{s.label}</dd>
+                    </div>
+                  ))}
+                  {p.stats.source && (
+                    <p class="bigstats__src">
+                      Source: <a href={p.stats.source.href} target="_blank" rel="noopener">{p.stats.source.label}</a>
+                    </p>
+                  )}
+                </dl>}
+              </div>
+            )}
+
+            {p.alumni && p.alumni.length > 0 && (
+              <ul class="grads">
+                {p.alumni.map((a) => (
+                  <li class="grad">
+                    <img class="grad__img" src={a.image} alt={a.name} loading="lazy" decoding="async" />
+                    <div>
+                      <p class="grad__name">{a.name}</p>
+                      <p class="grad__prog">{a.program}</p>
+                      <p class="grad__label">{a.label}</p>
+                      <ul class="grad__credits">
+                        {a.credits.map((c) => (
+                          <li>
+                            {c.text}
+                            {c.winner && <span class="grad__win">★ Winner</span>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {p.links.studentWork && (
+              <a class="link" href={p.links.studentWork} target="_blank" rel="noopener">
+                Watch student work <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Pathway ===== -->
+    {
+      p.pathway && (
+        <section class="pathway">
+          <div class="wrap">
+            <a class="pathway__card" href={p.pathway.link.href}>
+              <img src="/images/logo-yorkville.jpg" alt="Yorkville University" loading="lazy" decoding="async" />
+              <span class="pathway__body">
+                <span class="pathway__tag">Degree pathway</span>
+                <span class="pathway__title">{p.pathway.heading}</span>
+                <span class="pathway__text">{p.pathway.text}</span>
+                <span class="pathway__cta">{p.pathway.link.label} <span aria-hidden="true">→</span></span>
+              </span>
+            </a>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Costs ===== -->
+    {
+      p.costs && (
+        <section class="costs" aria-labelledby="costs-title">
+          <div class="wrap costs__grid">
+            <div>
+              <p class="eyebrow"><span aria-hidden="true" />Tuition</p>
+              <h2 id="costs-title" class="h2">{p.costs.heading}</h2>
+              <p class="costs__text" set:html={renderInline(p.costs.text)} />
+              <div class="costs__links">
+                <a class="link link--dark" href="/admissions/finances">Finances + funding <span aria-hidden="true">→</span></a>
+                {p.costs.breakdown && (
+                  <a class="link link--dark" href={p.costs.breakdown} target="_blank" rel="noopener">
+                    Cost breakdown <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
+            </div>
+            <div class="prices">
+              <div class="price">
+                <span class="price__label">Domestic</span>
+                <span class="price__value">{p.costs.domestic}</span>
+              </div>
+              <div class="price price--dark">
+                <span class="price__label">International</span>
+                <span class="price__value">{p.costs.international}</span>
+              </div>
+              {p.costs.notes?.map((n) => <p class="prices__note" set:html={renderInline(n)} />)}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Accreditation ===== -->
+    {
+      p.accreditation && (
+        <section class="accred">
+          <div class="wrap accred__grid">
+            <div class="accred__seals">
+              <img src="/images/ptiru-logo.png" alt="Designated — B.C. Private Training Institutions Regulatory Unit" loading="lazy" decoding="async" />
+            </div>
+            <div>
+              <h2 class="h3">{p.accreditation.heading}</h2>
+              {p.accreditation.paras.map((t) => <p set:html={renderInline(t)} />)}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ===== Details ===== -->
+    <section class="details" id="details" aria-labelledby="details-title">
+      <div class="wrap details__grid">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true"></span>The fine print</p>
+          <h2 id="details-title" class="h2">Program details</h2>
+          <div class="acc">
+            {p.details.map((d, i) => (
+              <div class="acc__item" data-acc>
+                <button type="button" class="acc__btn" aria-expanded="false" aria-controls={`d-${i}`}>
+                  <span>{d.label}</span>
+                  <span class="acc__icon" aria-hidden="true" />
+                </button>
+                <div class="acc__panel" id={`d-${i}`} role="region">
+                  <div class="acc__inner">
+                    <p set:html={renderInline(d.text)} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <aside class="side">
+          {p.startDates && (
+            <div class="side__card">
+              <h3>Start dates</h3>
+              <p set:html={renderInline(p.startDates)} />
+            </div>
+          )}
+          {p.requirements && (
+            <div class="side__card">
+              <h3>Admission requirements</h3>
+              <p>{p.requirements.intro}</p>
+              <ul>
+                {p.requirements.items.map((it) => <li set:html={renderInline(it)} />)}
+              </ul>
+            </div>
+          )}
+          <div class="side__card side__card--dark">
+            <h3>Ready to start?</h3>
+            <p>Talk to an admissions advisor about start dates, funding and your portfolio.</p>
+            <div class="side__actions">
+              <a class="btn btn--light" href={apply} target={ext(apply) ? '_blank' : undefined} rel={ext(apply) ? 'noopener' : undefined}>
+                Apply now <span aria-hidden="true">↗</span>
+              </a>
+              <a class="link" href="/contact">Request info <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Other programs ===== -->
+    {
+      others.length > 0 && (
+        <section class="others" aria-labelledby="others-title">
+          <div class="wrap">
+            <h2 id="others-title" class="h3">Explore other programs</h2>
+            <ul class="others__list">
+              {others.map((o) => (
+                <li>
+                  <a href={`/programs/${o.slug}`}>
+                    <span>{o.shortTitle}</span>
+                    <span class="others__meta">
+                      {o.facts.find((f) => f.label === 'Program length')?.value ?? ''}
+                      {o.facts.find((f) => f.label === 'Credential') && ` · ${o.facts.find((f) => f.label === 'Credential')!.value}`}
+                    </span>
+                    <span class="others__arrow" aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Sticky apply bar once the hero is out of view. -->
+    <div class="bar" data-bar aria-hidden="true">
+      <span class="bar__name">{p.shortTitle}</span>
+      <span class="bar__meta">{p.facts.map((f) => f.value).join(' · ')}</span>
+      <a class="btn btn--red" href={apply} tabindex="-1" target={ext(apply) ? '_blank' : undefined} rel={ext(apply) ? 'noopener' : undefined}>Apply now</a>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .h2 {
+    margin: 0 0 clamp(16px, 1.8vw, 26px);
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  .h3 {
+    margin: 0 0 14px;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.05;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn--light {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .btn--light:hover,
+  .btn--red {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--red:hover {
+    background: #a82727;
+  }
+
+  .link {
+    display: inline-flex;
+    gap: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--white);
+    transition: color 0.2s ease;
+  }
+
+  .link:hover {
+    color: var(--red);
+  }
+
+  .link--dark {
+    color: var(--charcoal);
+  }
+
+  /* ================= Hero ================= */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(50% 70% at 85% 30%, rgba(189, 47, 47, 0.28), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .hero__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.2s steps(6) infinite;
+  }
+
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3%, 2%); }
+    50% { transform: translate(2%, -3%); }
+    75% { transform: translate(-2%, -1%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(28px, 4vw, 80px);
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: clamp(44px, 5.5vw, 88px) var(--gutter) clamp(32px, 4vw, 56px);
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(24px, 3vw, 44px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 18px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .hero__eyebrow span {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .hero__title {
+    margin: 0;
+    max-width: 12ch;
+    font-size: clamp(44px, 6.4vw, 110px);
+    line-height: 0.92;
+  }
+
+  .hero__lede {
+    margin: clamp(20px, 2.2vw, 30px) 0 0;
+    max-width: 48ch;
+    font-size: clamp(16px, 1.25vw, 20px);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: clamp(26px, 3vw, 40px);
+  }
+
+  .hero__copy > * {
+    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero__copy > :nth-child(2) { animation-delay: 0.06s; }
+  .hero__copy > :nth-child(3) { animation-delay: 0.12s; }
+  .hero__copy > :nth-child(4) { animation-delay: 0.22s; }
+  .hero__copy > :nth-child(5) { animation-delay: 0.3s; }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+  }
+
+  /* Photo framed as a camera viewfinder. */
+  .viewfinder {
+    position: relative;
+    justify-self: end;
+    width: min(100%, 440px);
+    margin: 0;
+    padding: 18px;
+    animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+
+  .viewfinder img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  /* Transparent cut-out artwork: show it whole on a soft glow, no crop. */
+  /* The frame keeps its 4:5 shape; the cut-out sits centred at its own size
+     so the fade lands on the artwork's real bottom edge. */
+  .viewfinder--cutout {
+    display: flex;
+    align-items: center;
+    aspect-ratio: 4 / 5;
+    background: radial-gradient(60% 55% at 50% 55%, rgba(189, 47, 47, 0.28), transparent 70%);
+  }
+
+  .viewfinder--cutout img {
+    aspect-ratio: auto;
+    height: auto;
+    max-height: 100%;
+    background: none !important;
+    object-fit: contain;
+    /* Cut-outs often end in a hard crop line; fade the bottom into the glow. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 92%);
+    mask-image: linear-gradient(to bottom, #000 62%, transparent 92%);
+    background: radial-gradient(60% 55% at 50% 55%, rgba(189, 47, 47, 0.28), transparent 70%);
+  }
+
+  .vf {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 0 solid rgba(255, 255, 255, 0.75);
+  }
+
+  .vf--tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+  .vf--tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+  .vf--bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+  .vf--br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+
+  .viewfinder__rec {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    font-family: var(--font-head);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .viewfinder__rec i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.15; }
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 var(--gutter) clamp(32px, 4vw, 52px);
+  }
+
+  .facts > div {
+    padding: clamp(16px, 1.8vw, 24px) clamp(12px, 1.6vw, 24px) 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .facts > div + div {
+    padding-left: clamp(12px, 1.6vw, 24px);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .facts dt {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .facts dd {
+    margin: 6px 0 0;
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2.2vw, 36px);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  /* ================= Intro ================= */
+
+  .intro {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(24px, 5vw, 96px);
+  }
+
+  .intro__heading {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  .intro__body p {
+    margin: 0 0 1.1em;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  .intro__body .intro__lede {
+    font-family: var(--font-quote);
+    font-size: clamp(18px, 1.5vw, 24px);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--charcoal);
+  }
+
+  .intro__body :global(a),
+  .card :global(a),
+  .feature__copy :global(a),
+  .acc__inner :global(a),
+  .side__card :global(a),
+  .costs__text :global(a),
+  .prices__note :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+  }
+
+  /* ================= About cards ================= */
+
+  .about {
+    padding: 0 var(--gutter) clamp(56px, 7vw, 120px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .about__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: clamp(16px, 2vw, 28px) 0 0;
+    padding: 0;
+    list-style: none;
+    background: rgba(51, 51, 51, 0.14);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: clamp(24px, 2.8vw, 40px);
+    background: var(--white);
+    transition: background-color 0.3s ease;
+  }
+
+  .card:hover {
+    background: #fafafa;
+  }
+
+  .card__n {
+    font-family: var(--font-head);
+    font-size: clamp(34px, 3.4vw, 54px);
+    font-weight: 600;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--red);
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: clamp(19px, 1.6vw, 26px);
+    line-height: 1.1;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4a4a4a;
+  }
+
+  .card__link {
+    margin-top: auto;
+    padding-top: 8px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* ================= Feature sections ================= */
+
+  .feature {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: #f4f4f2;
+    color: var(--charcoal);
+  }
+
+  .feature--flip {
+    background: var(--white);
+  }
+
+  .feature__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 96px);
+    align-items: center;
+  }
+
+  .feature--noimg .feature__grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 900px;
+  }
+
+  .feature--flip .feature__media {
+    order: 2;
+  }
+
+  .feature__media {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .feature__media img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .feature__media::before {
+    content: '';
+    position: absolute;
+    inset: 20px -20px -20px 20px;
+    z-index: -1;
+    border: 2px solid var(--red);
+    border-radius: 16px;
+  }
+
+  .feature--flip .feature__media::before {
+    inset: 20px 20px -20px -20px;
+  }
+
+  .feature__copy p {
+    margin: 0 0 1.1em;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  /* ================= Curriculum ================= */
+
+  .curr {
+    padding: clamp(60px, 7.5vw, 128px) var(--gutter);
+    background:
+      radial-gradient(60% 80% at 100% 0%, rgba(189, 47, 47, 0.2), transparent 65%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .curr__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px clamp(24px, 4vw, 72px);
+    align-items: end;
+  }
+
+  .curr__intro {
+    margin: 0 0 clamp(16px, 1.8vw, 26px);
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .curr__software {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: clamp(10px, 1.4vw, 20px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .curr__software li {
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: clamp(28px, 3.4vw, 48px) 0 clamp(28px, 3vw, 40px);
+    padding: 0;
+    list-style: none;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .module {
+    padding: clamp(22px, 2.4vw, 32px);
+    background: var(--charcoal);
+    transition: background-color 0.3s ease;
+  }
+
+  .module:hover {
+    background: #3a3a3a;
+  }
+
+  .module__n {
+    font-family: var(--font-head);
+    font-size: 13px;
+    color: var(--red);
+  }
+
+  .module__title {
+    margin: 10px 0 10px;
+    font-size: clamp(17px, 1.35vw, 21px);
+    line-height: 1.15;
+  }
+
+  .module p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ================= Outcomes ================= */
+
+  .outcomes {
+    padding: clamp(60px, 7.5vw, 128px) var(--gutter);
+    background:
+      radial-gradient(50% 80% at 0% 0%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .outcomes__top:has(> :only-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .outcomes__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(28px, 5vw, 96px);
+    align-items: center;
+    margin-bottom: clamp(36px, 4.4vw, 64px);
+  }
+
+  .outcomes__text {
+    margin: 0;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .bigstats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .bigstats > div {
+    padding: clamp(22px, 2.4vw, 34px);
+    background: var(--black);
+  }
+
+  .bigstats dt {
+    font-family: var(--font-head);
+    font-size: clamp(40px, 4.4vw, 76px);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--red);
+  }
+
+  .bigstats dd {
+    margin: 10px 0 0;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .bigstats__src {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 12px clamp(22px, 2.4vw, 34px);
+    background: var(--black);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .bigstats__src a {
+    text-decoration: underline;
+  }
+
+  .grads {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: 0 0 clamp(28px, 3vw, 44px);
+    padding: 0;
+    list-style: none;
+  }
+
+  .grad {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    transition:
+      border-color 0.3s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .grad:hover {
+    border-color: rgba(189, 47, 47, 0.6);
+    transform: translateY(-3px);
+  }
+
+  .grad__img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 3px var(--black), 0 0 0 4px var(--red);
+  }
+
+  .grad p {
+    margin: 0;
+  }
+
+  .grad__name {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .grad__prog {
+    margin-top: 4px !important;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .grad__label {
+    margin-top: 10px !important;
+    font-family: var(--font-head);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .grad__credits {
+    display: grid;
+    gap: 2px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .grad__win {
+    margin-left: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #f0b429;
+    text-transform: uppercase;
+  }
+
+  /* ================= Pathway ================= */
+
+  .pathway {
+    padding: clamp(48px, 6vw, 96px) var(--gutter) 0;
+    background: var(--white);
+  }
+
+  .pathway__card {
+    display: grid;
+    grid-template-columns: clamp(120px, 12vw, 180px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 44px);
+    align-items: center;
+    padding: clamp(22px, 2.8vw, 40px);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-left: 4px solid var(--red);
+    border-radius: 12px;
+    color: var(--charcoal);
+    transition:
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pathway__card:hover {
+    box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .pathway__card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .pathway__body {
+    display: grid;
+    gap: 8px;
+  }
+
+  .pathway__tag {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .pathway__title {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2vw, 32px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .pathway__text {
+    max-width: 72ch;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  .pathway__cta {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  /* ================= Costs ================= */
+
+  .costs {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .costs__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(28px, 5vw, 96px);
+    align-items: center;
+  }
+
+  .costs__text {
+    margin: 0;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  .costs__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 28px;
+    margin-top: clamp(22px, 2.4vw, 32px);
+  }
+
+  .prices {
+    display: grid;
+    gap: 14px;
+  }
+
+  .price {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(22px, 2.6vw, 36px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-radius: 14px;
+  }
+
+  .price--dark {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .price__label {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .price--dark .price__label {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .price__value {
+    font-family: var(--font-head);
+    font-size: clamp(38px, 4vw, 64px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .prices__note {
+    margin: 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ================= Accreditation ================= */
+
+  .accred {
+    padding: 0 var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .accred__grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 64px);
+    align-items: center;
+    padding: clamp(24px, 3vw, 44px);
+    border-radius: 16px;
+    background: #f4f4f2;
+  }
+
+  .accred__seals {
+    display: flex;
+    gap: 16px;
+  }
+
+  .accred__seals img {
+    width: clamp(72px, 7vw, 104px);
+    height: auto;
+  }
+
+  .accred p {
+    margin: 0 0 0.9em;
+    max-width: 80ch;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+  }
+
+  .accred p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ================= Details ================= */
+
+  .details {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: #f4f4f2;
+    color: var(--charcoal);
+    scroll-margin-top: var(--nav-h);
+  }
+
+  .details__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: clamp(28px, 4.4vw, 84px);
+    align-items: start;
+  }
+
+  .acc {
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .acc__item {
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .acc__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: clamp(16px, 1.6vw, 22px) 0;
+    font-family: var(--font-head);
+    font-size: clamp(16px, 1.3vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .acc__btn:hover {
+    color: var(--red);
+  }
+
+  .acc__icon {
+    position: relative;
+    flex: none;
+    width: 15px;
+    height: 15px;
+  }
+
+  .acc__icon::before,
+  .acc__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 15px;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--red);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .acc__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .acc__item.is-open .acc__icon::after {
+    transform: rotate(0);
+  }
+
+  .acc__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .acc__item.is-open .acc__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .acc__inner {
+    overflow: hidden;
+  }
+
+  .acc__inner p {
+    margin: 0 0 clamp(16px, 1.8vw, 22px);
+    max-width: 70ch;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #444;
+  }
+
+  .side {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    display: grid;
+    gap: 14px;
+  }
+
+  .side__card {
+    padding: clamp(22px, 2.4vw, 30px);
+    border-radius: 14px;
+    background: var(--white);
+  }
+
+  .side__card h3 {
+    margin: 0 0 10px;
+    font-size: 19px;
+  }
+
+  .side__card p,
+  .side__card li {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  .side__card ul {
+    margin: 10px 0 0;
+    padding-left: 1.2em;
+  }
+
+  .side__card li::marker {
+    color: var(--red);
+  }
+
+  .side__card--dark {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .side__card--dark p {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .side__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 22px;
+    margin-top: 18px;
+  }
+
+  /* ================= Other programs ================= */
+
+  .others {
+    padding: clamp(48px, 6vw, 96px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .others__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(20px, 3vw, 48px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .others__list a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 4px;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.4vw, 22px);
+    font-weight: 500;
+    text-transform: uppercase;
+    transition:
+      color 0.2s ease,
+      padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .others__list a:hover {
+    padding-left: 14px;
+    color: var(--red);
+  }
+
+  .others__meta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: none;
+    color: #8a8a8a;
+  }
+
+  .others__arrow {
+    color: var(--red);
+  }
+
+  /* ================= Sticky bar ================= */
+
+  .bar {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 10px 10px 22px;
+    border-radius: 14px;
+    background: rgba(20, 20, 20, 0.92);
+    backdrop-filter: blur(10px);
+    color: var(--white);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
+    transform: translate(-50%, 140%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bar.is-on {
+    transform: translate(-50%, 0);
+  }
+
+  .bar__name {
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .bar__meta {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+  }
+
+  .bar .btn {
+    padding: 11px 18px;
+    font-size: 13px;
+  }
+
+  /* ================= Responsive ================= */
+
+  @media (max-width: 1000px) {
+    .hero__inner,
+    .intro__grid,
+    .feature__grid,
+    .curr__head,
+    .outcomes__top,
+    .costs__grid,
+    .details__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .viewfinder {
+      justify-self: start;
+      width: min(100%, 360px);
+    }
+
+    .feature--flip .feature__media {
+      order: 0;
+    }
+
+    .about__cards,
+    .modules,
+    .grads {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .side {
+      position: static;
+    }
+
+    .bar__meta {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .about__cards,
+    .modules,
+    .grads,
+    .others__list,
+    .bigstats {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .facts > div:nth-child(odd) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pathway__card,
+    .accred__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .feature__media::before,
+    .feature--flip .feature__media::before {
+      inset: 12px -8px -12px 8px;
+    }
+
+    .others__meta {
+      display: none;
+    }
+
+    .bar {
+      left: 12px;
+      right: 12px;
+      justify-content: space-between;
+      transform: translateY(140%);
+    }
+
+    .bar.is-on {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__grain,
+    .viewfinder__rec i {
+      animation: none;
+    }
+
+    .acc__panel,
+    .bar {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-acc]').forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>('.acc__btn');
+    btn?.addEventListener('click', () => {
+      const open = !item.classList.contains('is-open');
+      item.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  // Sticky apply bar: shown once the hero scrolls away, hidden at the footer.
+  const bar = document.querySelector<HTMLElement>('[data-bar]');
+  const hero = document.querySelector('.hero');
+  const footer = document.querySelector('footer');
+  if (bar && hero && window.IntersectionObserver) {
+    let heroGone = false;
+    let footerIn = false;
+    const sync = () => bar.classList.toggle('is-on', heroGone && !footerIn);
+    new IntersectionObserver(([e]) => ((heroGone = !e.isIntersecting), sync())).observe(hero);
+    if (footer) new IntersectionObserver(([e]) => ((footerIn = e.isIntersecting), sync())).observe(footer);
+  }
+</script>

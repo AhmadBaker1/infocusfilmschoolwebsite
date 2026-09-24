@@ -1,0 +1,767 @@
+---
+// Blog articles live at the site root (/how-to-use-lenses-in-film/) to match
+// the old WordPress URLs. Static pages always win over this route.
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import PostCard from '../components/PostCard.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+import { getPosts, toCard, type Post } from '../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content, headings } = await render(post);
+const { title, description, author, cover } = post.data;
+const card = toCard(post);
+
+// Headings are all-caps in the source; the contents list reads better in
+// title case.
+const SMALL = new Set(['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'vs', 'with']);
+const titleCase = (t: string) =>
+  t
+    .toLowerCase()
+    .split(/(\s+)/)
+    .map((w, i) => (i > 0 && SMALL.has(w) ? w : w.replace(/\p{L}/u, (c) => c.toUpperCase())))
+    .join('');
+const toc = headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: titleCase(h.text) }));
+
+// Up to three others, same category first, then newest.
+const others = (await getPosts())
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => Number(b.data.category === post.data.category) - Number(a.data.category === post.data.category))
+  .slice(0, 3)
+  .map(toCard);
+
+const url = new URL(`/${post.id}/`, Astro.site).toString();
+const share = [
+  { label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
+  { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+  { label: 'X', href: `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}` },
+];
+---
+
+<Base title={`${title} — InFocus Film School`} description={description} image={cover} type="article">
+  <Nav />
+
+  <!-- Reading progress, pinned under the nav. -->
+  <div class="progress" aria-hidden="true"><span data-progress></span></div>
+
+  <main>
+    <PageHero
+      title={title}
+      eyebrow={card.categoryLabel}
+      crumbs={[
+        { label: 'Home', href: '/' },
+        post.data.category === 'success'
+          ? { label: 'Student Success', href: '/student-success' }
+          : { label: 'Blog', href: '/resources/blog' },
+        { label: post.data.category === 'success' ? 'Story' : card.categoryLabel },
+      ]}
+    >
+      <p>{description}</p>
+      <p class="meta">
+        {author && <span>By {author}</span>}
+        <time datetime={card.date.toISOString().slice(0, 10)}>{card.dateText}</time>
+        <span>{card.minutes} min read</span>
+      </p>
+    </PageHero>
+
+    <div class="read">
+      <div class="read__grid">
+        <aside class="side">
+          <div class="side__sticky">
+            {
+              toc.length > 1 && (
+                <nav class="toc" aria-label="In this article">
+                  <p class="side__label">In this article</p>
+                  <ol>
+                    {toc.map((h) => (
+                      <li>
+                        <a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )
+            }
+            <div class="side__share">
+              <p class="side__label">Share</p>
+              <div class="share">
+                {share.map((s) => (
+                  <a href={s.href} target="_blank" rel="noopener" aria-label={`Share on ${s.label}`}>{s.label}</a>
+                ))}
+                <button type="button" data-copy={url}>Copy link</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="read__main">
+          <article class="prose" data-prose>
+            <Content />
+          </article>
+
+          <footer class="end">
+            {
+              author && (
+                <div class="byline">
+                  <span class="byline__avatar" aria-hidden="true">
+                    {author.split(/\s+/).map((w) => w[0]).join('').slice(0, 2)}
+                  </span>
+                  <span>
+                    <span class="byline__label">Written by</span>
+                    <span class="byline__name">{author}</span>
+                  </span>
+                </div>
+              )
+            }
+            <div class="end__row">
+              <a class="end__back" href="/resources/blog"><span aria-hidden="true">←</span> All articles</a>
+              <div class="share share--inline">
+                <span class="side__label">Share</span>
+                {share.map((s) => (
+                  <a href={s.href} target="_blank" rel="noopener" aria-label={`Share on ${s.label}`}>{s.label}</a>
+                ))}
+                <button type="button" data-copy={url}>Copy link</button>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    {
+      others.length > 0 && (
+        <section class="more" aria-labelledby="more-title">
+          <div class="more__inner">
+            <div class="more__head">
+              <div>
+                <p class="more__eyebrow"><span aria-hidden="true" />Keep reading</p>
+                <h2 id="more-title" class="more__title">More from the blog</h2>
+              </div>
+              <a class="more__all" href="/resources/blog">View all articles <span aria-hidden="true">→</span></a>
+            </div>
+            <ul class="more__grid">
+              {others.map((p) => (
+                <li>
+                  <PostCard post={p} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin-top: 18px !important;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .meta > * + *::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    margin: 0 14px 3px -4px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  /* ---- Reading column ---- */
+
+  .read {
+    padding: clamp(40px, 5vw, 84px) var(--gutter) clamp(48px, 6vw, 96px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .prose > :global(*) {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: clamp(16px, 1.15vw, 18px);
+    line-height: 1.8;
+    color: #353535;
+  }
+
+  .prose :global(p) {
+    margin-block: 0 1.3em;
+  }
+
+  /* The opening paragraph reads as a standfirst. */
+  .prose > :global(p:first-child),
+  .prose > :global(.embed + p) {
+    font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.65;
+    color: var(--charcoal);
+  }
+
+  .prose :global(h2) {
+    position: relative;
+    margin-block: 2.2em 0.7em;
+    padding-top: 22px;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.1;
+  }
+
+  .prose :global(h2)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 3px;
+    background: var(--red);
+  }
+
+  .prose :global(h3) {
+    margin-block: 1.8em 0.6em;
+    font-size: clamp(18px, 1.45vw, 23px);
+    line-height: 1.15;
+  }
+
+  .prose :global(strong) {
+    color: var(--charcoal);
+  }
+
+  .prose :global(a) {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+    transition: color 0.2s ease;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--red);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-block: 0 1.4em;
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .prose :global(blockquote) {
+    margin-block: 1.8em;
+    padding: 4px 0 4px 22px;
+    border-left: 3px solid var(--red);
+  }
+
+  .prose :global(blockquote p) {
+    font-family: var(--font-quote);
+    font-size: clamp(18px, 1.4vw, 22px);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Photos break out wider than the text column. */
+  .prose > :global(figure),
+  .prose > :global(.embed) {
+    max-width: 1000px;
+    margin-block: clamp(28px, 3.4vw, 48px);
+  }
+
+  .prose :global(figure img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .prose :global(figcaption) {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #777;
+    text-align: center;
+  }
+
+  /* ---- Video embed (built by the script below) ---- */
+
+  .prose :global(.embed) {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #111;
+  }
+
+  .prose :global(.embed > a:not(.embed__play)) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+  }
+
+  .prose :global(.embed img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    opacity: 0.8;
+  }
+
+  .prose :global(.embed iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .prose :global(.embed__play) {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 12px;
+    width: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.35), transparent 55%);
+    cursor: pointer;
+  }
+
+  .prose :global(.embed__ring) {
+    display: grid;
+    place-items: center;
+    width: clamp(64px, 6vw, 88px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition:
+      background-color 0.35s ease,
+      border-color 0.35s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .prose :global(.embed__ring svg) {
+    width: 38%;
+    margin-left: 7%;
+    fill: var(--white);
+  }
+
+  .prose :global(.embed__label) {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .prose :global(.embed__play:hover .embed__ring),
+  .prose :global(.embed__play:focus-visible .embed__ring) {
+    background: var(--red);
+    border-color: var(--red);
+    transform: scale(1.08);
+  }
+
+
+  /* ---- Progress ---- */
+
+  .progress {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    height: 3px;
+    pointer-events: none;
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* ---- Layout: sticky contents beside the text ---- */
+
+  .read__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 880px);
+    justify-content: center;
+    gap: clamp(32px, 5vw, 88px);
+  }
+
+  .side__sticky {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+    display: grid;
+    gap: 32px;
+  }
+
+  .side__label {
+    margin: 0 0 12px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .toc a {
+    display: block;
+    margin-left: -1px;
+    padding: 7px 0 7px 14px;
+    border-left: 2px solid transparent;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #6d6d6d;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  .share {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .share a,
+  .share button {
+    padding: 7px 12px;
+    border: 1px solid rgba(51, 51, 51, 0.2);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--charcoal);
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .share a:hover,
+  .share button:hover {
+    border-color: var(--red);
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .share button.is-copied {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+  }
+
+  /* ---- Article footer ---- */
+
+  .end {
+    max-width: 720px;
+    margin: clamp(40px, 4.4vw, 64px) auto 0;
+    padding-top: 28px;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .byline__avatar {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 17px;
+    letter-spacing: 0.04em;
+  }
+
+  .byline__label {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .byline__name {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .end__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .end__back {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .end__back:hover {
+    color: var(--red);
+  }
+
+  .share--inline {
+    align-items: center;
+  }
+
+  .share--inline .side__label {
+    margin: 0 6px 0 0;
+  }
+
+  /* ---- More from the blog ---- */
+
+  .more {
+    padding: clamp(52px, 6.5vw, 104px) var(--gutter);
+    background: #f4f4f4;
+    color: var(--charcoal);
+  }
+
+  .more__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .more__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(26px, 3vw, 40px);
+  }
+
+  .more__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .more__eyebrow span {
+    width: 32px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .more__title {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 48px);
+    line-height: 1;
+  }
+
+  .more__all {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .more__all:hover {
+    color: var(--red);
+  }
+
+  .more__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 44px) clamp(18px, 2vw, 32px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1100px) {
+    .read__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* On narrower screens the contents rail folds away; share moves to the
+       article footer. */
+    .side {
+      display: none;
+    }
+
+    .more__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .more__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Reading progress: how far through the article body the reader is.
+  const prose = document.querySelector<HTMLElement>('[data-prose]');
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  if (prose && bar) {
+    const update = () => {
+      const r = prose.getBoundingClientRect();
+      const total = r.height - window.innerHeight * 0.6;
+      const p = Math.min(1, Math.max(0, -r.top / Math.max(1, total)));
+      bar.style.transform = `scaleX(${p})`;
+    };
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+
+  // Contents: highlight the section being read.
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('[data-toc]').forEach((a) => tocLinks.set(a.dataset.toc!, a));
+  if (tocLinks.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          tocLinks.forEach((a) => a.removeAttribute('aria-current'));
+          tocLinks.get(e.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-15% 0px -75% 0px' }
+    );
+    tocLinks.forEach((_, id) => {
+      const h = document.getElementById(id);
+      if (h) io.observe(h);
+    });
+  }
+
+  // Copy link.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) =>
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        const label = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('is-copied');
+        setTimeout(() => {
+          btn.textContent = label;
+          btn.classList.remove('is-copied');
+        }, 1800);
+      } catch {
+        // Clipboard unavailable: leave the button as is.
+      }
+    })
+  );
+
+  // YouTube embeds in the Markdown start as a plain link; upgrade them to a
+  // thumbnail with a play button that plays in place.
+  document.querySelectorAll<HTMLElement>('.prose .embed[data-yt]').forEach((embed) => {
+    const id = embed.dataset.yt!;
+    const title = embed.dataset.title || 'Video';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'embed__play';
+    btn.setAttribute('aria-label', `Play video: ${title}`);
+    btn.innerHTML =
+      '<span class="embed__ring" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 6.2v11.6c0 .8.9 1.3 1.6.8l9-5.8c.6-.4.6-1.3 0-1.7l-9-5.8c-.7-.4-1.6 0-1.6.9Z"/></svg></span><span class="embed__label">Play video</span>';
+    const img = document.createElement('img');
+    img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+    img.alt = '';
+    img.loading = 'lazy';
+    embed.replaceChildren(img, btn);
+
+    btn.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.title = title;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      embed.replaceChildren(iframe);
+      iframe.focus();
+    });
+  });
+</script>

@@ -1,0 +1,185 @@
+{
+  "slug": "graphic-digital-design",
+  "oldPath": "/graphic-design-program",
+  "title": "Graphic + Digital Design Program",
+  "shortTitle": "Graphic + Digital Design",
+  "group": "animation",
+  "summary": "A 6-month, online certificate with live evening and weekend classes, 10 portfolio projects and mentorship from award-winning designers.",
+  "hero": {
+    "image": "/images/program-graphic-digital-design.jpg",
+    "imageAlt": "Graphic design student working on a layout"
+  },
+  "intro": {
+    "heading": "Learn graphic design. Build the world’s brands.",
+    "paras": [
+      "Get ready to shape the way we see the world. Your in-depth graphic design education will go beyond mastering graphic design for web, print, and marketing. You’ll develop the professional confidence needed to succeed in the real world, work with clients, and pitch campaigns. After 6 months of hands-on graphic design courses, you will have an eye-catching, tailored portfolio to take to design firms and the ability to build your own brand identity.",
+      "The Graphic and Digital Design Program allows you to study from home with 20 hours per week of live and interactive online classes. Delivered in the evenings and on weekends, you have the ability to maintain your current career while you study."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "Online"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "6 months"
+    }
+  ],
+  "about": {
+    "heading": "About the InFocus Graphic Design Program",
+    "cards": [
+      {
+        "title": "Training that fits your schedule",
+        "text": "Finally, a professional graphic design course that respects your busy schedule. The Graphic and Digital Design program is an online course livestreamed in evenings and on weekends. Totaling 20 hours of instruction per week, this light school schedule frees time for you to work a part-time job, build your skills, make industry contacts, or simply enjoy life.",
+        "link": {
+          "label": "View curriculum breakdown",
+          "href": "https://infocusfilmschool.com/graphic-design-course-descriptions/"
+        }
+      },
+      {
+        "title": "One-on-one mentorship from pros",
+        "text": "Learn from some of the best graphic designers in Canada. Instructors in the Graphic and Digital Design program are actively working in the industry and have worked for clients including Ford, NHL and NFL teams, Honda, Disney and more. Small class sizes emphasize personalized learning and ensure one-on-one attention from instructors at every stage.",
+        "link": {
+          "label": "See instructor profiles",
+          "href": "https://infocusfilmschool.com/graphic-design-program/graphic-digital-design-instructors/"
+        }
+      },
+      {
+        "title": "Build a professional portfolio",
+        "text": "Our rigorous, six-month program is taught purely online and culminates in a marketable design portfolio of 10 high-quality projects, your own personal brand (including a personal logo, business cards, and resume), networking skills, and business development knowledge gained through the program.",
+        "link": {
+          "label": "See student work",
+          "href": "https://infocusfilmschool.com/graphic-design-program/graphic-design-projects/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Build a stunning portfolio",
+      "paras": [
+        "You’ll complete 10 unique projects during the program to showcase your skills and stand out to employers. From magazine layouts and product packaging to branded signs, posters, web, and social media assets, you’ll build a diverse portfolio that proves you’re ready for real-world design challenges. Our hands-on, project-based approach helps you gain the practical experience and confidence needed to succeed in the creative industry. You could be next."
+      ],
+      "image": "/images/programs/graphic-digital-design/student-work.jpg",
+      "imageAlt": "Student brand identity project: Vernon Active, Aquatics and Arts logo cards"
+    },
+    {
+      "heading": "Learn from award-winning graphic designers",
+      "paras": [
+        "Instructors in the Graphic and Digital Design Program are all industry professionals and award-winning graphic designers. Under their mentorship, many InFocus students have won awards and received job offers right out of school. We are dedicated to your success in the program and in your professional career after graduation. Online classes provide the flexibility to study from anywhere, but with live lectures and in-depth critique of projects, you won’t have to give up the efficacy of classroom learning."
+      ],
+      "image": "/images/about-5.jpg",
+      "imageAlt": ""
+    }
+  ],
+  "curriculum": {
+    "heading": "Graphic design skills to pay the bills",
+    "intro": "Gain the fundamental skills needed to succeed as a graphic designer with courses in typography, branding, colour theory and more. Master Adobe CC programs including Photoshop, InDesign, and Illustrator. Learn layout for both print and digital formats, including web design and social media. But professional graphic designers know the industry just as well as the craft. You’ll also learn how to work with clients, implement business goals in designs, implement and run marketing campaigns, showcase a tailored portfolio, and more.",
+    "software": [
+      "Photoshop",
+      "Illustrator",
+      "InDesign",
+      "Meta",
+      "Google Ads",
+      "WordPress"
+    ],
+    "modules": [
+      {
+        "title": "Design and critical thinking",
+        "text": "Develop your ability to realize creative concepts and create design solutions through research and the core principles of design. Understand the theories of graphic design, colour, copy and typography, and how users interact with your designs."
+      },
+      {
+        "title": "Strategic design",
+        "text": "Employers want data-driven marketing. Learn how to use research and analytics to build strategies for branding, marketing, advertising, web, and social media. Learn to design experiences that will keep users engaged."
+      },
+      {
+        "title": "Software skills",
+        "text": "A versatile graphic designer is capable in all the standard tools of the industry. Train and develop advanced skills in Adobe CC programs: Photoshop, Illustrator, and InDesign. Master marketing tools for web design and digital advertising such as WordPress, Google Ads and Google Analytics."
+      },
+      {
+        "title": "Final production",
+        "text": "Elevate your professional value with practical knowledge. Understand the process of both print and digital production, working with other industry professionals, and the ethics of advertising including sustainable selection of materials. Execute your vision and build a professional portfolio to launch your career."
+      }
+    ]
+  },
+  "stats": {
+    "heading": "Our students win awards",
+    "text": "We are committed to your excellence. Our students’ work has been recognized in international competitions such as the [Graphis New Talent Annual](https://www.graphis.com/entry/e88cfc2c-1ca4-4213-841e-a0fcd523b5f0/) and [Indigo Design Award](https://www.indigoawards.com/winners/4461). In the last 2 years, InFocus students have won over 20 graphic design awards with work they completed in school, many with no design experience beforehand.",
+    "items": [
+      {
+        "value": "20+",
+        "label": "Graphic design awards"
+      },
+      {
+        "value": "10",
+        "label": "Portfolio projects"
+      }
+    ]
+  },
+  "costs": {
+    "heading": "Achieve more, pay less",
+    "text": "InFocus Film School is one of the most financially-competitive schools in North America. We offer program costs comparable to public institutions, but with the high quality and expediency of private education. That said, financial assistance is always available, and all programs are eligible for student loans. Interest-free payment plans tailored to your specific financial needs can be arranged, and scholarships are available to qualified students.",
+    "domestic": "$12,950",
+    "international": "$14,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-7"
+  },
+  "accreditation": {
+    "heading": "Accredited design education",
+    "paras": [
+      "The Graphic and Digital Design Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "520 hours delivered over 26 weeks of instruction. Delivery is two terms of 13 weeks each, with a 1-week term break. The program consists of 10 required courses."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "Distance (100% Synchronous)"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full-Time, Tuesday – Saturday. Weekday evenings: 6:00pm – 9:00pm plus Saturdays: 9:00am – 4:30pm. Students can expect to be in class at least 20 hours per week. Students should expect 1 hour of homework per hour of class."
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 485 hours for graduation eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies and meet all assignment deadlines. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 60%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    },
+    {
+      "label": "Required materials",
+      "text": "This program requires software including Adobe CC. Instructions for obtaining a license at a reduced cost will be provided in class, however, students must have access to a computer with strong graphics processing capabilities. Contact us for full system requirement details."
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Graphic + Digital Design Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-design-1/",
+    "studentWork": "https://infocusfilmschool.com/graphic-design-program/student-work/",
+    "curriculum": "https://infocusfilmschool.com/graphic-design-course-descriptions/"
+  }
+}

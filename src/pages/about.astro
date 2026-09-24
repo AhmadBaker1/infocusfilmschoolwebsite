@@ -1,0 +1,1170 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+
+// Frames for the rolling film strip in the opening. Listed twice in the
+// markup so the loop is seamless.
+const frames = [
+  { src: '/images/about-3.jpg', alt: 'Students operating a cinema camera on set' },
+  { src: '/images/herobg-3.jpg', alt: 'Student filmmaker with a camera outdoors in Vancouver' },
+  { src: '/images/about-4.jpg', alt: 'Students rigging lights and camera in the studio' },
+  { src: '/images/about-6.jpg', alt: 'Monitor showing a take on an InFocus set' },
+  { src: '/images/about-2.jpg', alt: 'Camera operator framing a scene' },
+  { src: '/images/about-1.jpg', alt: 'Instructor and students at an InFocus event' },
+];
+
+const facts = [
+  { n: '2010', label: 'Founded in Vancouver' },
+  { n: '¼–⅒', label: 'The time of a 4-year degree' },
+  { n: '<½', label: 'The tuition of comparable programs, often' },
+  { n: '$4.4B', label: 'Spent on film + TV in BC each year' },
+];
+
+const principles = [
+  {
+    title: 'Hands-on + project based',
+    text: 'Practical training built around projects, so every lesson ends up on screen.',
+  },
+  {
+    title: 'Small class sizes',
+    text: 'A personalized learning experience that allows individuality while harnessing the collaborative nature of filmmaking.',
+  },
+  {
+    title: 'Room to experiment',
+    text: 'Multiple projects give you room to take risks, make mistakes and apply what you learn, building a portfolio that stands above the crowd.',
+  },
+];
+
+const seals = [
+  {
+    src: '/images/ptiru-logo.png',
+    alt: 'Designated — B.C. Private Training Institutions Regulatory Unit',
+    title: 'Private Training Institutions Regulatory Unit',
+    text: 'InFocus Film School is Designated with the Private Training Institutions Regulatory Unit of the British Columbia Ministry of Advanced Education, Skills and Training.',
+  },
+];
+---
+
+<Base
+  title="About Us — InFocus Film School"
+  description="InFocus Film School is an independent Vancouver film school offering accelerated, hands-on diploma and certificate programs in film production, 3D animation, visual effects, screenwriting and design since 2010."
+>
+  <Nav />
+
+  <main>
+    <!-- ===== Opening ===== -->
+    <section class="open" aria-labelledby="open-title">
+      <div class="open__grain" aria-hidden="true"></div>
+      <div class="open__inner">
+        <div class="open__copy">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li aria-current="page">About Us</li>
+            </ol>
+          </nav>
+          <p class="open__eyebrow"><span aria-hidden="true"></span>About InFocus</p>
+          <h1 id="open-title" class="open__title">
+            Built for<br />storytellers<br /><span>since 2010.</span>
+          </h1>
+          <p class="open__lede">
+            An independent film school in downtown Vancouver, built on the premise of an
+            accelerated education in film and entertainment arts.
+          </p>
+          <a class="open__down" href="#story">
+            Our story <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+
+        <!-- A strip of 35mm film rolling through the gate. -->
+        <div class="strip" aria-hidden="true">
+          <div class="strip__reel">
+            {[...frames, ...frames].map((f) => (
+              <figure class="strip__frame">
+                <img src={f.src} alt="" loading="eager" decoding="async" />
+              </figure>
+            ))}
+          </div>
+          <span class="strip__fade strip__fade--top"></span>
+          <span class="strip__fade strip__fade--bottom"></span>
+        </div>
+      </div>
+
+      <ul class="facts">
+        {facts.map((f) => (
+          <li>
+            <strong>{f.n}</strong>
+            <span>{f.label}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- ===== Story ===== -->
+    <section class="story" id="story" aria-labelledby="story-title">
+      <div class="story__inner">
+        <div class="story__media">
+          <img src="/images/about-1.jpg" alt="An InFocus instructor with students at a screening event" loading="lazy" decoding="async" />
+          <span class="story__stamp">Est. 2010 · Vancouver, BC</span>
+        </div>
+
+        <div class="story__copy">
+          <p class="eyebrow"><span aria-hidden="true"></span>Our story</p>
+          <h2 id="story-title" class="story__title">
+            Vancouver’s top cinematic arts training institution.
+          </h2>
+          <p>
+            Originally founded as a non-profit society in 2010, InFocus Film School offers diploma
+            and certificate programs in film production, 3D animation, visual effects,
+            screenwriting and digital graphic design. While our structure has changed over the
+            years, the growth of emerging artists, storytellers, and the arts and entertainment
+            industry as a whole has remained at the core of everything we do.
+          </p>
+          <p>
+            We provide a superior education through accelerated, hands-on learning. Our
+            industry-professional instructors mentor students through interactive classes focused
+            on building a strong portfolio. We encourage students to grow as visual storytellers,
+            to realize their personal artistic visions, and to keep their creative autonomy as they
+            enter Vancouver’s multi-billion dollar film industry.
+          </p>
+
+          <ol class="timeline">
+            <li>
+              <span class="timeline__year">2010</span>
+              <span>Opens its doors as a non-profit society</span>
+            </li>
+            <li>
+              <span class="timeline__year">Today</span>
+              <span>Diplomas + certificates across film, animation, VFX, writing and design</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Mission ===== -->
+    <section class="mission" aria-labelledby="mission-title">
+      <div class="mission__inner">
+        <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Our mission</p>
+        <h2 id="mission-title" class="visually-hidden">Our mission</h2>
+        <blockquote class="mission__quote">
+          <p>
+            Visual storytellers need to explore their artistic identity, build on their strengths
+            and develop a <em>unique voice</em> that avoids mainstream formulas.
+          </p>
+        </blockquote>
+
+        <div class="mission__body">
+          <p>
+            They must also have a strong understanding of the technical and logistical tools at
+            their disposal to realize their artistic potential. Our mission is to provide an
+            education environment that holds true to these beliefs. We encourage experimentation
+            and artistic risk, to create a centre of excellence where our students can learn and
+            flourish.
+          </p>
+        </div>
+
+        <ul class="principles">
+          {principles.map((p, i) => (
+            <li>
+              <span class="principles__n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Reasons ===== -->
+    <section class="reasons" aria-labelledby="reasons-title">
+      <div class="reasons__inner">
+        <header class="reasons__head">
+          <p class="eyebrow"><span aria-hidden="true"></span>Reasons to choose InFocus</p>
+          <h2 id="reasons-title" class="reasons__title">Three reasons, one reel.</h2>
+        </header>
+
+        <article class="chapter">
+          <div class="chapter__media">
+            <img src="/images/herobg-3.jpg" alt="Student filmmaker shooting outdoors in Vancouver" loading="lazy" decoding="async" />
+            <span class="chapter__reel">Reel 01</span>
+          </div>
+          <div class="chapter__copy">
+            <h3 class="chapter__title">You’ll study in Hollywood North</h3>
+            <p>
+              Located in downtown Vancouver, InFocus is at the heart of Canada’s film industry.
+              Known as “Hollywood North”, Vancouver is the third-largest production centre in North
+              America, with a long history of film, TV, documentary, animation, VFX and video game
+              production. With outstanding natural beauty and a vibrant, diverse and warm
+              atmosphere, it’s one of the best places in the world to study film and digital screen
+              arts.
+            </p>
+            <dl class="chapter__stats">
+              <div>
+                <dt>$4.4 billion</dt>
+                <dd>Spent on film and TV production in BC every year, and the industry keeps growing.</dd>
+              </div>
+              <div>
+                <dt>494</dt>
+                <dd>Motion picture productions shot in BC in 2022 (Creative BC), not counting hundreds of commercials and shorts.</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="chapter chapter--flip">
+          <div class="chapter__media">
+            <img src="/images/about-4.jpg" alt="Students learning lighting and camera setup in the studio" loading="lazy" decoding="async" />
+            <span class="chapter__reel">Reel 02</span>
+          </div>
+          <div class="chapter__copy">
+            <h3 class="chapter__title">Our education model</h3>
+            <p>
+              The age of two-hour PowerPoint presentations is over. Our classes are interactive:
+              theory, instructor-led demos and follow-up assignments, with weekly labs that
+              solidify knowledge in a real-life setting. In storytelling, we push students to take
+              risks. Cinema isn’t supposed to be safe or easily defined.
+            </p>
+            <p>
+              As filmmakers ourselves, we strive to provide the most accessible, highest-quality
+              education possible. Programs are intensive, led by working industry professionals
+              and innately hands-on, and smaller classes mean more individual training so every
+              student finds their creative voice.
+            </p>
+            <dl class="chapter__stats">
+              <div>
+                <dt>A fraction of the time</dt>
+                <dd>Programs run ¼ to ⅒ the length of a 4-year university degree, so you’re certified and working sooner.</dd>
+              </div>
+              <div>
+                <dt>A fraction of the cost</dt>
+                <dd>Program costs are often less than half the tuition of comparable programs.</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="chapter" id="alumni-success">
+          <div class="chapter__media">
+            <img src="/images/about-6.jpg" alt="A take playing back on set" loading="lazy" decoding="async" />
+            <span class="chapter__reel">Reel 03</span>
+          </div>
+          <div class="chapter__copy">
+            <h3 class="chapter__title">Alumni success</h3>
+            <p>
+              A school’s relationship with its students never truly ends, and our dedication
+              doesn’t stop at graduation. We hire alumni to collaborate on films with partner
+              organizations, provide ongoing mentorship from our instructors, and connect alumni
+              with industry professionals and job opportunities.
+            </p>
+            <dl class="chapter__stats">
+              <div>
+                <dt>Our students work</dt>
+                <dd>A high percentage find work in their field of study within a year of graduating.</dd>
+              </div>
+              <div>
+                <dt>Our students win awards</dt>
+                <dd>Alumni win awards, receive grants and make the selection of prestigious festivals right out of school. You could be next.</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Letter ===== -->
+    <section class="letter" aria-labelledby="letter-title">
+      <div class="letter__inner">
+        <div class="letter__portrait">
+          <img src="/images/monika-gupta.jpeg" alt="Dr. Monika Chhabra Gupta, President and CEO of InFocus Film School" loading="lazy" decoding="async" />
+        </div>
+
+        <div class="letter__paper">
+          <p class="eyebrow"><span aria-hidden="true"></span>A letter from our President &amp; CEO</p>
+          <h2 id="letter-title" class="letter__title">Welcome to InFocus.</h2>
+
+          {/* Draft for Dr. Gupta's approval. */}
+          <div class="letter__body">
+            <p>
+              Since InFocus first opened its doors in January 2010, this school has been a home for
+              people who see the world in frames and scenes, and who can’t stop imagining the
+              stories that belong in them. I am honoured to carry that legacy forward, and to
+              build on the creative, project-based, career-focused foundation our founder and our
+              instructors established.
+            </p>
+            <p>
+              My life’s work rests on a simple belief: see the potential in people, then build the
+              pathway to it. That belief is why I came to InFocus. Here, raw talent becomes a
+              working career. Our instructors are working professionals who bring the industry
+              into the classroom, our class sizes stay deliberately small, and every program is
+              built around the projects you will make and the portfolio you will leave with.
+            </p>
+            <p>
+              Vancouver is one of the most exciting places in the world to make films. Hundreds of
+              productions shoot here every year, and our graduates are part of them: on set, in
+              the edit suite and in the visual effects studios behind the stories audiences love.
+            </p>
+            <p>
+              Whether you are taking your first step toward a creative career or returning to a
+              dream you once set aside, you belong here. Come visit us, meet our team, and see what
+              you could create.
+            </p>
+          </div>
+
+          <div class="letter__sign">
+            <span class="letter__name">Dr. Monika Chhabra Gupta</span>
+            <span class="letter__role">President &amp; CEO, InFocus Film School</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Accreditation ===== -->
+    <section class="accred" aria-labelledby="accred-title">
+      <div class="accred__inner">
+        <header class="accred__head">
+          <p class="eyebrow"><span aria-hidden="true"></span>College accreditations</p>
+          <h2 id="accred-title" class="accred__title">Designated in British Columbia.</h2>
+        </header>
+        <ul class="seals">
+          {seals.map((s) => (
+            <li class="seal">
+              <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ================= Opening ================= */
+
+  .open {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(50% 70% at 85% 30%, rgba(189, 47, 47, 0.28), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .open__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.2s steps(6) infinite;
+  }
+
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-3%, 2%); }
+    50% { transform: translate(2%, -3%); }
+    75% { transform: translate(-2%, -1%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .open__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 4vw, 80px);
+    align-items: center;
+    max-width: 1440px;
+    min-height: min(88vh, 900px);
+    margin: 0 auto;
+    padding: clamp(48px, 6vw, 96px) var(--gutter) clamp(32px, 4vw, 56px);
+  }
+
+  .crumbs ol {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 clamp(28px, 3.4vw, 52px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  .open__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(16px, 1.8vw, 24px);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .open__eyebrow span {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .open__title {
+    margin: 0;
+    font-size: clamp(48px, 7.4vw, 132px);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+  }
+
+  .open__title span {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    color: var(--red);
+  }
+
+  /* Title lines rise in one after another, like a title sequence. */
+  .open__copy > * {
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .open__copy > :nth-child(2) { animation-delay: 0.1s; }
+  .open__copy > :nth-child(3) { animation-delay: 0.2s; }
+  .open__copy > :nth-child(4) { animation-delay: 0.35s; }
+  .open__copy > :nth-child(5) { animation-delay: 0.45s; }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  .open__lede {
+    margin: clamp(22px, 2.4vw, 34px) 0 0;
+    max-width: 46ch;
+    font-size: clamp(16px, 1.25vw, 20px);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .open__down {
+    display: inline-flex;
+    gap: 10px;
+    margin-top: clamp(28px, 3vw, 44px);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .open__down span {
+    display: inline-block;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+
+  @keyframes nudge {
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  /* ---- Film strip ---- */
+
+  .strip {
+    --perf: 14px;
+    position: relative;
+    justify-self: center;
+    width: min(100%, 440px);
+    height: min(76vh, 760px);
+    overflow: hidden;
+    border-radius: 6px;
+    background: #2a2522;
+    transform: rotate(3deg);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  /* Sprocket holes are painted on the moving reel, so they travel with the
+     frames like real film. */
+  .strip__reel {
+    --hole: radial-gradient(ellipse 44% 30% at center, #070707 96%, transparent 100%);
+    display: grid;
+    gap: 14px;
+    padding: 14px calc(var(--perf) * 2.4);
+    background:
+      var(--hole) left calc(var(--perf) * 0.7) top 0 / var(--perf) 22px repeat-y,
+      var(--hole) right calc(var(--perf) * 0.7) top 0 / var(--perf) 22px repeat-y;
+    animation: roll 40s linear infinite;
+  }
+
+  @keyframes roll {
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
+  .strip__frame {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 3px;
+    background: #111;
+  }
+
+  .strip__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.9) contrast(1.05);
+  }
+
+  .strip:hover .strip__reel {
+    animation-play-state: paused;
+  }
+
+  .strip__fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18%;
+    pointer-events: none;
+  }
+
+  .strip__fade--top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+  }
+
+  .strip__fade--bottom {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  }
+
+  /* ---- Facts ---- */
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--gutter) clamp(36px, 4vw, 60px);
+    list-style: none;
+  }
+
+  .facts li {
+    display: grid;
+    gap: 6px;
+    padding: clamp(18px, 2vw, 28px) clamp(12px, 1.6vw, 24px) 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .facts li + li {
+    padding-left: clamp(12px, 1.6vw, 24px);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .facts strong {
+    font-family: var(--font-head);
+    font-size: clamp(30px, 3vw, 52px);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .facts span {
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ================= Story ================= */
+
+  .story {
+    padding: clamp(64px, 8vw, 140px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+    scroll-margin-top: var(--nav-h);
+  }
+
+  .story__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 96px);
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .story__media {
+    position: relative;
+  }
+
+  .story__media img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  /* Offset red frame behind the photo. */
+  .story__media::before {
+    content: '';
+    position: absolute;
+    inset: 22px -22px -22px 22px;
+    z-index: -1;
+    border: 2px solid var(--red);
+    border-radius: 16px;
+  }
+
+  .story__media {
+    isolation: isolate;
+  }
+
+  .story__stamp {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .story__title {
+    margin: 0 0 clamp(20px, 2.2vw, 30px);
+    font-size: clamp(32px, 3.6vw, 62px);
+    line-height: 1;
+  }
+
+  .story__copy p {
+    margin: 0 0 1.1em;
+    max-width: 62ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: clamp(22px, 2.4vw, 34px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline li {
+    position: relative;
+    display: grid;
+    gap: 6px;
+    padding: 22px 20px 0 0;
+    border-top: 2px solid rgba(51, 51, 51, 0.14);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+  }
+
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 0 4px var(--white);
+  }
+
+  .timeline__year {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  /* ================= Mission ================= */
+
+  .mission {
+    padding: clamp(64px, 8vw, 140px) var(--gutter);
+    background:
+      radial-gradient(60% 80% at 100% 0%, rgba(189, 47, 47, 0.22), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .mission__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .mission__quote {
+    margin: 0;
+  }
+
+  /* Width in ch of the quote's own (large) font, not the blockquote's. */
+  .mission__quote p {
+    max-width: 24ch;
+    margin: 0;
+    font-family: var(--font-quote);
+    font-size: clamp(28px, 3.4vw, 58px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  /* Same face as the quote; a thick red underline carries the emphasis,
+     since red type alone disappears on the charcoal. */
+  .mission__quote em {
+    font-style: normal;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 0.12em;
+    text-underline-offset: 0.14em;
+    text-decoration-skip-ink: none;
+  }
+
+  .mission__body {
+    margin-top: clamp(24px, 3vw, 40px);
+    padding-left: 22px;
+    border-left: 2px solid var(--red);
+  }
+
+  .mission__body p {
+    margin: 0;
+    max-width: 58ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: clamp(40px, 5vw, 80px) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .principles li {
+    padding: clamp(22px, 2.4vw, 34px) clamp(18px, 2vw, 32px) 0 0;
+  }
+
+  .principles li + li {
+    padding-left: clamp(18px, 2vw, 32px);
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .principles__n {
+    font-family: var(--font-head);
+    font-size: 13px;
+    color: var(--red);
+  }
+
+  .principles h3 {
+    margin: 10px 0 10px;
+    font-size: clamp(19px, 1.6vw, 26px);
+    line-height: 1.1;
+  }
+
+  .principles p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ================= Reasons ================= */
+
+  .reasons {
+    padding: clamp(64px, 8vw, 140px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .reasons__inner {
+    display: grid;
+    gap: clamp(56px, 7vw, 120px);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .reasons__title {
+    margin: 0;
+    font-size: clamp(34px, 4.4vw, 76px);
+    line-height: 0.95;
+  }
+
+  .chapter {
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(28px, 4.4vw, 84px);
+    align-items: center;
+  }
+
+  .chapter--flip .chapter__media {
+    order: 2;
+  }
+
+  .chapter__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .chapter__media img {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .chapter:hover .chapter__media img {
+    transform: scale(1.04);
+  }
+
+  /* Slate-style label on each photo. */
+  .chapter__reel {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .chapter__title {
+    margin: 0 0 clamp(16px, 1.8vw, 24px);
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .chapter__copy p {
+    margin: 0 0 1em;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  .chapter__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: clamp(22px, 2.4vw, 32px) 0 0;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .chapter__stats > div {
+    padding: clamp(18px, 2vw, 26px) clamp(14px, 1.6vw, 24px) 0 0;
+  }
+
+  .chapter__stats > div + div {
+    padding-left: clamp(14px, 1.6vw, 24px);
+    border-left: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .chapter__stats dt {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2.2vw, 36px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .chapter__stats dd {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* ================= Letter ================= */
+
+  .letter {
+    padding: clamp(64px, 8vw, 140px) var(--gutter);
+    background: #f3f1ee;
+    color: var(--charcoal);
+  }
+
+  .letter__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 4.4vw, 84px);
+    align-items: start;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .letter__portrait {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+  }
+
+  .letter__portrait img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 28%;
+    border-radius: 16px;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.45);
+  }
+
+  .letter__paper {
+    padding: clamp(28px, 4vw, 64px);
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px -35px rgba(0, 0, 0, 0.35);
+  }
+
+  .letter__title {
+    margin: 0 0 clamp(20px, 2.4vw, 32px);
+    font-size: clamp(32px, 3.6vw, 60px);
+    line-height: 1;
+  }
+
+  .letter__body p {
+    margin: 0 0 1.2em;
+    font-size: clamp(16px, 1.15vw, 18px);
+    line-height: 1.8;
+    color: #3f3f3f;
+  }
+
+  .letter__body p:first-child::first-letter {
+    float: left;
+    margin: 6px 12px 0 0;
+    font-family: var(--font-accent);
+    font-size: 4.2em;
+    line-height: 0.8;
+    color: var(--red);
+  }
+
+  .letter__sign {
+    display: grid;
+    gap: 2px;
+    margin-top: clamp(24px, 2.8vw, 40px);
+    padding-top: 24px;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+
+  .letter__name {
+    font-weight: 700;
+  }
+
+  .letter__role {
+    font-size: 14px;
+    color: #6d6d6d;
+  }
+
+  /* ================= Accreditation ================= */
+
+  .accred {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .accred__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .accred__title {
+    margin: 0 0 clamp(28px, 3.4vw, 52px);
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .seals {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 24px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .seal {
+    display: grid;
+    grid-template-columns: clamp(96px, 9vw, 132px) minmax(0, 1fr);
+    gap: clamp(18px, 2.4vw, 36px);
+    align-items: center;
+    padding: clamp(22px, 2.6vw, 38px);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-radius: 16px;
+  }
+
+  .seal img {
+    width: 100%;
+    height: auto;
+  }
+
+  .seal h3 {
+    margin: 0 0 8px;
+    font-size: clamp(17px, 1.4vw, 22px);
+    line-height: 1.15;
+  }
+
+  .seal p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  /* ================= Responsive ================= */
+
+  @media (max-width: 1000px) {
+    .open__inner {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    /* The strip turns horizontal-ish: a shorter window under the title. */
+    .strip {
+      height: 320px;
+      width: min(100%, 520px);
+      transform: rotate(2deg);
+    }
+
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .facts li:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .story__inner,
+    .chapter,
+    .letter__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chapter--flip .chapter__media {
+      order: 0;
+    }
+
+    .story__media {
+      max-width: 520px;
+    }
+
+    .letter__portrait {
+      position: static;
+      max-width: 360px;
+    }
+
+    .principles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .principles li,
+    .principles li + li {
+      padding-left: 0;
+      border-left: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      padding-bottom: 22px;
+    }
+
+    .seals {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .chapter__stats,
+    .timeline {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chapter__stats > div + div {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .story__media::before {
+      inset: 14px -10px -14px 10px;
+    }
+
+    .seal {
+      grid-template-columns: 80px minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .strip__reel,
+    .open__grain,
+    .open__down span {
+      animation: none;
+    }
+  }
+</style>

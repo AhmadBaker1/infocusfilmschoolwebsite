@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { getPrograms } from '../../lib/programs';
+
+const programs = getPrograms();
+const groups = [
+  { key: 'film', label: 'Film + Television' },
+  { key: 'animation', label: 'Animation, VFX, Games + Design' },
+] as const;
+const fact = (p: (typeof programs)[number], label: string) => p.facts.find((f) => f.label === label)?.value;
+---
+
+<Base
+  title="Programs — InFocus Film School"
+  description="Diploma and certificate programs in film production, cinematography, documentary, screenwriting, acting, 3D animation, VFX, game design and graphic design."
+>
+  <Nav />
+  <main>
+    <PageHero title="Programs" crumbs={[{ label: 'Home', href: '/' }, { label: 'Programs' }]}>
+      <p>Accelerated, project-based diploma and certificate programs taught by working industry professionals.</p>
+    </PageHero>
+
+    <div class="page">
+      <div class="wrap">
+        {groups.map((g) => (
+          <section class="group" aria-labelledby={`g-${g.key}`}>
+            <h2 id={`g-${g.key}`} class="group__title">{g.label}</h2>
+            <ul class="grid">
+              {programs.filter((p) => p.group === g.key).map((p) => (
+                <li>
+                  <a class="card" href={`/programs/${p.slug}`}>
+                    <span class:list={['card__media', { 'card__media--cutout': p.hero.image?.endsWith('.png') }]}>
+                      {p.hero.image && <img src={p.hero.image} alt="" loading="lazy" decoding="async" />}
+                    </span>
+                    <span class="card__body">
+                      <span class="card__meta">
+                        {[fact(p, 'Credential'), fact(p, 'Program length'), fact(p, 'Delivery')].filter(Boolean).join(' · ')}
+                      </span>
+                      <span class="card__title">{p.shortTitle}</span>
+                      <span class="card__text">{p.summary}</span>
+                      <span class="card__foot">
+                        {p.costs && <span>From {p.costs.domestic}</span>}
+                        <span class="card__cta">Explore <span aria-hidden="true">→</span></span>
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+
+        <section class="group" aria-labelledby="g-more">
+          <h2 id="g-more" class="group__title">Pathways + continuing studies</h2>
+          <ul class="mini">
+            <li>
+              <a href="/programs/yorkville-university-pathway">
+                <span>Yorkville University Pathway</span>
+                <span class="mini__text">Diploma + Bachelor of Creative Arts in as little as 15 months</span>
+                <span class="mini__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="/programs/standardized-traffic-control-training">
+                <span>Standardized Traffic Control Training</span>
+                <span class="mini__text">2-day BCCSA course · required for the DGC permittee logbook</span>
+                <span class="mini__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </main>
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page { padding: clamp(48px, 6vw, 100px) var(--gutter) clamp(56px, 7vw, 120px); background: var(--white); color: var(--charcoal); }
+  .wrap { max-width: 1440px; margin: 0 auto; display: grid; gap: clamp(48px, 6vw, 96px); }
+  .group__title { margin: 0 0 clamp(20px, 2.4vw, 32px); padding-bottom: 14px; border-bottom: 2px solid var(--charcoal); font-size: clamp(24px, 2.4vw, 40px); line-height: 1; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 2vw, 32px); margin: 0; padding: 0; list-style: none; }
+  .card { display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid rgba(51, 51, 51, 0.14); border-radius: 14px; transition: box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+  .card:hover { box-shadow: 0 22px 50px -28px rgba(0, 0, 0, 0.45); transform: translateY(-4px); }
+  .card__media { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--charcoal); }
+  .card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+  .card:hover .card__media img { transform: scale(1.05); }
+  .card__media--cutout { background: radial-gradient(60% 70% at 50% 60%, rgba(189, 47, 47, 0.35), transparent 70%), var(--charcoal); }
+  .card__media--cutout img { object-fit: contain; padding: 14px; }
+  .card__body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: clamp(18px, 2vw, 26px); }
+  .card__meta { font-family: var(--font-head); font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); }
+  .card__title { font-family: var(--font-head); font-size: clamp(22px, 1.9vw, 30px); font-weight: 600; line-height: 1.05; text-transform: uppercase; }
+  .card__text { font-size: 14px; line-height: 1.6; color: #555; }
+  .card__foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(51, 51, 51, 0.12); font-size: 14px; font-weight: 600; }
+  .card__cta { font-family: var(--font-head); font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+  .card:hover .card__cta { color: var(--red); }
+  .mini { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(51, 51, 51, 0.14); }
+  .mini a { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto; align-items: center; gap: 16px; padding: 20px 4px; border-bottom: 1px solid rgba(51, 51, 51, 0.14); font-family: var(--font-head); font-size: clamp(17px, 1.4vw, 22px); font-weight: 500; text-transform: uppercase; transition: color 0.2s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .mini a:hover { padding-left: 14px; color: var(--red); }
+  .mini__text { font-family: var(--font-body); font-size: 14px; font-weight: 400; text-transform: none; color: #6d6d6d; }
+  .mini__arrow { color: var(--red); }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } .mini a { grid-template-columns: minmax(0, 1fr) auto; } .mini__text { grid-row: 2; } }
+</style>

@@ -1,0 +1,523 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+// Copied verbatim from infocusfilmschool.com/policies (2026-09-24) by the
+// policy import script; edit the JSON to change a policy.
+import policies from '../data/policies.json';
+
+const minutes = (w: number) => Math.max(1, Math.round(w / 230));
+---
+
+<Base
+  title="Student Policies — InFocus Film School"
+  description="InFocus Film School student policies: statement of rights, tuition refunds, English proficiency, accessibility, grade appeals, attendance, conduct, discipline, dispute resolution, harassment and critical incidents."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Student Policies"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Policies' }]}
+    >
+      <p>
+        The policies that support the student experience at InFocus Film School. All policies can
+        also be found in your student enrolment contract.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="page__inner">
+        <aside class="side">
+          <div class="side__sticky">
+            <p class="side__label">{policies.length} policies</p>
+            <ol class="side__list">
+              {policies.map((p) => (
+                <li>
+                  <a href={`#${p.id}`} data-jump={p.id}>
+                    <span class="side__n">{String(p.n).padStart(2, '0')}</span>
+                    <span>{p.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </aside>
+
+        <div class="main">
+          <div class="toolbar">
+            <p class="toolbar__note">Select a policy to read it in full.</p>
+            <div class="toolbar__btns">
+              <button type="button" data-all="open">Expand all</button>
+              <button type="button" data-all="close">Collapse all</button>
+            </div>
+          </div>
+
+          <div class="list">
+            {policies.map((p) => (
+              <section class="pol" id={p.id} data-pol data-n={p.n}>
+                <h2 class="pol__h">
+                  <button
+                    type="button"
+                    class="pol__btn"
+                    aria-expanded="false"
+                    aria-controls={`${p.id}-panel`}
+                    id={`${p.id}-btn`}
+                  >
+                    <span class="pol__n">{String(p.n).padStart(2, '0')}</span>
+                    <span class="pol__title">{p.title}</span>
+                    <span class="pol__time">{minutes(p.words)} min read</span>
+                    <span class="pol__icon" aria-hidden="true"></span>
+                  </button>
+                </h2>
+                <div class="pol__panel" id={`${p.id}-panel`} role="region" aria-labelledby={`${p.id}-btn`}>
+                  <div class="pol__inner">
+                    <div class="pol__body" set:html={p.html} />
+                    <a class="pol__top" href="#top-of-policies" data-top>Back to all policies <span aria-hidden="true">↑</span></a>
+                  </div>
+                </div>
+              </section>
+            ))}
+          </div>
+
+          <p class="help">
+            Questions about a policy? Contact Student Services or
+            <a href="/contact">get in touch with our team</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    padding: clamp(40px, 5vw, 84px) var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .page__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 88px);
+    align-items: start;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Side list ---- */
+
+  .side__sticky {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .side__label {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .side__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .side__list a {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 6px;
+    margin-left: -1px;
+    padding: 8px 0 8px 14px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .side__list a:hover {
+    color: var(--charcoal);
+  }
+
+  .side__list a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  .side__n {
+    font-family: var(--font-head);
+    font-size: 12px;
+    color: var(--red);
+    padding-top: 1px;
+  }
+
+  /* ---- Toolbar ---- */
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .toolbar__note {
+    margin: 0;
+    font-size: 14px;
+    color: #6d6d6d;
+  }
+
+  .toolbar__btns {
+    display: flex;
+    gap: 8px;
+  }
+
+  .toolbar__btns button {
+    padding: 8px 14px;
+    border: 1px solid rgba(51, 51, 51, 0.22);
+    border-radius: 999px;
+    font-size: 13px;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .toolbar__btns button:hover {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  /* ---- Accordion ---- */
+
+  .list {
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .pol {
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    scroll-margin-top: calc(var(--nav-h) + 16px);
+  }
+
+  .pol__h {
+    margin: 0;
+    font-size: inherit;
+    text-transform: none;
+  }
+
+  .pol__btn {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto 18px;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: clamp(18px, 1.8vw, 24px) 0;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .pol__n {
+    font-family: var(--font-head);
+    font-size: 15px;
+    color: var(--red);
+  }
+
+  .pol__title {
+    font-family: var(--font-head);
+    font-size: clamp(18px, 1.6vw, 26px);
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+  }
+
+  .pol__btn:hover .pol__title {
+    color: var(--red);
+  }
+
+  .pol__time {
+    font-size: 12px;
+    color: #9a9a9a;
+    white-space: nowrap;
+  }
+
+  .pol__icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+  }
+
+  .pol__icon::before,
+  .pol__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 16px;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--red);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pol__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .pol.is-open .pol__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .pol__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pol.is-open .pol__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .pol__inner {
+    overflow: hidden;
+  }
+
+  /* ---- Policy text ---- */
+
+  .pol__body {
+    padding: 0 0 8px 58px;
+    max-width: calc(72ch + 58px);
+  }
+
+  .pol__body :global(p),
+  .pol__body :global(li) {
+    font-size: clamp(15px, 1.02vw, 16px);
+    line-height: 1.75;
+    color: #3f3f3f;
+  }
+
+  .pol__body :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .pol__body :global(h3),
+  .pol__body :global(h4) {
+    margin: 1.8em 0 0.6em;
+    font-size: clamp(16px, 1.2vw, 19px);
+    letter-spacing: 0.02em;
+  }
+
+  .pol__body :global(strong) {
+    color: var(--charcoal);
+  }
+
+  .pol__body :global(ul),
+  .pol__body :global(ol) {
+    margin: 0 0 1.2em;
+    padding-left: 1.3em;
+  }
+
+  .pol__body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .pol__body :global(li::marker) {
+    color: var(--red);
+  }
+
+  .pol__body :global(a) {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+    word-break: break-word;
+  }
+
+  .pol__body :global(a:hover) {
+    color: var(--red);
+  }
+
+  /* Tables scroll sideways on narrow screens rather than squashing. */
+  .pol__body :global(table) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 1.4em;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .pol__body :global(th),
+  .pol__body :global(td) {
+    min-width: 200px;
+    padding: 12px 14px;
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .pol__body :global(th) {
+    background: #f4f4f4;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .pol__body :global(th:last-child),
+  .pol__body :global(td:last-child) {
+    width: 45%;
+  }
+
+  .pol__top {
+    display: inline-flex;
+    gap: 8px;
+    margin: 8px 0 clamp(22px, 2.4vw, 32px) 58px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #6d6d6d;
+    transition: color 0.2s ease;
+  }
+
+  .pol__top:hover {
+    color: var(--red);
+  }
+
+  .help {
+    margin: clamp(28px, 3vw, 44px) 0 0;
+    padding: 16px 20px;
+    border-left: 2px solid var(--red);
+    background: #f6f6f6;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4a4a4a;
+  }
+
+  .help a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+  }
+
+  @media (max-width: 960px) {
+    .page__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .side {
+      display: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pol__btn {
+      grid-template-columns: 30px minmax(0, 1fr) 16px;
+    }
+
+    .pol__time {
+      display: none;
+    }
+
+    .pol__body,
+    .pol__top {
+      padding-left: 0;
+      margin-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pol__panel,
+    .pol__icon::before,
+    .pol__icon::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const items = [...document.querySelectorAll<HTMLElement>('[data-pol]')];
+  const side = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('[data-jump]').forEach((a) => side.set(a.dataset.jump!, a));
+
+  const setOpen = (item: HTMLElement, open: boolean) => {
+    item.classList.toggle('is-open', open);
+    item.querySelector('.pol__btn')?.setAttribute('aria-expanded', String(open));
+  };
+
+  const markCurrent = (id: string | null) => {
+    side.forEach((a, key) => (key === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+  };
+
+  const openOnly = (item: HTMLElement, scroll: boolean) => {
+    items.forEach((it) => setOpen(it, it === item));
+    markCurrent(item.id);
+    if (scroll) requestAnimationFrame(() => item.scrollIntoView({ block: 'start' }));
+  };
+
+  items.forEach((item) =>
+    item.querySelector('.pol__btn')?.addEventListener('click', () => {
+      const open = item.classList.contains('is-open');
+      setOpen(item, !open);
+      markCurrent(open ? null : item.id);
+      if (!open) history.replaceState(null, '', `#${item.id}`);
+    })
+  );
+
+  side.forEach((a, id) =>
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const item = document.getElementById(id);
+      if (item) {
+        openOnly(item, true);
+        history.replaceState(null, '', `#${id}`);
+      }
+    })
+  );
+
+  document.querySelectorAll<HTMLButtonElement>('[data-all]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const open = b.dataset.all === 'open';
+      items.forEach((it) => setOpen(it, open));
+      if (!open) markCurrent(null);
+    })
+  );
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-top]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.page')?.scrollIntoView({ block: 'start' });
+    })
+  );
+
+  // Deep links: #policy-slug, and the old site's #toggle-id-N.
+  const fromHash = () => {
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (!h) return;
+    const legacy = h.match(/^toggle-id-(\d+)$/);
+    const item = legacy ? items.find((it) => it.dataset.n === legacy[1]) : document.getElementById(h);
+    if (item && item.hasAttribute('data-pol')) openOnly(item, true);
+  };
+  fromHash();
+  addEventListener('hashchange', fromHash);
+</script>

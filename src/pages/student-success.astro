@@ -1,0 +1,352 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import PostCard from '../components/PostCard.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+import { getPosts, toCard } from '../lib/blog';
+
+const stories = (await getPosts()).filter((p) => p.data.category === 'success').map(toCard);
+const [featured, ...rest] = stories;
+
+// Names for the rolling credits band.
+const alumni = [
+  'Zoe Hertz',
+  'Aina Vinokurova',
+  'Not.RIPO',
+  'Ross Langill',
+  'Drew Forster',
+  'Chenneth Weeraratne',
+  'Enrique Martinez Piña',
+  'Shanthini Balasubramanian',
+  'Anuruddha Jayasinghe',
+  'Aharon Jinjihashvili',
+];
+---
+
+<Base
+  title="Student Success Stories — InFocus Film School"
+  description="InFocus Film School alumni on set, on screen and on the festival circuit: cinematographers, directors, crew and festival founders."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Student Success Stories"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'About Us', href: '/about' }, { label: 'Student Success' }]}
+    >
+      <p>
+        Our graduates win awards, receive grants, screen at festivals and build careers on film
+        crews around the world. These are some of their stories.
+      </p>
+    </PageHero>
+
+    <!-- End-credits style band of alumni names. -->
+    <div class="credits" aria-label="Featured alumni">
+      <div class="credits__track">
+        {[0, 1].map((copy) => (
+          <ul class="credits__list" aria-hidden={copy === 1 ? 'true' : undefined}>
+            {alumni.map((name) => (
+              <li>{name}</li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </div>
+
+    <div class="stories">
+      <div class="stories__inner">
+        {
+          featured && (
+            <section class="featured" aria-label="Latest story">
+              <p class="eyebrow"><span aria-hidden="true" />Latest story</p>
+              <PostCard post={featured} featured eager />
+            </section>
+          )
+        }
+
+        <section aria-labelledby="all-title">
+          <div class="head">
+            <h2 id="all-title" class="head__title">More alumni stories</h2>
+            <a class="head__link" href="/resources/blog">All articles <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="grid">
+            {rest.map((post, i) => (
+              <li style={`--i:${i}`}>
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <section class="next" aria-labelledby="next-title">
+      <div class="next__inner">
+        <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>You could be next</p>
+        <h2 id="next-title" class="next__title">Your name belongs in the credits.</h2>
+        <p class="next__text">
+          A high percentage of our students find work in their field within a year of graduating,
+          and our support doesn’t stop at graduation: alumni get ongoing mentorship, collaborations
+          with partner organizations and connections to industry opportunities.
+        </p>
+        <div class="next__actions">
+          <a class="next__btn" href="/apply">Apply now <span aria-hidden="true">↗</span></a>
+          <a class="next__link" href="/about#alumni-success">How we support alumni <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(16px, 1.8vw, 24px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ---- Credits band ---- */
+
+  .credits {
+    overflow: hidden;
+    padding: clamp(18px, 2vw, 26px) 0;
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .credits__track {
+    display: flex;
+    width: max-content;
+    animation: credits 40s linear infinite;
+  }
+
+  .credits:hover .credits__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes credits {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .credits__list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .credits__list li {
+    display: flex;
+    align-items: center;
+    padding-right: clamp(28px, 3vw, 48px);
+    font-family: var(--font-head);
+    font-size: clamp(18px, 1.8vw, 28px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Small film-frame between names. */
+  .credits__list li::after {
+    content: '';
+    width: 12px;
+    height: 9px;
+    margin-left: clamp(28px, 3vw, 48px);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+  }
+
+  /* ---- Stories ---- */
+
+  .stories {
+    padding: clamp(48px, 6vw, 100px) var(--gutter) clamp(64px, 8vw, 128px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .stories__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .featured {
+    padding-bottom: clamp(44px, 5.5vw, 88px);
+    margin-bottom: clamp(36px, 4.4vw, 68px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(26px, 3vw, 44px);
+  }
+
+  .head__title {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .head__link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .head__link:hover {
+    color: var(--red);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(32px, 3.4vw, 56px) clamp(18px, 2vw, 32px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grid li {
+    animation: card-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* ---- You could be next ---- */
+
+  .next {
+    padding: clamp(64px, 8vw, 132px) var(--gutter);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.28), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .next__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .next__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(36px, 4.6vw, 80px);
+    line-height: 0.95;
+  }
+
+  .next__text {
+    margin: clamp(20px, 2.2vw, 30px) 0 0;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .next__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: clamp(28px, 3vw, 44px);
+  }
+
+  .next__btn {
+    display: inline-flex;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .next__btn:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .next__link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+  }
+
+  .next__link:hover {
+    color: var(--white);
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .credits__track {
+      animation: none;
+      width: auto;
+      flex-wrap: wrap;
+    }
+
+    .credits__list[aria-hidden] {
+      display: none;
+    }
+  }
+</style>

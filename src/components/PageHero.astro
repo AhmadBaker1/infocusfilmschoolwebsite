@@ -1,0 +1,399 @@
+---
+// Shared banner for inner pages. No photography — the frame is drawn as a
+// camera viewfinder: corner brackets, a rule-of-thirds grid, a focus ring
+// that racks into focus on load, and a REC readout with running timecode.
+// New pages pass a title, breadcrumbs and an optional lede; nothing else.
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  crumbs?: Crumb[];
+  eyebrow?: string;
+  /* Matches the page's content column so the heading lines up with it. */
+  width?: string;
+}
+
+const { title, crumbs = [], eyebrow, width = '1320px' } = Astro.props;
+const ticks = Array.from({ length: 72 }, (_, i) => i);
+---
+
+<header class="phero" style={`--phero-w:${width}`}>
+  <span class="phero__grain" aria-hidden="true"></span>
+  <span class="phero__grid" aria-hidden="true"></span>
+
+  <svg class="phero__ring" viewBox="0 0 400 400" aria-hidden="true">
+    <g class="phero__dial">
+      {
+        ticks.map((i) => (
+          <line
+            x1="200"
+            y1={i % 6 === 0 ? 6 : 12}
+            x2="200"
+            y2="22"
+            transform={`rotate(${i * 5} 200 200)`}
+            class={i % 18 === 0 ? 'tick tick--red' : 'tick'}
+          />
+        ))
+      }
+    </g>
+    <circle cx="200" cy="200" r="150" class="ring" />
+    <circle cx="200" cy="200" r="96" class="ring ring--faint" />
+    <circle cx="200" cy="200" r="4" class="dot" />
+    <path d="M200 160v24M200 216v24M160 200h24M216 200h24" class="cross" />
+  </svg>
+
+  <span class="phero__corner phero__corner--tl" aria-hidden="true"></span>
+  <span class="phero__corner phero__corner--tr" aria-hidden="true"></span>
+  <span class="phero__corner phero__corner--bl" aria-hidden="true"></span>
+  <span class="phero__corner phero__corner--br" aria-hidden="true"></span>
+
+  <div class="phero__hud phero__hud--top" aria-hidden="true">
+    <span class="rec"><i></i>Rec</span>
+    <span class="tc" data-timecode>00:00:00:00</span>
+  </div>
+  <div class="phero__hud phero__hud--bottom" aria-hidden="true">
+    <span>24 FPS</span>
+    <span>ƒ/2.8</span>
+    <span>ISO 800</span>
+    <span>4K</span>
+  </div>
+
+  <div class="phero__inner">
+    {
+      crumbs.length > 0 && (
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            {crumbs.map((c, i) => (
+              <li aria-current={i === crumbs.length - 1 ? 'page' : undefined}>{c.href ? <a href={c.href}>{c.label}</a> : c.label}</li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    {
+      eyebrow && (
+        <p class="phero__eyebrow">
+          <span aria-hidden="true" />
+          {eyebrow}
+        </p>
+      )
+    }
+    <h1>{title}</h1>
+    {
+      Astro.slots.has('default') && (
+        <div class="phero__lede">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .phero {
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --inset: clamp(14px, 1.8vw, 30px);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(320px, 34vw, 500px);
+    padding: clamp(72px, 8vw, 130px) var(--gutter) clamp(44px, 5vw, 80px);
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--white);
+    background:
+      radial-gradient(60% 90% at 78% 55%, rgba(189, 47, 47, 0.22), transparent 62%),
+      radial-gradient(50% 70% at 8% 0%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--black);
+  }
+
+  /* Film grain — a tiny turbulence tile, kept very quiet. */
+  .phero__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: 0;
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.2s steps(6) infinite;
+    pointer-events: none;
+  }
+
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-3%, 2%); }
+    40% { transform: translate(2%, -3%); }
+    60% { transform: translate(-2%, -1%); }
+    80% { transform: translate(3%, 3%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* Rule-of-thirds guides. */
+  .phero__grid {
+    position: absolute;
+    inset: var(--inset);
+    z-index: 0;
+    background:
+      linear-gradient(to right, transparent calc(33.333% - 0.5px), rgba(255, 255, 255, 0.06) calc(33.333% - 0.5px), rgba(255, 255, 255, 0.06) calc(33.333% + 0.5px), transparent calc(33.333% + 0.5px)),
+      linear-gradient(to right, transparent calc(66.666% - 0.5px), rgba(255, 255, 255, 0.06) calc(66.666% - 0.5px), rgba(255, 255, 255, 0.06) calc(66.666% + 0.5px), transparent calc(66.666% + 0.5px)),
+      linear-gradient(to bottom, transparent calc(33.333% - 0.5px), rgba(255, 255, 255, 0.06) calc(33.333% - 0.5px), rgba(255, 255, 255, 0.06) calc(33.333% + 0.5px), transparent calc(33.333% + 0.5px)),
+      linear-gradient(to bottom, transparent calc(66.666% - 0.5px), rgba(255, 255, 255, 0.06) calc(66.666% - 0.5px), rgba(255, 255, 255, 0.06) calc(66.666% + 0.5px), transparent calc(66.666% + 0.5px));
+    pointer-events: none;
+  }
+
+  /* ---- Focus ring: racks from soft to sharp on load, then the outer
+     dial turns slowly like a lens barrel. ---- */
+
+  /* Sized off the banner's height, not its width, so the whole ring always
+     sits inside the viewfinder corners. */
+  .phero__ring {
+    position: absolute;
+    top: 50%;
+    right: clamp(40px, 7vw, 150px);
+    z-index: 0;
+    height: calc(100% - var(--inset) * 2 - clamp(40px, 4vw, 64px));
+    width: auto;
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    animation: rack 1.8s var(--ease) 0.15s both;
+    overflow: visible;
+  }
+
+  @keyframes rack {
+    from {
+      opacity: 0;
+      filter: blur(18px);
+      transform: translateY(-50%) scale(1.12);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(-50%) scale(1);
+    }
+  }
+
+  .phero__dial {
+    transform-origin: 200px 200px;
+    animation: turn 90s linear infinite;
+  }
+
+  @keyframes turn {
+    to { transform: rotate(360deg); }
+  }
+
+  .tick {
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 1.2;
+  }
+
+  .tick--red {
+    stroke: var(--red);
+    stroke-width: 2.4;
+  }
+
+  .ring {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.16);
+    stroke-width: 1;
+  }
+
+  .ring--faint {
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-dasharray: 2 6;
+  }
+
+  .dot {
+    fill: var(--red);
+  }
+
+  .cross {
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 1.2;
+  }
+
+  /* ---- Viewfinder corners ---- */
+
+  .phero__corner {
+    position: absolute;
+    z-index: 1;
+    width: clamp(18px, 1.8vw, 30px);
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+  }
+
+  .phero__corner--tl { top: var(--inset); left: var(--inset); border-top-width: 2px; border-left-width: 2px; }
+  .phero__corner--tr { top: var(--inset); right: var(--inset); border-top-width: 2px; border-right-width: 2px; }
+  .phero__corner--bl { bottom: var(--inset); left: var(--inset); border-bottom-width: 2px; border-left-width: 2px; }
+  .phero__corner--br { bottom: var(--inset); right: var(--inset); border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* ---- Camera readouts ---- */
+
+  .phero__hud {
+    position: absolute;
+    right: calc(var(--inset) + clamp(26px, 2.6vw, 44px));
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 26px);
+    font-family: var(--font-head);
+    font-size: clamp(10px, 0.75vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .phero__hud--top {
+    top: calc(var(--inset) + 4px);
+  }
+
+  .phero__hud--bottom {
+    bottom: calc(var(--inset) + 4px);
+  }
+
+  .rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--white);
+  }
+
+  .rec i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 10px rgba(189, 47, 47, 0.8);
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0.15; }
+  }
+
+  /* ---- Copy ---- */
+
+  .phero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--phero-w);
+    margin: 0 auto;
+    animation: rise 1s var(--ease) 0.1s both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  .phero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .phero__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .phero h1 {
+    margin: 0;
+    max-width: 20ch;
+    font-size: clamp(34px, 4.4vw, 74px);
+    font-weight: 600;
+    line-height: 1.02;
+  }
+
+  .phero__lede {
+    margin: clamp(16px, 1.8vw, 26px) 0 0;
+    max-width: 64ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .phero__lede :global(p) {
+    margin: 0;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .crumbs a {
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s ease;
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  @media (max-width: 760px) {
+    .phero__ring {
+      right: -30%;
+      opacity: 0.35;
+    }
+
+    .phero__hud--bottom {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phero__grain,
+    .phero__dial,
+    .rec i {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Running timecode (HH:MM:SS:FF at 24fps) from page load.
+  const tcs = document.querySelectorAll<HTMLElement>('[data-timecode]');
+  if (tcs.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const start = performance.now();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const tick = () => {
+      const t = (performance.now() - start) / 1000;
+      const text = `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t / 60) % 60)}:${pad(Math.floor(t) % 60)}:${pad(Math.floor((t % 1) * 24))}`;
+      tcs.forEach((el) => (el.textContent = text));
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+</script>

@@ -1,0 +1,293 @@
+{
+  "slug": "film-production",
+  "oldPath": "/film-production",
+  "title": "Film Production Program",
+  "shortTitle": "Film Production",
+  "group": "film",
+  "summary": "A 12-month, in-person diploma with cameras out from day one, 12 film projects and mentorship from working filmmakers.",
+  "hero": {
+    "image": "/images/about-3.jpg",
+    "imageAlt": "Film Production students operating a cinema camera on set"
+  },
+  "intro": {
+    "heading": "The film course built for Canada’s film industry",
+    "paras": [
+      "With cameras out from day one, over 1000 hours of rigorous training, and mentorship from actively working filmmakers and industry professionals, InFocus Film School is the best film school to get you working in the industry. We believe in learning by doing. Interactive lessons and 12 film projects in a broad range of filmmaking styles will give you an understanding of the technical and theoretical aspects of film production.",
+      "Small class sizes provide focused, individualized training and plenty of one-on-one time with industry-professional instructors, building your artistic strength and awareness through real experience. Become a part of our creative community and join our award-winning alumni with a record of festival selections, awards, and employment after graduation."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "In-person"
+    },
+    {
+      "label": "Credential",
+      "value": "Diploma"
+    },
+    {
+      "label": "Program length",
+      "value": "12 months"
+    }
+  ],
+  "about": {
+    "heading": "About the InFocus Film Program",
+    "cards": [
+      {
+        "title": "12 projects in 12 months",
+        "text": "The best way to learn filmmaking is through hands-on experience. That’s why we maximize the amount of time you spend actually working on productions. Creating and finishing multiple projects enables you to experiment, make mistakes, and gain experience in a variety of roles in a way that isn’t possible with only a single capstone project.",
+        "link": {
+          "label": "View project timeline",
+          "href": "https://infocusfilmschool.com/film-production-program-film-timeline/"
+        }
+      },
+      {
+        "title": "Film production classes led by pros",
+        "text": "All InFocus filmmaking classes are led by industry pros, meaning your mentors are actively working directors, cinematographers, and editors. Not only does this provide the most up-to-date instruction on the techniques and state of the film industry, but it also provides networking opportunities, references, and job opening intel, right in the classroom!"
+      },
+      {
+        "title": "The film industry needs you",
+        "text": "Learning film production in Vancouver means you’ll enter the Canadian film industry which provides over 65,000 jobs and $4 billion in annual spending in B.C. alone. Whether you’re into directing, cinematography, or something else, the Film Production Program gives you a taste of all the positions on a film set and allows you to specialize in the role you want to pursue in the future.",
+        "link": {
+          "label": "Read course descriptions",
+          "href": "https://infocusfilmschool.com/film-course-descriptions/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Work on the films you love",
+      "paras": [
+        "InFocus alumni work on everything from massive Marvel superhero films to Oscar-winning dramas to critically acclaimed TV to indie gems. Workshops with Vancouver film unions give students the inside scoop on entering the industry, networking events provide contacts and job leads, and classes on starting a production studio provide insight on how to pursue a more entrepreneurial path in Vancouver’s booming film industry. Students from the Film Production program often work in the film industry within days of graduating. You could be next."
+      ],
+      "image": "/images/herobg-1.jpg",
+      "imageAlt": "A Film Production student on location"
+    },
+    {
+      "heading": "Intense, hands-on education",
+      "paras": [
+        "We believe in learning by doing, which is why you’ll have cameras in hand from day one as you dive headfirst into 12 film projects covering a wide range of filmmaking styles. Through in-depth classes and interactive lessons, you’ll gain a deep understanding of the technical and theoretical aspects of the art of filmmaking.",
+        "Small class sizes ensure personalized attention, helping to build your artistic strength and awareness in all areas of film production. Over 1000 hours of intense training and mentorship from actively working filmmakers and industry professionals will set you on the path to becoming a true master of the craft.",
+        "Choose to specialize or take a more generalist approach. Advanced industry mentorship in cinematography, directing, producing, production design, and more will ensure you become a creative, artistic, and technically skilled filmmaker. Enter the industry and join our award-winning alumni with a record of festival selections, awards, and employment after graduation."
+      ],
+      "image": "/images/about-4.jpg",
+      "imageAlt": "Students setting up lights and camera in the studio"
+    }
+  ],
+  "stats": {
+    "heading": "Our students win awards",
+    "text": "With InFocus, you are more than just a student. We are dedicated to your success, both during the program and in launching your professional career after graduation. Many InFocus students have won awards, received grants, and made the selection of prestigious festivals right out of school. In addition to supporting and promoting your projects, we offer ongoing assistance by building your network of industry contacts and connecting you with job opportunities, leading to an outstanding job placement rate for our alumni.",
+    "items": [
+      {
+        "value": "100+",
+        "label": "Festival selections"
+      },
+      {
+        "value": "Over 80%",
+        "label": "Employment rate"
+      }
+    ]
+  },
+  "alumni": [
+    {
+      "name": "Alex K.",
+      "image": "/images/programs/film-production/alex.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work on",
+      "credits": [
+        {
+          "text": "DC’s Legends of Tomorrow"
+        }
+      ]
+    },
+    {
+      "name": "Dhun S.",
+      "image": "/images/programs/film-production/dhun.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Hallmark Studios"
+        }
+      ]
+    },
+    {
+      "name": "Hiba I.",
+      "image": "/images/programs/film-production/hiba.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Netflix"
+        },
+        {
+          "text": "Hallmark"
+        }
+      ]
+    },
+    {
+      "name": "Janalee B.",
+      "image": "/images/programs/film-production/janalee.jpg",
+      "program": "Documentary Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Canada Shorts",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "CBC Television + more"
+        }
+      ]
+    },
+    {
+      "name": "Janice M.",
+      "image": "/images/programs/film-production/janice.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Black Truth Film Festival",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "Independent Short Awards + more"
+        }
+      ]
+    },
+    {
+      "name": "Ray P.",
+      "image": "/images/programs/film-production/ray.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "CW Network"
+        }
+      ]
+    },
+    {
+      "name": "Ross L.",
+      "image": "/images/programs/film-production/ross.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "20th Century Fox"
+        },
+        {
+          "text": "NBC Universal"
+        }
+      ]
+    },
+    {
+      "name": "Timothy C.",
+      "image": "/images/programs/film-production/tim.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "New York Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Chicago Indie Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Indie Short Fest + more"
+        }
+      ]
+    },
+    {
+      "name": "Vinicius S.",
+      "image": "/images/programs/film-production/vinicius.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Art Without Limit Film Fest",
+          "winner": true
+        },
+        {
+          "text": "Rome Prisma Film Festival"
+        },
+        {
+          "text": "Doku Film Festival + more"
+        }
+      ]
+    }
+  ],
+  "pathway": {
+    "heading": "Earn a diploma, work towards a degree",
+    "text": "InFocus has partnered with several universities to offer degree pathways. Graduates of the Film Production Program can transfer to programs at Yorkville University to pursue a degree at reduced time and cost. Earn a university degree in addition to your film school diploma.",
+    "link": {
+      "label": "Yorkville University Pathway",
+      "href": "/programs/yorkville-university-pathway"
+    }
+  },
+  "costs": {
+    "heading": "Achieve more, pay less",
+    "text": "Affordability, quality, and transparency converge at InFocus Film School. Our program costs rival those of public institutions but you’ll only spend a year or less in school, meaning you get an exceptional education at a fraction of the price. We offer a range of financial assistance options, including student loan support, interest-free payment plans tailored to your specific needs, and scholarships for qualified students. With our transparent pricing, we don’t hide behind annual charges, confusing credit pricing, or hidden fees.",
+    "domestic": "$25,950",
+    "international": "$35,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-1"
+  },
+  "accreditation": {
+    "heading": "Accredited film education",
+    "paras": [
+      "The Film Production Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.C. in regard to student protection and quality of education.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "1040 hours delivered over 48 instructional weeks. The program is divided into 4 terms of 12 weeks each. There is a 1-week break in between each term."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "On-campus"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full-Time, Monday – Friday 9:00am – 5:00pm. Occasional weekends will be required for film shoots: approximately three weekends per term. Students can expect 1 hour of homework per hour of class."
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 900 hours for graduation eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 60%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible at this time"
+    }
+  ],
+  "startDates": "New cohorts launch regularly. Speak with an Admissions Advisor to learn about upcoming start dates and enrollment availability.",
+  "requirements": {
+    "intro": "To be accepted into the Film Production Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-film-production-1/",
+    "studentWork": "https://www.youtube.com/watch?v=rvI4ajKaiZc&list=PLHb7xljCn6xFRJwjhDsH3GJpjFEPTTiSM",
+    "curriculum": "https://infocusfilmschool.com/film-course-descriptions/"
+  }
+}

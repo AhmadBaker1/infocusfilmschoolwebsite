@@ -1,0 +1,257 @@
+---
+// Blog post card, shared by the blog index and the article footer.
+import type { PostCard } from '../lib/blog';
+
+interface Props {
+  post: PostCard;
+  /* Large horizontal layout for the featured story. */
+  featured?: boolean;
+  /* Load the image eagerly (above the fold). */
+  eager?: boolean;
+}
+
+const { post, featured = false, eager = false } = Astro.props;
+---
+
+<a class:list={['post', { 'post--featured': featured }]} href={post.href}>
+  <span class="post__media">
+    {
+      post.image ? (
+        <img
+          src={post.image}
+          alt=""
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      ) : (
+        /* No photo in the article: a designed title card instead. */
+        <span class="post__slate" aria-hidden="true">
+          <span class="post__corner post__corner--tl" />
+          <span class="post__corner post__corner--tr" />
+          <span class="post__corner post__corner--bl" />
+          <span class="post__corner post__corner--br" />
+          <span class="post__slate-cat">{post.categoryLabel}</span>
+          <span class="post__slate-title">{post.title}</span>
+        </span>
+      )
+    }
+    <span class="post__tag">{post.categoryLabel}</span>
+  </span>
+
+  <span class="post__body">
+    <span class="post__title">{post.title}</span>
+    <span class="post__text">{post.description}</span>
+    <span class="post__meta">
+      {post.author && <span>{post.author}</span>}
+      <time datetime={post.date.toISOString().slice(0, 10)}>{post.dateText}</time>
+      <span>{post.minutes} min read</span>
+    </span>
+    {featured && <span class="post__cta">Read the article <span aria-hidden="true">→</span></span>}
+  </span>
+</a>
+
+<style>
+  .post {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: var(--charcoal);
+  }
+
+  .post__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--charcoal);
+  }
+
+  .post__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .post:hover .post__media img {
+    transform: scale(1.05);
+  }
+
+  .post__tag {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Title card fallback. */
+  .post__slate {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: clamp(20px, 2.4vw, 32px);
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgba(189, 47, 47, 0.45), transparent 60%),
+      radial-gradient(60% 80% at 0% 100%, rgba(34, 68, 102, 0.6), transparent 70%),
+      #1c1c1c;
+    color: var(--white);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .post:hover .post__slate {
+    transform: scale(1.03);
+  }
+
+  .post__slate-cat {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .post__slate-title {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2.2vw, 34px);
+    font-weight: 600;
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+
+  .post__corner {
+    position: absolute;
+    width: 16px;
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.5);
+  }
+
+  .post__corner--tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+  .post__corner--tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+  .post__corner--bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+  .post__corner--br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* The slate carries its own label; hide the overlay tag on top of it. */
+  .post__slate ~ .post__tag {
+    display: none;
+  }
+
+  .post__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 18px;
+  }
+
+  .post__title {
+    font-family: var(--font-head);
+    font-size: clamp(19px, 1.5vw, 24px);
+    font-weight: 600;
+    line-height: 1.12;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+  }
+
+  .post:hover .post__title {
+    color: var(--red);
+  }
+
+  .post__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #5a5a5a;
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: auto;
+    padding-top: 6px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .post__meta > * + *::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    margin: 0 11px 3px -3px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  /* ---- Featured ---- */
+
+  .post--featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(24px, 3.6vw, 64px);
+    align-items: center;
+  }
+
+  .post--featured .post__media {
+    aspect-ratio: 16 / 10;
+    border-radius: 16px;
+  }
+
+  .post--featured .post__body {
+    padding-top: 0;
+  }
+
+  .post--featured .post__title {
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .post--featured .post__text {
+    -webkit-line-clamp: 5;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.65;
+  }
+
+  .post--featured .post__meta {
+    margin-top: 8px;
+  }
+
+  .post__cta {
+    align-self: flex-start;
+    margin-top: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 860px) {
+    .post--featured {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

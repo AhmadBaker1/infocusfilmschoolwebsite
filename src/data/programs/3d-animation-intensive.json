@@ -1,0 +1,189 @@
+{
+  "slug": "3d-animation-intensive",
+  "oldPath": "/3d-animation-intensive-program",
+  "title": "3D Animation Intensive Program",
+  "shortTitle": "3D Animation Intensive",
+  "group": "animation",
+  "summary": "An 8-month, live online certificate in character animation, with 600 hours of Maya training, one-on-one mentorship and a studio-ready demo reel.",
+  "hero": {
+    "image": "/images/program-3d-animation.jpg",
+    "imageAlt": "3D Animation student animating a character"
+  },
+  "intro": {
+    "heading": "Study. Animate. Work.",
+    "paras": [
+      "Train in professional character animation in just 8 months. The 3D Animation Online Intensive is a 600-hour, live online certificate program focused on one thing: bringing characters to life with believable performances. Through structured lessons, hands-on projects, and industry mentorship, you will develop the technical precision and artistic instincts required to succeed as a junior character animator in film, games, and digital media.",
+      "Make real industry connections and gain cutting-edge skills. Led by award-winning industry professionals, you’ll get hands-on experience and personalized mentorship while learning industry-standard software, techniques, and tools. Students from our 3D Animation course have been offered jobs within days of graduation. You could join them in just 12 months!"
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "Online"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "8 months"
+    }
+  ],
+  "about": {
+    "heading": "About InFocus 3D Animation Intensive",
+    "cards": [
+      {
+        "title": "No experience to pro in 30 weeks",
+        "text": "No drawing or artistic experience is needed to succeed in the 3D Animation program. In just 30 weeks of guided mentorship, you’ll master 3D animation, learn advanced skills in Autodesk Maya, and build a dynamic demo reel tailored to catch the attention of studios."
+      },
+      {
+        "title": "Animators get hired. Period.",
+        "text": "The BC animation industry includes some of the world’s top animation studios. Skilled 3D animators are in extreme demand and often get hired within days of graduation. Our curriculum ensures you’ll be exactly what these studios are looking for."
+      },
+      {
+        "title": "Learn from working animators.",
+        "text": "Your mentors in the 3D Animation Program are all industry professionals currently working in the animation field. They bring mastery of the latest animation techniques, industry connections, and networking opportunities.",
+        "link": {
+          "label": "Read instructor profiles",
+          "href": "https://infocusfilmschool.com/3d-animation-program/animation-instructors/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Education that leads to employment",
+      "paras": [
+        "InFocus alumni work on everything from massive Marvel superhero films to Oscar-winning dramas to critically acclaimed TV to indie gems. Tours of Vancouver animation and VFX studios give students a look inside the industry, networking events provide contacts and job leads, and classes on career development ensure a polished portfolio and resume. Students from the 3D Animation Program often work in the animation industry within days of graduating. You could be next."
+      ],
+      "image": "/images/about-5.jpg",
+      "imageAlt": ""
+    }
+  ],
+  "curriculum": {
+    "heading": "Curriculum developed by the industry",
+    "intro": "Our curriculum has been developed in collaboration with 3D and VFX studios, leading animators, and top professionals in the field of 3D animation. The result is a program that will provide the skills and experience that the world’s top studios are looking for while helping you build a demo reel tailor-made for your specialty within the industry.",
+    "software": [
+      "Autodesk Maya",
+      "Arnold",
+      "Nuke"
+    ],
+    "modules": [
+      {
+        "title": "Autodesk Maya",
+        "text": "Train using Autodesk Maya, the industry-standard software used in professional animation studios worldwide. Throughout the program, you’ll develop hands-on experience navigating production workflows, animating characters, and preparing shots to a studio-ready level. By graduation, you’ll be confident working inside Maya and ready to apply your skills in a professional production environment."
+      },
+      {
+        "title": "Animation foundations",
+        "text": "Build a strong technical base in timing, spacing, weight, posing, and body mechanics. You’ll develop the core principles that make movement feel natural, believable, and expressive, whether you are aiming for realistic or stylized."
+      },
+      {
+        "title": "Storytelling",
+        "text": "Strong animation begins with strong ideas. You’ll explore visual storytelling, character intention, and performance planning to ensure every shot communicates clearly and purposefully. You’ll learn how to develop concepts that support emotion, action, and narrative, building a foundation that strengthens your animation from the first pose to the final frame."
+      },
+      {
+        "title": "Workflows",
+        "text": "Learning 3D animation workflows gives you a whole overview of the different processes, stages, and roles in 3D animation. The perfect way to figure out what you want to specialize in!"
+      },
+      {
+        "title": "Character performance",
+        "text": "Focus on full-body acting and physical storytelling. You’ll animate walk cycles, weight shifts, gestures, and action-based shots that convey intention through movement and body mechanics. This is where you learn how posture, timing, and physical choices define personality on screen."
+      },
+      {
+        "title": "Facial animation & lip sync",
+        "text": "Zoom in on the subtleties that sell emotion. You’ll animate dialogue, mouth shapes, eye focus, and micro-expressions to create believable, nuanced performances. This stage refines the details that make a character feel truly alive and emotionally authentic."
+      },
+      {
+        "title": "Lighting & presentation",
+        "text": "Understand the fundamentals of 3D lighting using Arnold in Maya. You’ll learn how to present your animation professionally and elevate the final look of your work."
+      },
+      {
+        "title": "One-on-one mentorship",
+        "text": "Receive personalized guidance from industry professionals who are invested in your growth. Through focused critiques and direct feedback, you’ll identify weaknesses, refine your strengths, and push your work to a professional standard. This dedicated mentorship ensures you’re not just completing assignments, you’re developing as an animator."
+      },
+      {
+        "title": "Virtual studio tours",
+        "text": "Experience the world of 3D animation from anywhere with our virtual studio tours. Get a behind-the-scenes look at how animation teams work, and join discussions with recruiters to learn how your skills could fit within the industry. It’s an inside view of production pipelines and a chance to explore the opportunities after graduation."
+      },
+      {
+        "title": "Professional readiness",
+        "text": "Refine your animation through critique and guided mentorship. You’ll graduate prepared for portfolio reviews, interviews, and the realities of entering the animation industry."
+      },
+      {
+        "title": "Demo reel",
+        "text": "Graduate with a polished demo reel that showcases your strongest character animation work. Throughout the program, you’ll refine selected shots under mentorship to ensure they meet industry expectations. By the end, you’ll have a focused, high quality reel designed to help you stand out to studios and recruiters."
+      }
+    ]
+  },
+  "stats": {
+    "heading": "Get paid to do what you love",
+    "text": "Animators are in high demand in Vancouver with salaries to match. The median wage for a 3D animator in Canada is over $100,000 per year, with experienced senior animators’ pay often well above six figures. Vancouver is home to some of the largest animation studios in the world, and InFocus maintains an excellent reputation in the industry. Our alumni can be found at many of the top studios, some having been hired within days of graduation.",
+    "items": [
+      {
+        "value": "$108,000",
+        "label": "Median salary"
+      },
+      {
+        "value": "$150,000+",
+        "label": "Senior-level salary"
+      }
+    ],
+    "source": {
+      "label": "Talent.com salary breakdown",
+      "href": "https://ca.talent.com/salary?job=3d+animator"
+    }
+  },
+  "costs": {
+    "heading": "Achieve more, pay less",
+    "text": "Affordability, quality, and transparency converge at InFocus Film School. Our program costs rival those of public institutions but you’ll only spend a year or less in school, meaning you get an exceptional education at a fraction of the price. We offer a range of financial assistance options, including student loan support, interest-free payment plans tailored to your specific needs, and scholarships for qualified students. With our transparent pricing, we don’t hide behind annual charges, confusing credit pricing, or hidden fees. What you see is what you pay – the full investment in your education with all fees included.",
+    "domestic": "$18,950",
+    "international": "$19,950",
+    "notes": [
+      "Get up to $15,000 off by studying online in April!"
+    ],
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-2"
+  },
+  "accreditation": {
+    "heading": "Accredited animation education",
+    "paras": [
+      "The 3D Animation Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "600 hours delivered over 30 instructional weeks. The program is divided into 3 terms of 10 weeks each. There is a 1-week break in between each term."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "100% Distance Learning with asynchronous components"
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 534 hours for graduation eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing Grade is equal to 60%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the 3D Animation Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-3d-vfx-1/",
+    "studentWork": "https://www.youtube.com/watch?v=p3hK_VESlzk",
+    "curriculum": "https://infocusfilmschool.com/?page_id=8105"
+  }
+}

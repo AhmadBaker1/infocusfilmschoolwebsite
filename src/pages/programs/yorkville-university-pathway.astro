@@ -1,0 +1,427 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+// Content from infocusfilmschool.com/film-production/yorkville-university-pathway
+// (2026-09-24). The old infographic is rebuilt as the steps below.
+const steps = [
+  { n: '01', title: 'Begin your diploma program', school: 'InFocus Film School', note: '12-month Film Production diploma' },
+  { n: '02', title: 'Graduate with your diploma', school: 'InFocus Film School', note: 'Film Production Diploma' },
+  { n: '03', title: 'Begin your Bachelor of Creative Arts', school: 'Yorkville University', note: 'Bachelor of Creative Arts program' },
+  { n: '04', title: 'Graduate with your Bachelor of Creative Arts degree', school: 'Yorkville University', note: 'In as few as 15 months' },
+];
+---
+
+<Base
+  title="Yorkville University Pathway — InFocus Film School"
+  description="Film Production graduates can earn a Bachelor of Creative Arts degree from Yorkville University in as little as 15 months, with up to $24,375 in bursaries."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Yorkville University Education Pathway"
+      eyebrow="Degree pathway"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Programs', href: '/programs' }, { label: 'Film Production', href: '/programs/film-production' }, { label: 'Yorkville Pathway' }]}
+    >
+      <p>
+        Film Production graduates can earn a Bachelor’s Degree in Creative Arts from Yorkville
+        University in as little as 15 months.
+      </p>
+    </PageHero>
+
+    <section class="intro">
+      <div class="wrap intro__grid">
+        <div class="logos" aria-label="InFocus Film School and Yorkville University">
+          <img src="/images/IF-Logo-Final-Lg.png" alt="InFocus Film School" loading="lazy" decoding="async" />
+          <span class="logos__plus" aria-hidden="true">+</span>
+          <img src="/images/logo-yorkville.jpg" alt="Yorkville University" loading="lazy" decoding="async" />
+        </div>
+        <div class="intro__copy">
+          <p class="intro__lede">
+            InFocus Film School is proud to announce a partnership with Yorkville University to offer
+            an educational pathway for graduates of the Film Production Program. This pathway will
+            allow Film Production graduates to earn a Bachelor’s Degree in Creative Arts in as little
+            as 15 months.
+          </p>
+          <p>
+            The Bachelor of Creative Arts Degree program from Yorkville University is designed to
+            give students the practical business and leadership skills needed to succeed in the
+            creative arts industries. Developed for both full-time students and those in the
+            workforce, this flexible program can be completed in as few as 15 months. Graduates of
+            the program will gain a complete understanding of the methodologies, tools and
+            perspectives of their chosen creative industry, including talent management, project
+            budgeting, financial planning, and legal and ethical considerations in the creative arts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="path" aria-labelledby="path-title">
+      <div class="wrap">
+        <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>How it works</p>
+        <h2 id="path-title" class="h2">Four steps to a degree</h2>
+        <ol class="steps">
+          {steps.map((s, i) => (
+            <li class:list={['step', { 'step--yu': i > 1 }]}>
+              <span class="step__n">{s.n}</span>
+              <span class="step__school">{s.school}</span>
+              <h3 class="step__title">{s.title}</h3>
+              <span class="step__note">{s.note}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="perks">
+      <div class="wrap perks__grid">
+        <div class="perk">
+          <span class="perk__label">Certifications</span>
+          <p class="perk__big">Diploma <span>+</span> Degree</p>
+          <p>Earn a Bachelor of Creative Arts Degree in addition to your Film Production Diploma.</p>
+        </div>
+        <div class="perk perk--dark">
+          <span class="perk__label">Bursaries</span>
+          <p class="perk__big">Up to $24,375</p>
+          <p>Film Production graduates may be eligible for up to $24,375 in bursaries!</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="start">
+      <div class="wrap start__inner">
+        <h2 class="h2">Start your education pathway today</h2>
+        <p>
+          The pathway begins with our Film Production diploma. Talk to an admissions advisor about
+          start dates, funding and the transfer to Yorkville University.
+        </p>
+        <div class="start__actions">
+          <a class="btn" href="/programs/film-production">Explore Film Production <span aria-hidden="true">→</span></a>
+          <a class="link" href="/contact">Talk to an advisor <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: 36px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .h2 {
+    margin: 0 0 clamp(18px, 2vw, 28px);
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  /* ---- Intro ---- */
+
+  .intro {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 96px);
+    align-items: center;
+  }
+
+  .logos {
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    padding: clamp(28px, 3vw, 44px);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-radius: 16px;
+  }
+
+  .logos img {
+    width: min(100%, 260px);
+    height: auto;
+  }
+
+  .logos__plus {
+    font-family: var(--font-head);
+    font-size: 34px;
+    color: var(--red);
+  }
+
+  .intro__copy p {
+    margin: 0 0 1.1em;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.75;
+    color: #444;
+  }
+
+  .intro__copy .intro__lede {
+    font-family: var(--font-quote);
+    font-size: clamp(19px, 1.6vw, 26px);
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--charcoal);
+  }
+
+  /* ---- Steps ---- */
+
+  .path {
+    padding: clamp(60px, 7.5vw, 128px) var(--gutter);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.22), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 24px);
+    margin: clamp(28px, 3.4vw, 48px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Dotted track joining the steps. */
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    border-top: 2px dashed rgba(255, 255, 255, 0.3);
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 8px;
+  }
+
+  .step__n {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: var(--red);
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0 0 0 6px var(--charcoal);
+  }
+
+  .step--yu .step__n {
+    background: var(--blue);
+    box-shadow: 0 0 0 6px var(--charcoal), 0 0 0 7px rgba(255, 255, 255, 0.4);
+  }
+
+  .step__school {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .step__title {
+    margin: 0;
+    font-size: clamp(18px, 1.5vw, 24px);
+    line-height: 1.1;
+  }
+
+  .step__note {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* ---- Perks ---- */
+
+  .perks {
+    padding: clamp(56px, 7vw, 112px) var(--gutter) 0;
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .perks__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 24px);
+  }
+
+  .perk {
+    padding: clamp(26px, 3vw, 44px);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+    border-radius: 16px;
+  }
+
+  .perk--dark {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .perk__label {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .perk__big {
+    margin: 10px 0 12px;
+    font-family: var(--font-head);
+    font-size: clamp(34px, 3.6vw, 60px);
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .perk__big span {
+    color: var(--red);
+  }
+
+  .perk p:last-child {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  .perk--dark p:last-child {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* ---- Start ---- */
+
+  .start {
+    padding: clamp(56px, 7vw, 112px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .start__inner {
+    padding: clamp(28px, 4vw, 60px);
+    border-radius: 16px;
+    background: #f4f4f2;
+  }
+
+  .start__inner p {
+    margin: 0;
+    max-width: 60ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.7;
+    color: #444;
+  }
+
+  .start__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 28px;
+  }
+
+  .btn {
+    display: inline-flex;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s ease,
+      transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn:hover {
+    background: var(--red);
+    transform: translateY(-2px);
+  }
+
+  .link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .link:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 900px) {
+    .intro__grid,
+    .perks__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .steps::before {
+      top: 30px;
+      bottom: 30px;
+      left: 29px;
+      right: auto;
+      border-top: 0;
+      border-left: 2px dashed rgba(255, 255, 255, 0.3);
+    }
+
+    .step {
+      grid-template-columns: 60px minmax(0, 1fr);
+      column-gap: 20px;
+    }
+
+    .step__n {
+      grid-row: span 3;
+      margin: 0;
+    }
+  }
+</style>

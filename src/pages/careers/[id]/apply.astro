@@ -1,0 +1,12 @@
+---
+import ApplyPage from '../../../components/ApplyPage.astro';
+import { jobs, type Job } from '../../../lib/jobs';
+
+export function getStaticPaths() {
+  return jobs.map((job) => ({ params: { id: job.id }, props: { job } }));
+}
+
+const { job } = Astro.props as { job: Job };
+---
+
+<ApplyPage job={job} />

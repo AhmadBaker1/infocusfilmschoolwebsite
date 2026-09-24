@@ -1,0 +1,433 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { jobs, DEPTS, EMAIL } from '../../lib/jobs';
+
+const depts = Object.entries(DEPTS).filter(([k]) => jobs.some((j) => j.dept === k));
+---
+
+<Base
+  title="Careers — InFocus Film School"
+  description="Join the InFocus Film School team. Current openings for instructors, admissions, student finance, marketing and campus leadership in Vancouver and remote."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Join Our Team"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'About Us', href: '/about' }, { label: 'Careers' }]}
+    >
+      <p>
+        At InFocus Film School, we believe in the power of storytelling, not just on screen, but
+        in the classroom. Our team is made up of filmmakers, designers, animators, writers and
+        professionals who are passionate about inspiring the next generation of creative talent.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="wrap">
+        <header class="head">
+          <div>
+            <p class="eyebrow"><span aria-hidden="true"></span>Open positions</p>
+            <h2 class="head__title"><span>{jobs.length}</span> roles open now</h2>
+            <p class="head__text">
+              Browse our current openings below, or send a <a href="/careers/apply">general application</a>
+              if you don’t see a role that matches your skills.
+            </p>
+          </div>
+          <div class="filters" role="group" aria-label="Filter by team">
+            <button type="button" class="chip" data-dept="all" aria-pressed="true">All <span>{jobs.length}</span></button>
+            {depts.map(([key, label]) => (
+              <button type="button" class="chip" data-dept={key} aria-pressed="false">
+                {label} <span>{jobs.filter((j) => j.dept === key).length}</span>
+              </button>
+            ))}
+          </div>
+        </header>
+
+        <ul class="jobs">
+          {jobs.map((j) => (
+            <li data-job data-dept={j.dept}>
+              <a class="job" href={`/careers/${j.id}`}>
+                <span class="job__main">
+                  <span class="job__dept">{DEPTS[j.dept]}</span>
+                  <span class="job__title">{j.title}</span>
+                </span>
+                <span class="job__facts">
+                  <span class="fact">{j.location}</span>
+                  <span class="fact">{j.type}</span>
+                  <span class="fact fact--pay">{j.pay}</span>
+                </span>
+                <span class="job__go">
+                  View role <span class="job__arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <section class="apply" id="apply" aria-labelledby="apply-title">
+      <div class="apply__inner">
+        <div class="apply__copy">
+          <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Don’t see your role?</p>
+          <h2 id="apply-title" class="apply__title">General Application</h2>
+          <p class="apply__text">
+            Tell us how you’d like to contribute. Our team reviews every application and will reach
+            out if there’s an opportunity that’s a good match.
+          </p>
+          <p class="apply__text">
+            Prefer email? Send your resume and a brief cover letter to
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+          </p>
+          <p class="apply__eq">
+            InFocus Film School is committed to building a diverse, equitable and inclusive
+            workplace. We welcome applications from people of all backgrounds, identities and lived
+            experiences, including Indigenous Peoples, racialized persons, persons with disabilities
+            and members of the 2SLGBTQIA+ community.
+          </p>
+        </div>
+        <div class="apply__cta">
+          <a class="btn-apply" href="/careers/apply">Start a general application <span aria-hidden="true">→</span></a>
+          <p>Takes about five minutes. Applying for a specific role? Open it above and apply from its page.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: 36px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .page {
+    padding: clamp(48px, 6vw, 100px) var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 22px 40px;
+    margin-bottom: clamp(28px, 3.4vw, 48px);
+  }
+
+  .head__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  .head__title span {
+    color: var(--red);
+  }
+
+  .head__text {
+    margin: 16px 0 0;
+    max-width: 58ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.65;
+    color: #4a4a4a;
+  }
+
+  .head__text a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.6);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    gap: 8px;
+    padding: 9px 15px;
+    border: 1px solid rgba(51, 51, 51, 0.22);
+    border-radius: 999px;
+    font-size: 14px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .chip span {
+    font-size: 12px;
+    color: #9a9a9a;
+  }
+
+  .chip:hover {
+    border-color: var(--charcoal);
+  }
+
+  .chip[aria-pressed='true'] {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .chip[aria-pressed='true'] span {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .jobs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .jobs li[hidden] {
+    display: none;
+  }
+
+  .job {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) auto;
+    align-items: center;
+    gap: 18px clamp(20px, 3vw, 48px);
+    padding: clamp(20px, 2.2vw, 30px) clamp(4px, 1vw, 16px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    transition: background-color 0.25s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .job:hover {
+    padding-left: clamp(14px, 1.8vw, 28px);
+    background: #fafafa;
+  }
+
+  .job__main {
+    display: grid;
+    gap: 6px;
+  }
+
+  .job__dept {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .job__title {
+    font-family: var(--font-head);
+    font-size: clamp(20px, 1.8vw, 30px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .job:hover .job__title {
+    color: var(--red);
+  }
+
+  .job__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fact {
+    padding: 7px 12px;
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-radius: 999px;
+    font-size: 13px;
+    color: #4a4a4a;
+    white-space: nowrap;
+  }
+
+  .fact--pay {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .job__go {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .job__arrow {
+    display: inline-block;
+    margin-left: 6px;
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .job:hover .job__arrow {
+    transform: translateX(5px);
+  }
+
+  .apply {
+    padding: clamp(56px, 7vw, 120px) var(--gutter);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.25), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+    scroll-margin-top: var(--nav-h);
+  }
+
+  .apply__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 4vw, 72px);
+    align-items: start;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .apply__title {
+    margin: 0;
+    font-size: clamp(32px, 3.6vw, 60px);
+    line-height: 1;
+  }
+
+  .apply__text {
+    margin: 18px 0 0;
+    max-width: 48ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .apply__text a {
+    color: var(--white);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 3px;
+  }
+
+  .apply__eq {
+    margin: 28px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .apply__cta {
+    display: grid;
+    gap: 16px;
+    align-self: center;
+    justify-items: start;
+    padding: clamp(26px, 3vw, 44px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .apply__cta p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .btn-apply {
+    display: inline-flex;
+    gap: 12px;
+    padding: 17px 30px;
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-apply:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1000px) {
+    .job {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .job__facts {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .apply__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .job__go {
+      font-size: 0;
+    }
+
+    .job__arrow {
+      font-size: 18px;
+    }
+
+    .fact {
+      white-space: normal;
+    }
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('[data-job]');
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-dept]');
+  chips.forEach((c) =>
+    c.addEventListener('click', () => {
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      const d = c.dataset.dept;
+      items.forEach((j) => (j.hidden = d !== 'all' && j.dataset.dept !== d));
+    })
+  );
+
+  // Old deep links (/careers#campus-director) go to the role's page.
+  const hash = location.hash.slice(1);
+  if (hash && document.querySelector(`a[href="/careers/${CSS.escape(hash)}"]`)) {
+    location.replace(`/careers/${hash}`);
+  }
+</script>

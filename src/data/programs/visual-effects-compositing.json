@@ -1,0 +1,200 @@
+{
+  "slug": "visual-effects-compositing",
+  "oldPath": "/visual-effects-compositing-program",
+  "title": "Visual Effects Compositing Program",
+  "shortTitle": "Visual Effects Compositing",
+  "group": "animation",
+  "summary": "A 6-month, live online certificate in Nuke compositing, taught by VFX pros with credits on Star Wars and Game of Thrones, built around a studio-ready demo reel.",
+  "hero": {
+    "image": "/images/program-visual-effects-compositing.jpg",
+    "imageAlt": "Visual effects compositing student at a workstation"
+  },
+  "intro": {
+    "heading": "No experience to VFX pro in less than 6 months",
+    "paras": [
+      "Master the art of visual effects compositing in just 24 weeks. The projects you undertake in this 6-month program are designed to create a diverse, polished, and advanced demo reel that catches the attention of top VFX studios. Advanced industry mentorship empowers you to develop skills on par with top industry standards. Our networking events provide you with further support, helping you build contacts that will ensure your success in the visual effects industry.",
+      "The Compositing for VFX Program is now being delivered online, allowing you to study VFX compositing from the comfort of your own home. All classes are live and interactive with instructors who have worked on major films such as Game of Thrones, Star Wars: The Last Jedi, Star Trek, Fast and Furious 8, and many more."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "Online"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "6 months"
+    }
+  ],
+  "about": {
+    "heading": "About InFocus Visual Effects Program",
+    "cards": [
+      {
+        "title": "The future of post-production",
+        "text": "VFX compositors are the key to the stunning effects seen on screen today. They combine the footage filmed on set with 3D elements or other CGI. Compositors also alter, fix, and enhance footage to better match the director’s vision. All of the final pieces of a scene are assembled by compositors, who can transform a shot into something spectacular that initially was not possible. Compositing is now the most important role in post-production, required on nearly every modern film and video project.",
+        "link": {
+          "label": "View curriculum breakdown",
+          "href": "https://infocusfilmschool.com/visual-effects-compositing-program/vfx-compositing-courses/"
+        }
+      },
+      {
+        "title": "One-on-one mentorship from VFX pros",
+        "text": "Learn from the most accomplished Visual Effects artists in Canada. Instructors in the VFX Compositing program are actively working in the industry and have credits that range from massive films such as Star Wars, Harry Potter, and The Avengers to TV series such as Game of Thrones, The Mandalorian, and Stranger Things. Small class sizes emphasize personalized learning and ensure one-on-one attention from instructors at every stage.",
+        "link": {
+          "label": "See instructor profiles",
+          "href": "https://infocusfilmschool.com/visual-effects-compositing-program/visual-effects-compositing-instructors/"
+        }
+      },
+      {
+        "title": "Entertainment’s fastest-growing field",
+        "text": "While a film or television show might have only a single editor, often dozens of compositors are required even for a simple TV commercial. With the ever-rising demand for visual effects, studios are in desperate need of new compositors. With lots of work to do and not enough people to do it, salaries are high and professional growth is inevitable. With the rise of remote workplaces, you don’t even need to live near a studio anymore.",
+        "link": {
+          "label": "Read student success stories",
+          "href": "https://infocusfilmschool.com/testimonials/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Education that leads to employment",
+      "paras": [
+        "InFocus alumni work on everything from massive Marvel superhero films to Oscar-winning dramas to critically acclaimed TV to indie gems. Workshops with recruiters and VFX studios give students insight into what employers are looking for and classes on career development ensure a polished portfolio and resume. Not only will your instructors provide mentorship and knowledge, but as actively working VFX professionals they provide job leads, references, and networking options upon and after graduation. Nearly all students graduating from the Visual Effects Compositing program find work in the industry within 6 months. You could be next."
+      ],
+      "image": "/images/about-5.jpg",
+      "imageAlt": ""
+    }
+  ],
+  "curriculum": {
+    "heading": "Learn high demand VFX skills",
+    "intro": "Learn rotoscopy, keying, and advanced 3D compositing in Nuke, the industry-standard software for VFX compositing. Skills are cemented through intensive projects involving object removal, green screen elements, camera tracking and stabilization, set extension, dynamic effects, colour correction, and more. Master the art of visual effects and build a dynamic demo reel to showcase your skills. Your demo reel will be your calling card to the industry, and one-on-one mentorship will ensure it is polished and ready to grab the attention of employers.",
+    "software": [
+      "Nuke"
+    ],
+    "modules": [
+      {
+        "title": "3D compositing",
+        "text": "Compositing is the combining of visual elements into a single image. From major films to car commercials, nearly all professional modern video contains composited elements."
+      },
+      {
+        "title": "Nuke",
+        "text": "Nuke is a node-based digital compositing application developed by The Foundry, and used for film and television post-production. It is the industry standard compositing software."
+      },
+      {
+        "title": "Rotoscopy",
+        "text": "Integral to compositing, rotoscopy is a technique where animators trace over motion picture footage, frame by frame, to produce realistic action."
+      },
+      {
+        "title": "Lighting",
+        "text": "2D and 3D integration of lighting techniques to create visually cohesive and realistic scenes by balancing shadows, highlights, and color correction."
+      },
+      {
+        "title": "Roto paint",
+        "text": "Another key to compositing, this tool is used to isolate objects within a clip and make the changes your production needs."
+      },
+      {
+        "title": "Match moving",
+        "text": "Learn how to digitally track camera movements to insert digital objects into a scene with proper size, scale and motion or stabilize camera shots."
+      },
+      {
+        "title": "Green screen keying",
+        "text": "Green screens (or blue screens) are used to insert background elements into a live-action shot. Keying is the method of removing and replacing the solid colour with other scenes."
+      },
+      {
+        "title": "Object removal",
+        "text": "To keep the magic of special effects magic, removing unwanted objects from the final image, such as the wires that allow actors or stunt performers to fly through the air, is an often crucial duty in compositing."
+      },
+      {
+        "title": "Set extension",
+        "text": "Elevate a simple shot by setting it anywhere your production needs. Add creative backgrounds, landscapes, and environments from alien worlds to another city’s skyline."
+      },
+      {
+        "title": "Colour correction",
+        "text": "Learn to grade and correct colour, enhancing the image in order to adjust the mood, unify the aesthetics, and make it ready for the big screen."
+      }
+    ]
+  },
+  "stats": {
+    "heading": "Get paid to do what you love",
+    "text": "VFX artists are in high demand in Vancouver with salaries to match. Graduates can find work as a Roto Artist, Compositor, FX Technical Director, CGI Supervisor, VFX Technical Artist, Technical Director, and many more positions, with a wide range of salaries that can easily reach six figures with only a few years of experience.",
+    "items": [
+      {
+        "value": "$82,000",
+        "label": "Median salary"
+      },
+      {
+        "value": "$110,000+",
+        "label": "Senior-level salary"
+      }
+    ],
+    "source": {
+      "label": "Talent.com salary breakdown",
+      "href": "https://ca.talent.com/salary?job=compositor"
+    }
+  },
+  "costs": {
+    "heading": "Achieve more, pay less",
+    "text": "Affordability, quality, and transparency converge at InFocus Film School. Our program costs rival those of public institutions but you’ll spend less than 6 months in class, meaning you get an exceptional education at a fraction of the price. We offer a range of financial assistance options, including student loan support, interest-free payment plans tailored to your specific needs, and scholarships for qualified students. With our transparent pricing, we don’t hide behind annual charges, confusing credit pricing, or hidden fees. What you see is what you pay – the full investment in your education with all fees included.",
+    "domestic": "$12,950",
+    "international": "$14,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-6"
+  },
+  "accreditation": {
+    "heading": "Accredited VFX education",
+    "paras": [
+      "The Visual Effects Compositing Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "525 hours delivered over 24 weeks of instruction. Delivery is two terms of 12 weeks each, with a 1-week break between terms. The program consists of 7 required courses."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "Distance (100% Synchronous)"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full Time, Monday to Wednesday 11:00am-6:00pm PST, Friday 3:00pm-9:15pm PST. Students can expect to be in class at least 20 hours per week. Students can expect 1 hour of homework per hour of class."
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies and meet all assignments deadlines. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 60%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    },
+    {
+      "label": "Required materials",
+      "text": "This program requires software including The Foundry’s Nuke. A license for Nuke will be provided, however, students must have access to a computer with strong graphics processing capabilities. Contact us for full system requirement details."
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Visual Effects Compositing Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-compositing-1/",
+    "studentWork": "https://www.youtube.com/playlist?list=PLHb7xljCn6xGzjBg_bscE9HCnOIuOgzto",
+    "curriculum": "https://infocusfilmschool.com/visual-effects-compositing-program/vfx-compositing-courses/"
+  }
+}

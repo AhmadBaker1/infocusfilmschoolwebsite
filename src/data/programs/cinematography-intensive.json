@@ -1,0 +1,284 @@
+{
+  "slug": "cinematography-intensive",
+  "oldPath": "/cinematography-program",
+  "title": "Cinematography Intensive Program",
+  "shortTitle": "Cinematography Intensive",
+  "group": "film",
+  "summary": "A 3-month, in-person certificate with daily camera exercises, multiple portfolio projects and mentorship from established cinematographers.",
+  "hero": {
+    "image": "/images/herobg-3.jpg",
+    "imageAlt": "Cinematography student with a cinema camera outdoors in Vancouver"
+  },
+  "intro": {
+    "heading": "Cinematic storytelling through light and lens",
+    "paras": [
+      "Our hands-on Cinematography Program will teach you the skills necessary to find work in the film and television industry. Learn cinematography theory and technical skills through lectures with established filmmakers as well as hands-on projects and exercises.",
+      "Learn how to be a Cinematographer in record time.",
+      "Understand how to make films look good on ANY camera. Quickly work your way up from entry-level cameras to state-of-the-art brands.",
+      "Discover ways to evoke your audience’s emotions through framing, composition, lighting, and color on screen.",
+      "Understand the ins and outs of every camera department role and master the use of industry standard set equipment.",
+      "Research and analyze work from the greatest cinematographers in history. Acquire their techniques and execute them with your own artistic twist.",
+      "Take part in exclusive InFocus Film School events and industry-parties. Learn how to build your network and find collaborators to work with post-graduation."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "In-person"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "3 months"
+    }
+  ],
+  "about": {
+    "heading": "Not your average cinematography course",
+    "cards": [
+      {
+        "title": "Explore complementary cinematography skills",
+        "text": "More than any other skill, cinematography is best learnt through hands-on practice. Daily camera exercises and multiple portfolio projects will lead to long days, late nights, and a breakneck schedule, but our intense curriculum will lead to a mastery of the camera and lighting techniques expected from a Director of Photography in just 3 months.",
+        "link": {
+          "label": "View project timeline",
+          "href": "https://infocusfilmschool.com/film-production-program-film-timeline/"
+        }
+      },
+      {
+        "title": "Learn from established cinematographers and filmmakers",
+        "text": "With hands-on training under the mentorship of celebrated cinematographers, InFocus Film School’s Cinematography Program offers unparalleled access to expertise, equipment, and career guidance. Master the most cutting-edge techniques, trends, and styles, while also receiving networking opportunities, references, and job opening intel, right in the classroom!",
+        "link": {
+          "label": "See instructor profiles",
+          "href": "https://infocusfilmschool.com/film-production/film-production-instructors/"
+        }
+      },
+      {
+        "title": "The film industry needs you",
+        "text": "Vancouver’s film industry is a thriving hub with over $4 billion in annual spending and more than 100,000 jobs. Designed for professionals ready to lead, InFocus Film School’s Cinematography Program delivers an elite education in the art and craft of visual storytelling, equipping you with the skills, portfolio, and connections needed to break into this competitive market.",
+        "link": {
+          "label": "Read course descriptions",
+          "href": "https://infocusfilmschool.com/film-course-descriptions/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Intense, hands-on education",
+      "paras": [
+        "More than any other skill, cinematography mastery is achieved through hands-on practice. Daily camera exercises and multiple portfolio projects will lead to long days, late nights, and a breakneck schedule, but our intense curriculum will lead to a mastery of the camera and lighting techniques expected from a Director of Photography in just 3 months.",
+        "Use light and shadow to convey tone, mood, and character. Craft compelling visual narratives that support and enhance the story. Explore the emotional impact of camera movement, composition and framing. Study the visual language of cinema. Learn how great cinematographers collaborate with directors to tell unforgettable stories."
+      ],
+      "image": "/images/about-4.jpg",
+      "imageAlt": "Students setting up lights and camera in the studio"
+    },
+    {
+      "heading": "Fast-track your cinematography career",
+      "paras": [
+        "InFocus Film School graduates have worked with some of the world’s top film and television production companies and made their mark in the independent film scene. From directing and producing to screenwriting, cinematography, editing and more, our students are shaping the future of cinema. Our Cinematography course will have you career-ready in three months.",
+        "Films and shows our students worked on: The Last Of Us, Planet of the Apes, Supernatural, Game of Thrones, The Mandalorian, The Avengers, Spider-Man, The Twilight Zone, Dr. Strange and The Irishman."
+      ],
+      "image": "/images/about-5.jpg",
+      "imageAlt": ""
+    }
+  ],
+  "stats": {
+    "heading": "Our students win awards",
+    "text": "With InFocus, you are more than just a student. We are dedicated to your success, both during the program and in launching your professional career after graduation. Many InFocus students have won awards, received grants, and made the selection of prestigious festivals right out of school. In addition to supporting and promoting your projects, we offer ongoing assistance by building your network of industry contacts and connecting you with job opportunities, leading to an outstanding job placement rate for our alumni.",
+    "items": []
+  },
+  "alumni": [
+    {
+      "name": "Alex K.",
+      "image": "/images/programs/cinematography-intensive/alex.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work on",
+      "credits": [
+        {
+          "text": "DC’s Legends of Tomorrow"
+        }
+      ]
+    },
+    {
+      "name": "Dhun S.",
+      "image": "/images/programs/cinematography-intensive/dhun.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Hallmark Studios"
+        }
+      ]
+    },
+    {
+      "name": "Hiba I.",
+      "image": "/images/programs/cinematography-intensive/hiba.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "Netflix"
+        },
+        {
+          "text": "Hallmark"
+        }
+      ]
+    },
+    {
+      "name": "Janalee B.",
+      "image": "/images/programs/cinematography-intensive/janalee.jpg",
+      "program": "Documentary Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Canada Shorts",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "CBC Television + more"
+        }
+      ]
+    },
+    {
+      "name": "Janice M.",
+      "image": "/images/programs/cinematography-intensive/janice.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Black Truth Film Festival",
+          "winner": true
+        },
+        {
+          "text": "Whistler Film Festival"
+        },
+        {
+          "text": "Independent Short Awards + more"
+        }
+      ]
+    },
+    {
+      "name": "Ray P.",
+      "image": "/images/programs/cinematography-intensive/ray.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "CW Network"
+        }
+      ]
+    },
+    {
+      "name": "Ross L.",
+      "image": "/images/programs/cinematography-intensive/ross.jpg",
+      "program": "Film Production Program",
+      "label": "Hired to work for",
+      "credits": [
+        {
+          "text": "20th Century Fox"
+        },
+        {
+          "text": "NBC Universal"
+        }
+      ]
+    },
+    {
+      "name": "Timothy C.",
+      "image": "/images/programs/cinematography-intensive/tim.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "New York Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Chicago Indie Film Awards",
+          "winner": true
+        },
+        {
+          "text": "Indie Short Fest + more"
+        }
+      ]
+    },
+    {
+      "name": "Vinicius S.",
+      "image": "/images/programs/cinematography-intensive/vinicius.jpg",
+      "program": "Film Production Program",
+      "label": "Film festival selections",
+      "credits": [
+        {
+          "text": "Art Without Limit Film Fest",
+          "winner": true
+        },
+        {
+          "text": "Rome Prisma Film Festival"
+        },
+        {
+          "text": "Doku Film Festival + more"
+        }
+      ]
+    }
+  ],
+  "costs": {
+    "heading": "Specialized training, competitive price",
+    "text": "Our launchpad Cinematography Course is designed for those eager to break into the film industry fast. Through hands-on training, expert mentorship, and industry-driven techniques, you’ll develop the skills to craft compelling visuals that captivate audiences. From mastering camera movement and lighting to shaping emotion through framing and colour, this program equips you with the creative and technical expertise to stand out in a competitive industry.",
+    "domestic": "$15,950",
+    "international": "$17,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-8"
+  },
+  "accreditation": {
+    "heading": "Accredited cinematography education",
+    "paras": [
+      "The Cinematography Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "371 hours delivered over 12 weeks of instruction. Delivery is over 12 consecutive weeks with 0 weeks break. The program consists of 7 required courses."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "On-campus"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full Time, Monday – Friday 9:00am – 5:00pm. Students can expect to be in class at least 30 hours per week; occasional weekends may be required for film shoots."
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 315 hours for certificate eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies and meet all assignment deadlines. Weekly homework will be assigned. Passing grade equals 60%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible at this time"
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Cinematography Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-cinematography-1/",
+    "studentWork": "https://www.youtube.com/watch?v=LMIyKMpOpM8&list=PLHb7xljCn6xF8R4xG5XrHc_86NXvGOilM&index=1"
+  }
+}

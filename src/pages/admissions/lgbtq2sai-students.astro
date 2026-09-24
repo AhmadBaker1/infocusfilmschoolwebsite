@@ -1,0 +1,645 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+const contents = [
+  ['welcome', 'You Belong Here'],
+  ['diversity-in-film', 'Diversity In Film Initiative'],
+  ['funding', 'Funding Options'],
+  ['community', 'Community in Vancouver'],
+];
+
+// Camera colour bars, recoloured in Progress Pride order.
+const bars = ['#000000', '#613915', '#5bcefa', '#f5a9b8', '#ffffff', '#e40303', '#ff8c00', '#ffed00', '#008026', '#004dff', '#750787'];
+
+const eligible = [
+  'LGBTQ2SAI+',
+  'BIPOC',
+  'Diverse or racialized heritage',
+  'Historically marginalized communities',
+  'Facing mental or physical barriers',
+  'Underrepresented in film',
+];
+
+
+const WORKBC = 'https://www.workbc.ca/develop-skills/job-skills-training';
+const funding = [
+  {
+    tag: 'InFocus bursary',
+    name: 'Diversity In Film Initiative',
+    text: 'Bursaries of up to $2,500 for underrepresented filmmakers and visual storytellers.',
+    url: '#diversity-in-film',
+    external: false,
+  },
+  {
+    tag: 'WorkBC',
+    name: 'Skills Training for Young Adults at Risk',
+    text: 'Skills training and employment supports for young adults facing barriers to work.',
+    url: WORKBC,
+    external: true,
+  },
+  {
+    tag: 'WorkBC',
+    name: 'Skills Training for Individuals Facing Multiple Barriers',
+    text: 'Training and wraparound supports for people facing multiple barriers to employment.',
+    url: WORKBC,
+    external: true,
+  },
+];
+
+const community = [
+  {
+    name: 'QMUNITY',
+    text: 'Vancouver’s queer, trans and Two-Spirit resource centre, with programs, support and community for 2SLGBTQIA+ people and allies.',
+    url: 'https://qmunity.ca/',
+  },
+  {
+    name: 'MOSAIC I Belong',
+    text: 'A welcoming, affirming program for 2SLGBTQIA+ newcomers and refugees, with peer connections and legal guidance.',
+    url: 'https://mosaicbc.org/our-programs/services-for-newcomer-lqbtq-refugees/',
+  },
+];
+---
+
+<Base
+  title="LGBTQ2SAI+ Students — InFocus Film School"
+  description="A safe, welcoming film school for LGBTQ2SAI+ students in Vancouver. The Diversity In Film Initiative, bursaries and funding options."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="LGBTQ2SAI+ Students"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Admissions', href: '/admissions/how-to-apply' }, { label: 'LGBTQ2SAI+ Students' }]}
+    >
+      <p>
+        We’re dedicated to providing a safe and welcoming space for LGBTQ2SAI+ students to
+        explore their identities and share their stories with the world.
+      </p>
+    </PageHero>
+
+    <!-- Statement over camera colour bars in Progress Pride colours: a test
+         pattern every filmmaker knows, carrying the flag. -->
+    <section class="bars" aria-labelledby="bars-title">
+      <div class="bars__inner">
+        <p class="bars__eyebrow"><span aria-hidden="true"></span>Our belief</p>
+        <h2 id="bars-title" class="bars__statement">
+          The most powerful stories are the ones that are most true to our experiences.
+        </h2>
+      </div>
+
+      <div class="bars__strip" aria-hidden="true">
+        <div class="bars__main">
+          {bars.map((c, i) => <span style={`--c:${c};--i:${i}`} />)}
+        </div>
+        <div class="bars__sub">
+          {[...bars].reverse().map((c, i) => <span style={`--c:${c};--i:${i}`} />)}
+        </div>
+      </div>
+    </section>
+
+    <div class="page">
+      <div class="page__inner">
+        <div class="layout">
+          <aside class="toc">
+            <h2 class="toc__title">On this page</h2>
+            <nav aria-label="Table of contents">
+              <ol>
+                {contents.map(([id, label]) => (
+                  <li><a href={`#${id}`} data-toc={id}>{label}</a></li>
+                ))}
+              </ol>
+            </nav>
+          </aside>
+
+          <article class="body">
+            <section id="welcome" data-section>
+              <h2>You Belong Here</h2>
+              <p>
+                We welcome people of all sexual orientations, gender identities and creeds.
+                Whether you’re gay, bi, straight, pan or ace, trans, cis, non-binary or
+                Two-Spirit, if you’re interested in visual storytelling, we’re here to help you
+                find your voice and make your mark in the film industry.
+              </p>
+            </section>
+
+            <section id="diversity-in-film" data-section>
+              <h2>Diversity In Film Initiative</h2>
+              <p>
+                InFocus directly supports artists from diverse backgrounds looking to break into
+                the entertainment industry. We’re here to get your story heard.
+              </p>
+
+              <div class="difi">
+                <div class="difi__figure">
+                  <span class="difi__up">Bursaries up to</span>
+                  <strong>$2,500</strong>
+                </div>
+                <div class="difi__body">
+                  <p>
+                    The Diversity In Film Initiative offers bursaries to people with a diverse or
+                    racialized heritage, members of historically marginalized communities, and
+                    those who have faced adversity due to disability or systemic bias.
+                  </p>
+                  <span class="difi__label">We’re looking for filmmakers who are</span>
+                  <ul class="difi__chips">
+                    {eligible.map((e) => <li>{e}</li>)}
+                  </ul>
+                </div>
+                <span class="difi__bars" aria-hidden="true">
+                  {bars.map((c) => <i style={`--c:${c}`} />)}
+                </span>
+              </div>
+            </section>
+
+            <section id="funding" data-section>
+              <h2>Funding Options</h2>
+              <p>
+                Resources exist to help finance your education, especially if you face
+                discrimination or other barriers to employment. Explore the scholarships and
+                bursaries below.
+              </p>
+
+              <ul class="funds">
+                {funding.map((f, i) => (
+                  <li>
+                    <a
+                      class="fund"
+                      href={f.url}
+                      style={`--c:${bars[5 + i * 2]}`}
+                      target={f.external ? '_blank' : undefined}
+                      rel={f.external ? 'noopener' : undefined}
+                    >
+                      <span class="fund__tag">{f.tag}</span>
+                      <span class="fund__name">{f.name}</span>
+                      <span class="fund__text">{f.text}</span>
+                      <span class="fund__arrow" aria-hidden="true">{f.external ? '↗' : '↑'}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section id="community" data-section>
+              <h2>Community in Vancouver</h2>
+              <p>
+                Vancouver has a vibrant, welcoming queer community. These organizations are great
+                places to connect, find support and get involved.
+              </p>
+              <ul class="community">
+                {community.map((c) => (
+                  <li>
+                    <a href={c.url} target="_blank" rel="noopener">
+                      <span class="community__name">{c.name} <span aria-hidden="true">↗</span></span>
+                      <span class="community__text">{c.text}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </article>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    background: var(--white);
+    color: var(--charcoal);
+    padding: clamp(38px, 4.6vw, 76px) var(--gutter) clamp(56px, 7vw, 110px);
+  }
+
+  .page__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ---- Colour bars band ---- */
+
+  .bars {
+    position: relative;
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .bars__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: clamp(52px, 6.5vw, 108px) var(--gutter) clamp(40px, 5vw, 80px);
+  }
+
+  .bars__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .bars__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .bars__statement {
+    margin: 0;
+    max-width: 26ch;
+    font-family: var(--font-quote);
+    font-size: clamp(26px, 3.2vw, 54px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-transform: none;
+  }
+
+  /* Two rows, like broadcast bars: tall main bars over a short, reversed row. */
+  .bars__main,
+  .bars__sub {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
+
+  .bars__main {
+    height: clamp(56px, 7vw, 120px);
+  }
+
+  .bars__sub {
+    height: clamp(12px, 1.4vw, 22px);
+    opacity: 0.85;
+  }
+
+  .bars__strip span {
+    background: var(--c);
+    transform-origin: bottom;
+    animation: bar-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 45ms + 0.2s);
+  }
+
+  @keyframes bar-in {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  /* ---- Layout + contents: same as the other admissions pages. ---- */
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 90px);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+
+  .toc__title {
+    margin: 0 0 14px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(51, 51, 51, 0.18);
+  }
+
+  .toc a {
+    display: block;
+    padding: 7px 0 7px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #5c5c5c;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--charcoal);
+  }
+
+  .toc a[aria-current='true'] {
+    border-left-color: var(--red);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  /* ---- Body ---- */
+
+  .body section {
+    scroll-margin-top: calc(var(--nav-h) + 8px);
+  }
+
+  .body section + section {
+    margin-top: clamp(34px, 4vw, 62px);
+    padding-top: clamp(30px, 3.6vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .body h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-size: clamp(21px, 2vw, 33px);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .body p {
+    margin: 0 0 1.05em;
+    max-width: 72ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .body a {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .body a:hover {
+    color: var(--red);
+  }
+
+  /* Destination not supplied yet. */
+  .body .ph {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+
+  /* ---- Diversity In Film card ---- */
+
+  .difi {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(22px, 3vw, 52px);
+    margin-top: clamp(18px, 2vw, 28px);
+    padding: clamp(26px, 3vw, 44px) clamp(26px, 3vw, 44px) calc(clamp(26px, 3vw, 44px) + 8px);
+    overflow: hidden;
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(189, 47, 47, 0.26), transparent 60%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .difi__figure {
+    display: grid;
+    align-content: start;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  .difi__up {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .difi__figure strong {
+    font-size: clamp(54px, 6vw, 100px);
+    font-weight: 600;
+    line-height: 0.95;
+  }
+
+  .body .difi__body p {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .difi__label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .difi__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(20px, 2.2vw, 28px);
+    padding: 0;
+    list-style: none;
+  }
+
+  .difi__chips li {
+    padding: 7px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+
+  /* Thin colour-bar edge along the bottom of the card. */
+  .difi__bars {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    height: 6px;
+  }
+
+  .difi__bars i {
+    background: var(--c);
+  }
+
+  /* ---- Funding cards ---- */
+
+  .funds {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .body .fund {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    padding: clamp(20px, 2vw, 28px) clamp(20px, 2vw, 28px) clamp(44px, 4vw, 56px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-top: 4px solid var(--c);
+    text-decoration: none;
+    transition:
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .body .fund:hover {
+    color: var(--charcoal);
+    box-shadow: 0 18px 40px -26px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+  }
+
+  .fund__tag {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6d6d6d;
+  }
+
+  .fund__name {
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.35vw, 21px);
+    font-weight: 600;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .fund__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .fund__arrow {
+    position: absolute;
+    right: clamp(20px, 2vw, 28px);
+    bottom: clamp(16px, 1.6vw, 22px);
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .fund:hover .fund__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* ---- Community ---- */
+
+  .community {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .body .community a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 18px 2px;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+    text-decoration: none;
+  }
+
+  .community__name {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .community__name span {
+    color: var(--red);
+  }
+
+  .community__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  @media (max-width: 1000px) {
+    .funds {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+    }
+
+    .toc ol {
+      column-count: 2;
+      column-gap: 24px;
+    }
+
+    .difi {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .toc ol {
+      column-count: 1;
+    }
+
+    .community {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  // Highlights the contents entry for whichever section is in view.
+  const links = new Map<string, HTMLAnchorElement>();
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-toc]')) {
+    links.set(a.dataset.toc!, a);
+  }
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+  if (sections.length && links.size && window.IntersectionObserver) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links.values()) a.removeAttribute('aria-current');
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' }
+    );
+
+    for (const s of sections) io.observe(s);
+  }
+</script>

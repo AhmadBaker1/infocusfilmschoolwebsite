@@ -1,0 +1,671 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+// Links checked 2026-09-24. `url: null` renders unlinked.
+const unions: { name: string; who: string; url: string | null; join?: string | null }[] = [
+  { name: 'Directors Guild of Canada', who: 'Directors, assistant directors, production managers, locations and more', url: 'https://www.dgc.ca/en/british-columbia/', join: 'https://www.dgc.ca/en/british-columbia/dgc-bc-membership-info' },
+  { name: 'ICG Local 669', who: 'Camera, stills and publicists', url: 'https://icg669.com/', join: 'https://icg669.com/join/' },
+  { name: 'IATSE Local 891', who: 'Motion picture technicians and craft departments', url: 'https://www.iatse.com/', join: 'https://www.iatse.com/membership/applications/permittee_applications.aspx' },
+  { name: 'ACFC West', who: 'Film craftspeople across departments', url: 'https://acfcwest.com/', join: 'https://acfcwest.com/become/member/' },
+  { name: 'Teamsters 155', who: 'Drivers, transportation and equipment', url: 'https://www.teamsters155.org/', join: 'https://www.teamsters155.org/join-155/' },
+];
+
+const boards: { name: string; text: string; url: string | null }[] = [
+  { name: 'Production Beast', text: 'Film production jobs', url: 'https://www.productionbeast.com/' },
+  { name: 'BC Production Assistant Exchange', text: 'Facebook group for production assistants in BC', url: 'https://www.facebook.com/groups/BCPAX/' },
+  { name: 'Indeed', text: 'Film industry jobs in Vancouver', url: 'https://ca.indeed.com/jobs?q=film&l=Vancouver%2C+BC' },
+  { name: 'Vancouver Film, TV + Media Job Board', text: 'Facebook group for local film, TV and media jobs', url: 'https://www.facebook.com/groups/vanfilmgroup/' },
+];
+
+const studios = [
+  { name: 'Industrial Light & Magic', credits: ['Star Wars', 'Jurassic World', 'The Irishman'] },
+  { name: 'Method Studios', credits: ['Avengers', 'Top Gun: Maverick', 'Ford v Ferrari'] },
+  { name: 'Zoic Studios', credits: ['The Boys', 'Ozark', 'Game of Thrones'] },
+];
+---
+
+<Base
+  title="Careers in Film — InFocus Film School"
+  description="Film industry resources for Vancouver: how to build your network, BC film unions, film job boards, and how film resumes work."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Film Industry Resources"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Resources' }, { label: 'Careers in Film' }]}
+    >
+      <p>
+        It’s common to see Vancouver streets blocked off with hundreds of crew members working out
+        how to pull off the next shot. Vancouver is known as Hollywood North for good reason.
+      </p>
+    </PageHero>
+
+    <!-- Hollywood North in numbers -->
+    <section class="north" aria-labelledby="north-title">
+      <div class="north__inner">
+        <div class="north__copy">
+          <p class="eyebrow"><span aria-hidden="true"></span>Hollywood North</p>
+          <h2 id="north-title" class="north__title">Vancouver is where films get made</h2>
+          <p class="north__text">
+            With a mild climate, close proximity to LA and numerous motion picture studios, every
+            year hundreds of films, TV shows and documentaries are shot here.
+          </p>
+        </div>
+        <dl class="stats">
+          <div class="stat">
+            <dt>North America’s</dt>
+            <dd><strong>3rd</strong> largest film + TV production centre</dd>
+          </div>
+          <div class="stat">
+            <dt>Every year</dt>
+            <dd><strong>100s</strong> of films, series and documentaries</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- VFX studios -->
+    <section class="studios" aria-labelledby="studios-title">
+      <div class="studios__inner">
+        <div class="studios__head">
+          <p class="eyebrow"><span aria-hidden="true"></span>Behind the blockbusters</p>
+          <h2 id="studios-title" class="studios__title">Studios that have hired InFocus alumni</h2>
+          <p class="studios__text">
+            Out of sight, thousands of 3D and visual effects artists work in dozens of studios,
+            adding flash and polish to many of the biggest blockbusters.
+          </p>
+        </div>
+        <ul class="studios__list">
+          {studios.map((s, i) => (
+            <li class="studio">
+              <span class="studio__n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="studio__name">{s.name}</span>
+              <span class="studio__label">Selected credits</span>
+              <ol class="studio__credits">
+                {s.credits.map((c) => <li>{c}</li>)}
+              </ol>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <div class="page">
+      <div class="page__inner">
+        <!-- Networking -->
+        <section class="network" aria-labelledby="network-title">
+          <div>
+            <h2 id="network-title" class="h2">Careers in the film industry</h2>
+            <p>
+              In the film industry, who you know is key to finding work. Film school lets you
+              build your network and connect with other film professionals, so you find work much
+              faster than just sending out resumes.
+            </p>
+            <p>
+              InFocus instructors are all working film professionals, and often hear about job
+              opportunities before they’re publicly posted. The film industry is collaborative,
+              and people are always looking for talent.
+            </p>
+          </div>
+          <blockquote class="network__quote">
+            <p>
+              Your instructors will be your best references, committed to helping you reach your
+              career goals, whether that’s making an indie feature or getting a foot in the
+              industry door.
+            </p>
+          </blockquote>
+        </section>
+
+        <!-- Unions -->
+        <section class="block" aria-labelledby="unions-title">
+          <div class="block__head">
+            <h2 id="unions-title" class="h2">Film unions in BC</h2>
+            <p>
+              The local film unions post lists of active productions in and around Vancouver, and
+              what you need to apply for permittee status. Visit their websites to learn more.
+            </p>
+          </div>
+          <ul class="unions">
+            {unions.map((u) => (
+              <li>
+                {u.url ? (
+                  <a class="union" href={u.url} target="_blank" rel="noopener">
+                    <span class="union__name">{u.name}</span>
+                    <span class="union__who">{u.who}</span>
+                    <span class="union__cta">Visit site <span aria-hidden="true">↗</span></span>
+                  </a>
+                ) : (
+                  <div class="union">
+                    <span class="union__name">{u.name}</span>
+                    <span class="union__who">{u.who}</span>
+                  </div>
+                )}
+                {u.join && (
+                  <a class="union__join" href={u.join} target="_blank" rel="noopener">How to join / permittee info <span aria-hidden="true">↗</span></a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Job boards -->
+        <section class="block" aria-labelledby="boards-title">
+          <div class="block__head">
+            <h2 id="boards-title" class="h2">Film industry job boards</h2>
+            <p>Where local productions post crew calls and industry roles.</p>
+          </div>
+          <ul class="boards">
+            {boards.map((b) =>
+              b.url ? (
+                <li>
+                  <a href={b.url} target="_blank" rel="noopener">
+                    <span class="boards__name">{b.name}</span>
+                    <span class="boards__text">{b.text}</span>
+                    <span class="boards__arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <span class="boards__row">
+                    <span class="boards__name">{b.name}</span>
+                    <span class="boards__text">{b.text}</span>
+                  </span>
+                </li>
+              )
+            )}
+          </ul>
+        </section>
+
+        <!-- Resumes -->
+        <section class="resume" aria-labelledby="resume-title">
+          <span class="resume__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48"><path d="M12 6h18l8 8v28H12Z M30 6v8h8 M18 22h14 M18 28h14 M18 34h9" /></svg>
+          </span>
+          <div>
+            <h2 id="resume-title" class="h2">Film resumes</h2>
+            <p>
+              Resumes for the motion picture industry look different from a typical business
+              resume. If you’re unfamiliar with the format, you’ll find examples on the union
+              websites. Some positions also require a portfolio or demo reel.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ---- Hollywood North ---- */
+
+  .north {
+    padding: clamp(48px, 6vw, 100px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .north__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 90px);
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .north__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  .north__text {
+    margin: clamp(16px, 1.8vw, 24px) 0 0;
+    max-width: 52ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.7;
+    color: #4a4a4a;
+  }
+
+  .stats {
+    display: grid;
+    gap: 1px;
+    margin: 0;
+    background: rgba(51, 51, 51, 0.14);
+    border: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .stat {
+    padding: clamp(22px, 2.4vw, 34px);
+    background: var(--white);
+  }
+
+  .stat dt {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .stat dd {
+    margin: 10px 0 0;
+    font-size: clamp(15px, 1.2vw, 19px);
+    line-height: 1.35;
+  }
+
+  .stat strong {
+    display: block;
+    margin-bottom: clamp(10px, 1vw, 16px);
+    font-family: var(--font-head);
+    font-size: clamp(54px, 5.6vw, 96px);
+    font-weight: 600;
+    line-height: 0.95;
+    color: var(--red);
+  }
+
+  /* ---- Studios ---- */
+
+  .studios {
+    padding: clamp(52px, 6.5vw, 108px) var(--gutter);
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.2), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .studios__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .studios__head {
+    max-width: 760px;
+    margin-bottom: clamp(28px, 3.4vw, 52px);
+  }
+
+  .studios__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 58px);
+    line-height: 1;
+  }
+
+  .studios__text {
+    margin: clamp(16px, 1.8vw, 24px) 0 0;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .studios__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .studio {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: clamp(22px, 2.4vw, 34px) clamp(18px, 2vw, 30px) clamp(22px, 2.4vw, 34px) 0;
+  }
+
+  .studio + .studio {
+    padding-left: clamp(18px, 2vw, 30px);
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .studio__n {
+    font-family: var(--font-head);
+    font-size: 13px;
+    color: var(--red);
+  }
+
+  .studio__name {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2vw, 32px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  /* Credits read like an end-credit roll: one title per line on hairlines,
+     each marked with a small film-frame. */
+  .studio__label {
+    margin-top: clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .studio__credits {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .studio__credits li {
+    position: relative;
+    padding: clamp(12px, 1.2vw, 16px) 0 clamp(12px, 1.2vw, 16px) 26px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    font-family: var(--font-quote);
+    font-size: clamp(17px, 1.35vw, 21px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.92);
+    transition:
+      color 0.3s ease,
+      padding-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .studio__credits li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 9px;
+    border: 1.5px solid var(--red);
+    border-radius: 2px;
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease;
+  }
+
+  .studio__credits li:hover {
+    padding-left: 32px;
+    color: var(--white);
+  }
+
+  .studio__credits li:hover::before {
+    background: var(--red);
+  }
+
+  /* ---- Body ---- */
+
+  .page {
+    padding: clamp(48px, 6vw, 96px) var(--gutter) clamp(56px, 7vw, 110px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .page__inner {
+    display: grid;
+    gap: clamp(48px, 6vw, 96px);
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .h2 {
+    margin: 0 0 clamp(12px, 1.4vw, 18px);
+    font-size: clamp(24px, 2.3vw, 38px);
+    line-height: 1.05;
+  }
+
+  .page p {
+    margin: 0 0 1em;
+    max-width: 68ch;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #3f3f3f;
+  }
+
+  .network {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 72px);
+    align-items: center;
+  }
+
+  .network__quote {
+    margin: 0;
+    padding: clamp(24px, 2.8vw, 40px);
+    border-left: 4px solid var(--red);
+    background: #f6f6f6;
+  }
+
+  .page .network__quote p {
+    margin: 0;
+    font-family: var(--font-quote);
+    font-size: clamp(19px, 1.7vw, 27px);
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--charcoal);
+  }
+
+  .block__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 12px clamp(24px, 4vw, 72px);
+    align-items: end;
+    margin-bottom: clamp(18px, 2vw, 28px);
+  }
+
+  .page .block__head p {
+    margin: 0;
+  }
+
+  /* ---- Unions ---- */
+
+  .unions {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(10px, 1.2vw, 16px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .unions li {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .union {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding: clamp(18px, 1.8vw, 24px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    border-top: 3px solid var(--charcoal);
+    transition:
+      border-color 0.3s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  a.union:hover {
+    border-top-color: var(--red);
+    transform: translateY(-3px);
+  }
+
+  .union__name {
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.3vw, 21px);
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .union__who {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6d6d6d;
+  }
+
+  .union__cta {
+    margin-top: auto;
+    padding-top: 8px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .union__join {
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.55);
+  }
+
+  .union__join:hover {
+    color: var(--red);
+  }
+
+  /* ---- Job boards ---- */
+
+  .boards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .boards a,
+  .boards__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: clamp(16px, 1.6vw, 22px) 4px;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.16);
+  }
+
+  .boards a {
+    transition: background-color 0.2s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .boards a:hover {
+    padding-left: 14px;
+    background: #fafafa;
+  }
+
+  .boards__name {
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.4vw, 22px);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .boards__text {
+    font-size: 14px;
+    color: #6d6d6d;
+  }
+
+  .boards__arrow {
+    color: var(--red);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .boards a:hover .boards__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* ---- Resumes ---- */
+
+  .resume {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(18px, 2.4vw, 36px);
+    align-items: start;
+    padding: clamp(26px, 3vw, 44px);
+    background:
+      radial-gradient(70% 120% at 100% 0%, rgba(189, 47, 47, 0.25), transparent 60%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .resume__icon svg {
+    width: clamp(44px, 4vw, 60px);
+    height: auto;
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+
+  .page .resume p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  @media (max-width: 1100px) {
+    .unions {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .north__inner,
+    .network,
+    .block__head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .studios__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .studio,
+    .studio + .studio {
+      padding-left: 0;
+      padding-right: 0;
+      border-left: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .unions {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .boards a,
+    .boards__row {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .boards__text {
+      grid-row: 2;
+    }
+  }
+</style>

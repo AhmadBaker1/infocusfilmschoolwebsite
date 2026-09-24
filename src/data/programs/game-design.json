@@ -1,0 +1,165 @@
+{
+  "slug": "game-design",
+  "oldPath": "/game-design-program",
+  "title": "Game Design Program",
+  "shortTitle": "Game Design",
+  "group": "animation",
+  "summary": "An 8-month, online or hybrid certificate taught by working game designers, ending with a portfolio and your own original video game prototype.",
+  "hero": {
+    "image": "/images/program-game-design.jpg",
+    "imageAlt": "Game Design student working on a game level at a workstation"
+  },
+  "intro": {
+    "heading": "Level up your career",
+    "paras": [
+      "Vancouver is in the heart of a multi-billion dollar and growing game design industry. Studios behind some of today’s biggest video game franchises (Halo, Gears Of War, Minecraft, NHL, FIFA, NBA, and more) call Vancouver home. Now, it’s your time to shape this industry. In the InFocus Game Design Course, you will develop skills in order to code, animate, illustrate, and fully develop video games, launching a career in one of the most influential media industries of today and the future."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "Online or hybrid"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "8 months"
+    }
+  ],
+  "about": {
+    "heading": "About the InFocus Game Design Program",
+    "cards": [
+      {
+        "title": "No experience to pro in 8 months",
+        "text": "No prior experience is needed to succeed in the Game Design Program. In just 8 months of guided mentorship you’ll build the fundamental skills needed, learn the art of game design, master the software, and create a dynamic portfolio including an original video game prototype.",
+        "link": {
+          "label": "View curriculum breakdown",
+          "href": "https://infocusfilmschool.com/game-design-program/game-design-course-descriptions/"
+        }
+      },
+      {
+        "title": "Learn from working designers",
+        "text": "Your mentors in the Game Design Program are all industry professionals currently working in the video game field. They bring experience from major studios including EA and Microsoft, mastery of the latest techniques, and industry connections which allows networking opportunities for students.",
+        "link": {
+          "label": "See instructor profiles",
+          "href": "https://infocusfilmschool.com/game-design-program/game-design-instructors/"
+        }
+      },
+      {
+        "title": "Study game design. Get hired.",
+        "text": "Become the designer game studios want to hire. Build a strong portfolio, a game design document, and an original game prototype to showcase your skills to employers. Networking events further ensure a leg up into Vancouver’s booming video game industry.",
+        "link": {
+          "label": "Read student success stories",
+          "href": "https://infocusfilmschool.com/testimonials/"
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Education that leads to employment",
+      "paras": [
+        "InFocus alumni work on everything from massive Marvel superhero films to Oscar-winning dramas to critically acclaimed TV to indie gems. Tours of Vancouver animation and VFX studios give students a look inside the industry, networking events provide contacts and job leads, and classes on career development ensure a polished portfolio and resume. Nearly all students graduating from the 3D Animation program find work in the industry within 6 months. You could be next."
+      ],
+      "image": "/images/about-5.jpg",
+      "imageAlt": "InFocus students working together in the studio"
+    },
+    {
+      "heading": "Try games made by our first cohort",
+      "paras": [
+        "[Play Hordez](https://noahdevs.itch.io/hordez), a game by Noah Irving.",
+        "[Play Tunnel](https://tiltamoose.itch.io/tunnel), a game by Levi Weaver.",
+        "[Play Brute Force](https://davidm47.itch.io/brute-force), a game by David Miranda."
+      ]
+    },
+    {
+      "heading": "Learn the game dev skills to succeed",
+      "paras": [
+        "Interactive lessons build a foundation of coding, animation skills, storyboarding, and visual art techniques. Take that foundation to create your own game in Unreal Engine, the industry-standard game design software. Alone or with a team, develop a playable game in the first semester. Learn coding and front-end interfaces to polish your game. Small class sizes provide focused, individualized training and plenty of one-on-one time with active, professional video game creators as your instructors."
+      ],
+      "image": "/images/about-2.jpg",
+      "imageAlt": "Student at work in the studio",
+      "link": {
+        "label": "View project timeline",
+        "href": "https://infocusfilmschool.com/game-design-program/game-design-course-descriptions/"
+      }
+    }
+  ],
+  "stats": {
+    "heading": "Get paid to do what you love",
+    "text": "Multiple triple-A game studios call Vancouver home including EA (Apex Legends, Need For Speed, EA Sports titles), Nintendo Canada, The Coalition (Gears Of War), SkyBox Labs (Halo, Minecraft), Relic Entertainment (Age Of Empires, Company of Heroes, Warhammer 40,000), and many more. Skilled game designers and programmers are in high demand in Vancouver. Senior game developers’ pay often exceeds six figures, and even junior positions can make over $80,000 per year.",
+    "items": [
+      {
+        "value": "$87,000",
+        "label": "Entry-level salary"
+      },
+      {
+        "value": "$200,000+",
+        "label": "Senior-level salary"
+      }
+    ],
+    "source": {
+      "label": "Talent.com salary breakdown",
+      "href": "https://ca.talent.com/en/salary?job=game+developer"
+    }
+  },
+  "costs": {
+    "heading": "Achieve more, pay less",
+    "text": "InFocus Film School is one of the most financially-competitive schools in North America. We offer program costs comparable to public institutions, but with the high quality and expediency of private education. That said, financial assistance is always available, and all programs are eligible for student loans. Interest-free payment plans tailored to your specific financial needs can be arranged, and scholarships are available to qualified students. Plus, what you see is what you pay. We don’t believe in obfuscating program costs by charging by credit or adding additional fees and surcharges. The listed price is the full cost of the program and includes all tuition, material, and application fees.",
+    "domestic": "$19,950",
+    "international": "$29,950",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-4"
+  },
+  "accreditation": {
+    "heading": "Accredited game design education",
+    "paras": [
+      "The Game Design Program has been approved by the Private Training Institutions Regulatory Unit (PTIRU) of the Ministry of Post-Secondary Education and Future Skills.",
+      "InFocus programs do not lead to regulated career pathways, as careers in the film and media industries are not subject to occupational regulation in Canada. However, graduates often go on to work for major studios, production companies, and media organizations both locally and internationally."
+    ]
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "633 hours delivered over 30 weeks of instruction. The program consists of 17 required courses. The program is divided into 3 terms of 10 weeks each. There is a 1-week break in between each term."
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "On-campus / Distance (100% Synchronous) / Hybrid (Combination of On-Campus and Distance-Synchronous)"
+    },
+    {
+      "label": "Schedule",
+      "text": "Full-Time, Monday – Friday 10:00am – 9:00pm. Students attend between three to six hours of class per day. Schedule generally consists of a 3-hour morning block from 10:00am – 1:00pm, plus one 3-hour afternoon/evening block. Students can expect to be in class at least 20 hours per week. Students can expect 1 hour of homework per hour of class."
+    },
+    {
+      "label": "Attendance requirements",
+      "text": "Minimum 570 hours for graduation eligibility. Students are expected to attend all classes, arrive on-time, and stay for the duration of the class."
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 50%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Game Design Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-game-design-step-1/",
+    "curriculum": "https://infocusfilmschool.com/game-design-program/game-design-course-descriptions/"
+  }
+}

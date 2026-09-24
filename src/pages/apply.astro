@@ -1,0 +1,1027 @@
+---
+// Student application: choose a program, then enter details.
+//
+// BACKEND: POSTs multipart/form-data to PUBLIC_ADMISSIONS_ENDPOINT with:
+//   program (slug), program_name, first_name, last_name, email,
+//   phone_country (e.g. "CA +1"), phone, city, country, heard_from.
+// All fields are required. With no endpoint set, submitting shows a notice
+// and sends nothing. Link here with ?program=<slug> to preselect a program.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PhoneField from '../components/PhoneField.astro';
+import { getPrograms } from '../lib/programs';
+import { COUNTRIES, PINNED } from '../lib/countries';
+
+const programs = getPrograms();
+const fact = (p: (typeof programs)[number], label: string) => p.facts.find((f) => f.label === label)?.value ?? '';
+const groups = [
+  { key: 'all', label: 'All programs' },
+  { key: 'film', label: 'Film + TV' },
+  { key: 'animation', label: 'Animation, VFX + Design' },
+];
+const pinned = PINNED.map((iso) => COUNTRIES.find((c) => c.iso === iso)!);
+const rest = COUNTRIES.filter((c) => !PINNED.includes(c.iso));
+const heard = ['Google search', 'Instagram', 'Facebook', 'TikTok', 'YouTube', 'LinkedIn', 'Friend or family', 'InFocus alumni', 'Education agent', 'School or career fair', 'Other'];
+const ENDPOINT = import.meta.env.PUBLIC_ADMISSIONS_ENDPOINT ?? '';
+---
+
+<Base
+  title="Apply Now — InFocus Film School"
+  description="Apply to InFocus Film School. Choose your program and send your details; an admissions advisor will be in touch."
+>
+  <Nav />
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="hero__eyebrow"><span aria-hidden="true"></span>Admissions</p>
+        <h1 class="hero__title">Apply to <em>InFocus</em></h1>
+        <p class="hero__lede">
+          Two quick steps: pick your program, then tell us how to reach you. An admissions advisor
+          will follow up about start dates, funding and next steps.
+        </p>
+        <ol class="hero__steps" aria-hidden="true">
+          <li data-hs="0" class="is-on"><span>01</span>Choose program</li>
+          <li data-hs="1"><span>02</span>Your details</li>
+          <li data-hs="2"><span>03</span>Submit</li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="body">
+      <div class="wrap" data-view="form">
+        <form class="form" data-form data-endpoint={ENDPOINT} method="post" action={ENDPOINT || undefined} enctype="multipart/form-data" novalidate>
+          <input type="hidden" name="program_name" data-program-name />
+
+          <!-- ===== Step 1 ===== -->
+          <section class="step" aria-labelledby="s1">
+            <header class="step__head">
+              <span class="step__n">01</span>
+              <div>
+                <h2 id="s1" class="step__title">Choose your program</h2>
+                <p class="step__sub">Select the program you’d like to apply for.</p>
+              </div>
+              <div class="tabs" role="group" aria-label="Filter programs">
+                {groups.map((g, i) => (
+                  <button type="button" class="tab" data-group={g.key} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>
+                ))}
+              </div>
+            </header>
+
+            <div class="cards" role="radiogroup" aria-labelledby="s1" data-cards>
+              {programs.map((p) => (
+                <label class="card" data-card data-group={p.group}>
+                  <input type="radio" name="program" value={p.slug} data-name={p.title} required />
+                  <span class:list={['card__media', { 'card__media--cutout': p.hero.image?.endsWith('.png') }]}>
+                    {p.hero.image && <img src={p.hero.image} alt="" loading="lazy" decoding="async" />}
+                    <span class="card__check" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                    </span>
+                  </span>
+                  <span class="card__body">
+                    <span class="card__meta">{[fact(p, 'Credential'), fact(p, 'Program length')].filter(Boolean).join(' · ')}</span>
+                    <span class="card__title">{p.shortTitle}</span>
+                    <span class="card__foot">
+                      <span>{fact(p, 'Delivery')}</span>
+                      {p.costs && <span class="card__price">{p.costs.domestic}</span>}
+                    </span>
+                  </span>
+                </label>
+              ))}
+            </div>
+            <p class="err" data-err="program" hidden>Please choose a program to continue.</p>
+          </section>
+
+          <!-- ===== Step 2 ===== -->
+          <section class="step step--details" aria-labelledby="s2" data-details>
+            <header class="step__head">
+              <span class="step__n">02</span>
+              <div>
+                <h2 id="s2" class="step__title">Your details</h2>
+                <p class="step__sub">All fields are required.</p>
+              </div>
+            </header>
+
+            <div class="chosen" data-chosen hidden>
+              <span class="chosen__label">Applying for</span>
+              <span class="chosen__name" data-chosen-name></span>
+              <button type="button" class="chosen__change" data-change>Change</button>
+            </div>
+
+            <div class="panel">
+              <div class="grid">
+                <label class="field">
+                  <span class="field__label">First name <span class="req">*</span></span>
+                  <input name="first_name" autocomplete="given-name" placeholder="Jane" required />
+                </label>
+                <label class="field">
+                  <span class="field__label">Last name <span class="req">*</span></span>
+                  <input name="last_name" autocomplete="family-name" placeholder="Smith" required />
+                </label>
+                <label class="field">
+                  <span class="field__label">Email <span class="req">*</span></span>
+                  <input name="email" type="email" autocomplete="email" placeholder="jane@example.com" required />
+                </label>
+                <div class="field">
+                  <label class="field__label" for="phone">Phone number <span class="req">*</span></label>
+                  <PhoneField />
+                </div>
+                <label class="field">
+                  <span class="field__label">City <span class="req">*</span></span>
+                  <input name="city" autocomplete="address-level2" placeholder="Vancouver" required />
+                </label>
+                <label class="field">
+                  <span class="field__label">Country <span class="req">*</span></span>
+                  <select name="country" required>
+                    {pinned.map((c) => <option selected={c.iso === 'CA'}>{c.name}</option>)}
+                    <option disabled>──────────</option>
+                    {rest.map((c) => <option>{c.name}</option>)}
+                  </select>
+                </label>
+                <label class="field field--wide">
+                  <span class="field__label">How did you hear about InFocus? <span class="req">*</span></span>
+                  <select name="heard_from" required>
+                    <option value="">Select an option</option>
+                    {heard.map((h) => <option>{h}</option>)}
+                  </select>
+                </label>
+              </div>
+
+              <div class="submit">
+                <p class="submit__status" data-status role="status" aria-live="polite"></p>
+                <button type="submit" class="submit__btn" data-submit>
+                  Submit application <span aria-hidden="true">→</span>
+                </button>
+              </div>
+              <p class="fine">
+                By submitting, you agree to be contacted by InFocus Film School about your application.
+                We never sell or share your information. <a href="/privacy">Privacy policy</a>.
+              </p>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <!-- ===== Success ===== -->
+      <div class="wrap done" data-view="done" hidden tabindex="-1">
+        <span class="done__icon" aria-hidden="true">
+          <svg viewBox="0 0 52 52">
+            <circle class="done__ring" cx="26" cy="26" r="24" />
+            <path class="done__tick" d="M15 27l7.5 7.5L37.5 18" />
+          </svg>
+        </span>
+        <h2 class="done__title">Application submitted</h2>
+        <p class="done__text">
+          Thank you, <span data-done-name></span>. We’ve received your application for
+          <strong data-done-program></strong>. An admissions advisor will be in touch soon about
+          start dates, funding and next steps.
+        </p>
+        <div class="done__actions">
+          <a class="submit__btn" href="/admissions/finances">Explore funding <span aria-hidden="true">→</span></a>
+          <a class="done__link" href="/">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* ================= Hero ================= */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(48px, 6vw, 96px) var(--gutter) clamp(40px, 5vw, 72px);
+    background:
+      radial-gradient(50% 80% at 90% 20%, rgba(189, 47, 47, 0.32), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .hero__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .hero__eyebrow span {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .hero__title {
+    margin: 0;
+    font-size: clamp(48px, 7vw, 120px);
+    line-height: 0.9;
+  }
+
+  .hero__title em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .hero__lede {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    max-width: 52ch;
+    font-size: clamp(16px, 1.25vw, 20px);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .hero__steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin: clamp(26px, 3vw, 40px) 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-head);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .hero__steps li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease;
+  }
+
+  .hero__steps span {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    font-size: 12px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .hero__steps li.is-on {
+    color: var(--white);
+  }
+
+  .hero__steps li.is-on span {
+    border-color: var(--red);
+    background: var(--red);
+  }
+
+  /* ================= Body ================= */
+
+  .body {
+    padding: clamp(40px, 5vw, 84px) var(--gutter) clamp(64px, 8vw, 128px);
+    background: #f4f4f2;
+    color: var(--charcoal);
+  }
+
+  .form {
+    display: grid;
+    gap: clamp(44px, 5vw, 72px);
+  }
+
+  .step__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 16px 20px;
+    margin-bottom: clamp(20px, 2.4vw, 30px);
+  }
+
+  .step__n {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .step__title {
+    margin: 0;
+    font-size: clamp(26px, 2.6vw, 42px);
+    line-height: 1;
+  }
+
+  .step__sub {
+    margin: 6px 0 0;
+    font-size: 15px;
+    color: #6d6d6d;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tab {
+    padding: 9px 15px;
+    border: 1px solid rgba(51, 51, 51, 0.2);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 14px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .tab:hover {
+    border-color: var(--charcoal);
+  }
+
+  .tab[aria-pressed='true'] {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  /* ---- Program cards ---- */
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 22px);
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background: var(--white);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 12px 30px -24px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.3s ease;
+  }
+
+  .card[hidden] {
+    display: none;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.5);
+  }
+
+  .card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .card:has(input:focus-visible) {
+    outline: 3px solid var(--red);
+    outline-offset: 3px;
+  }
+
+  .card:has(input:checked) {
+    border-color: var(--red);
+    box-shadow: 0 24px 50px -24px rgba(189, 47, 47, 0.55);
+  }
+
+  /* Once one is picked, the others step back. */
+  .cards:has(input:checked) .card:not(:has(input:checked)) {
+    opacity: 0.62;
+  }
+
+  .cards:has(input:checked) .card:not(:has(input:checked)):hover {
+    opacity: 1;
+  }
+
+  .card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--charcoal);
+  }
+
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .card__media img {
+    transform: scale(1.05);
+  }
+
+  .card__media--cutout {
+    background: radial-gradient(60% 70% at 50% 60%, rgba(189, 47, 47, 0.4), transparent 70%), var(--charcoal);
+  }
+
+  .card__media--cutout img {
+    object-fit: contain;
+    padding: 12px;
+  }
+
+  .card__check {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .card__check svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--white);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: stroke-dashoffset 0.35s ease 0.05s;
+  }
+
+  .card:has(input:checked) .card__check {
+    border-color: var(--red);
+    background: var(--red);
+    transform: scale(1.12);
+  }
+
+  .card:has(input:checked) .card__check svg {
+    stroke-dashoffset: 0;
+  }
+
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 20px 20px;
+  }
+
+  .card__meta {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .card__title {
+    font-family: var(--font-head);
+    font-size: clamp(20px, 1.7vw, 26px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .card__foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid rgba(51, 51, 51, 0.1);
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  .card__price {
+    font-weight: 700;
+    color: var(--charcoal);
+  }
+
+  .err {
+    margin: 14px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  /* ---- Details ---- */
+
+  .step--details {
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+  }
+
+  .chosen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-bottom: 16px;
+    padding: 14px 18px;
+    border-left: 4px solid var(--red);
+    border-radius: 12px;
+    background: var(--white);
+    animation: slide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slide {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  .chosen[hidden] {
+    display: none;
+  }
+
+  .chosen__label {
+    font-family: var(--font-head);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .chosen__name {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .chosen__change {
+    margin-left: auto;
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--red);
+  }
+
+  .panel {
+    padding: clamp(24px, 3.4vw, 48px);
+    border-radius: 18px;
+    background: var(--white);
+    box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.35);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .field {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+
+  .field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .field__label {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .req {
+    color: var(--red);
+  }
+
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid #e2e2e2;
+    border-radius: 12px;
+    background: var(--white);
+    font: inherit;
+    font-size: 16px;
+    color: var(--charcoal);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field select {
+    appearance: none;
+    padding-right: 40px;
+    background-image: linear-gradient(45deg, transparent 50%, #777 50%), linear-gradient(135deg, #777 50%, transparent 50%);
+    background-position: calc(100% - 20px) 52%, calc(100% - 14px) 52%;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  .field input::placeholder {
+    color: #b5b5b5;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--charcoal);
+    box-shadow: 0 0 0 4px rgba(189, 47, 47, 0.12);
+  }
+
+  .field.is-invalid input,
+  .field.is-invalid select {
+    border-color: var(--red);
+    background-color: rgba(189, 47, 47, 0.03);
+  }
+
+  .submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .submit__status {
+    flex: 1 1 260px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .submit__status.is-err {
+    color: var(--red);
+  }
+
+  .submit__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 32px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+
+  .submit__btn:hover {
+    background: #a82727;
+    box-shadow: 0 14px 30px -14px rgba(189, 47, 47, 0.8);
+    transform: translateY(-2px);
+  }
+
+  .submit__btn[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .fine {
+    margin: 16px 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #8a8a8a;
+  }
+
+  .fine a {
+    text-decoration: underline;
+  }
+
+  /* ================= Done ================= */
+
+  .done {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    max-width: 640px;
+    padding: clamp(24px, 5vh, 64px) 0;
+    text-align: center;
+    outline: none;
+  }
+
+  .done[hidden] {
+    display: none;
+  }
+
+  .done__icon {
+    display: grid;
+    place-items: center;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--red);
+    animation:
+      pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      pulse 1.6s ease-out 0.6s;
+  }
+
+  .done__icon svg {
+    width: 96px;
+    height: 96px;
+    fill: none;
+    stroke: var(--white);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .done__ring {
+    stroke-width: 2;
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+  }
+
+  .done__tick {
+    stroke-width: 4;
+    stroke-dasharray: 36;
+    stroke-dashoffset: 36;
+    animation: draw 0.45s cubic-bezier(0.65, 0, 0.35, 1) 0.55s forwards;
+  }
+
+  @keyframes pop {
+    from {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes pulse {
+    from {
+      box-shadow: 0 0 0 0 rgba(189, 47, 47, 0.45);
+    }
+    to {
+      box-shadow: 0 0 0 28px rgba(189, 47, 47, 0);
+    }
+  }
+
+  .done > :not(.done__icon) {
+    animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .done > :nth-child(2) { animation-delay: 0.7s; }
+  .done > :nth-child(3) { animation-delay: 0.8s; }
+  .done > :nth-child(4) { animation-delay: 0.9s; }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  .done__title {
+    margin: 0;
+    font-size: clamp(36px, 4.4vw, 68px);
+    line-height: 0.95;
+  }
+
+  .done__text {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #555;
+  }
+
+  .done__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 8px;
+  }
+
+  .done__link {
+    font-family: var(--font-head);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 5px;
+  }
+
+  @media (max-width: 1000px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .step__head {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .tabs {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .cards,
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .card {
+      flex-direction: row;
+    }
+
+    .card__media {
+      flex: none;
+      width: 38%;
+      aspect-ratio: auto;
+    }
+
+    .card__foot {
+      display: none;
+    }
+
+    .submit__btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .done__icon,
+    .done__ring,
+    .done__tick,
+    .done > * {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) {
+    const radios = [...form.querySelectorAll<HTMLInputElement>('input[name="program"]')];
+    const chosen = form.querySelector<HTMLElement>('[data-chosen]')!;
+    const chosenName = form.querySelector<HTMLElement>('[data-chosen-name]')!;
+    const nameField = form.querySelector<HTMLInputElement>('[data-program-name]')!;
+    const details = form.querySelector<HTMLElement>('[data-details]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const heroSteps = [...document.querySelectorAll<HTMLElement>('[data-hs]')];
+    const progErr = form.querySelector<HTMLElement>('[data-err="program"]')!;
+
+    const setHero = (n: number) => heroSteps.forEach((li, i) => li.classList.toggle('is-on', i <= n));
+
+    const pick = (r: HTMLInputElement, scroll: boolean) => {
+      nameField.value = r.dataset.name!;
+      chosenName.textContent = r.dataset.name!;
+      chosen.hidden = false;
+      progErr.hidden = true;
+      setHero(1);
+      if (scroll) setTimeout(() => details.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+    };
+    radios.forEach((r) => r.addEventListener('change', () => pick(r, true)));
+
+    form.querySelector('[data-change]')?.addEventListener('click', () =>
+      form.querySelector('[data-cards]')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    );
+
+    // Group tabs.
+    const tabs = [...form.querySelectorAll<HTMLButtonElement>('[data-group]')].filter((b) => b.tagName === 'BUTTON');
+    const cards = [...form.querySelectorAll<HTMLElement>('[data-card]')];
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        tabs.forEach((x) => x.setAttribute('aria-pressed', String(x === t)));
+        const g = t.dataset.group;
+        cards.forEach((c) => (c.hidden = g !== 'all' && c.dataset.group !== g && !c.querySelector<HTMLInputElement>('input')!.checked));
+      })
+    );
+
+    // ?program=<slug> preselects.
+    const pre = new URLSearchParams(location.search).get('program');
+    const preRadio = pre && radios.find((r) => r.value === pre);
+    if (preRadio) {
+      preRadio.checked = true;
+      pick(preRadio, false);
+    }
+
+    // Drop the error summary once the applicant starts fixing things.
+    const clearErr = () => {
+      if (status.classList.contains('is-err')) {
+        status.textContent = '';
+        status.classList.remove('is-err');
+      }
+    };
+    form.addEventListener('input', clearErr);
+    form.addEventListener('change', clearErr);
+
+    form.addEventListener('input', (e) => {
+      const box = (e.target as HTMLElement).closest('.is-invalid');
+      if (box && (e.target as HTMLInputElement).checkValidity()) box.classList.remove('is-invalid');
+    });
+    form.addEventListener('change', (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.checkValidity?.()) el.closest('.is-invalid')?.classList.remove('is-invalid');
+      if ([...form.querySelectorAll<HTMLInputElement>('.field [required], .phone [required]')].every((x) => x.checkValidity()) && radios.some((r) => r.checked)) setHero(2);
+    });
+
+    const say = (msg: string, err = false) => {
+      status.textContent = msg;
+      status.classList.toggle('is-err', err);
+    };
+
+    const validate = () => {
+      let first: HTMLElement | null = null;
+      if (!radios.some((r) => r.checked)) {
+        progErr.hidden = false;
+        first = form.querySelector('[data-cards]');
+      }
+      form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('.field [required], .phone [required]').forEach((el) => {
+        const box = (el.closest('.phone') as HTMLElement) ?? (el.closest('.field') as HTMLElement);
+        const bad = !el.checkValidity();
+        box.classList.toggle('is-invalid', bad);
+        if (bad && !first) first = box;
+      });
+      if (first) {
+        say(progErr.hidden ? 'Please complete the highlighted fields.' : 'Please choose a program and complete the highlighted fields.', true);
+        (first as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      return true;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const endpoint = form.dataset.endpoint;
+      if (!endpoint) {
+        say('Online applications are almost ready. For now, please call admissions at 604-779-1145 or email admissions@infocusfilmschool.com.', true);
+        return;
+      }
+      submit.disabled = true;
+      say('Sending your application…');
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: new FormData(form) });
+        if (!res.ok) throw new Error(String(res.status));
+        const fd = new FormData(form);
+        document.querySelector<HTMLElement>('[data-done-name]')!.textContent = String(fd.get('first_name'));
+        document.querySelector<HTMLElement>('[data-done-program]')!.textContent = String(fd.get('program_name'));
+        document.querySelector<HTMLElement>('[data-view="form"]')!.hidden = true;
+        setHero(2);
+        const done = document.querySelector<HTMLElement>('[data-view="done"]')!;
+        done.hidden = false;
+        done.focus();
+        document.querySelector('.body')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch {
+        say('Something went wrong sending your application. Please try again, or call admissions at 604-779-1145.', true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+</script>

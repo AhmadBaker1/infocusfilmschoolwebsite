@@ -1,0 +1,773 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+
+type Cat = 'general' | 'lgbtq' | 'women' | 'bipoc' | 'indigenous' | 'disability';
+type Region = 'canada' | 'bc' | 'ab' | 'on' | 'qc' | 'nb' | 'intl';
+
+const cats: [Cat, string][] = [
+  ['general', 'Broad / General'],
+  ['lgbtq', 'LGBTQ+'],
+  ['women', 'Women'],
+  ['bipoc', 'BIPOC'],
+  ['indigenous', 'First Nations + Indigenous'],
+  ['disability', 'Deaf + Disability'],
+];
+
+const regions: [Region, string][] = [
+  ['canada', 'Canada-wide'],
+  ['bc', 'BC'],
+  ['ab', 'Alberta'],
+  ['on', 'Ontario'],
+  ['qc', 'Québec'],
+  ['nb', 'New Brunswick'],
+  ['intl', 'International'],
+];
+
+type Fund = {
+  id: string;
+  name: string;
+  org?: string;
+  cats: Cat[];
+  regions: Region[];
+  amount?: string;
+  text: string;
+  url: string | null;
+  /* Shown as a small warning line: paused, upcoming, etc. */
+  status?: string;
+};
+
+// Program details change often. Links and statuses checked 2026-09-24.
+const funds: Fund[] = [
+  {
+    id: 'storyhive',
+    name: 'STORYHIVE',
+    org: 'TELUS',
+    cats: ['general'],
+    regions: ['bc', 'ab'],
+    text: 'Funding for emerging storytellers in BC and Alberta, plus a platform to distribute local stories. Winners receive funding, mentorship and distribution via TELUS Optik TV. Streams vary each year, from documentaries and web series to podcasts.',
+    url: 'https://www.storyhive.com/',
+  },
+  {
+    id: 'telefilm-development',
+    name: 'Development Program',
+    org: 'Telefilm Canada',
+    cats: ['general', 'bipoc', 'indigenous'],
+    regions: ['canada'],
+    text: 'Supports Canadian production companies financing the development of feature films. Applicants need a track record: at least one film screened at a festival in the last 5 years, or previous Telefilm funding. Includes streams for First Nations and Racialized filmmakers; in the Racialized Persons stream, the screenwriter and producer must both self-identify as Racialized Persons.',
+    url: 'https://telefilm.ca/en/programmes/development-program',
+  },
+  {
+    id: 'telefilm-production',
+    name: 'Production Program',
+    org: 'Telefilm Canada',
+    cats: ['general', 'indigenous'],
+    regions: ['canada'],
+    amount: 'Budgets over $250K',
+    text: 'Production financing for mid-budget Canadian feature films with Canadians in key positions. There is also an Indigenous stream for First Nations production companies.',
+    url: 'https://telefilm.ca/en/programmes/production-program',
+  },
+  {
+    id: 'fwb',
+    name: 'Filmmaking Grants',
+    org: 'Filmmakers Without Borders',
+    cats: ['general'],
+    regions: ['intl'],
+    amount: 'Up to $5,000',
+    text: 'Open internationally, for projects at any stage, including festival applications. Narrative, documentary, experimental and new media projects centred on social justice, empowerment and cultural exchange. Grants are awarded in quarterly cycles.',
+    url: 'https://filmmakerswithoutborders.org/grants/',
+  },
+  {
+    id: 'ottawa-cultural',
+    name: 'Cultural Funding',
+    org: 'City of Ottawa',
+    cats: ['general'],
+    regions: ['on'],
+    text: 'Available to artists from a range of historically marginalized communities, for cultural art projects led by professional artists or community elders and culture keepers. Applicants must be based in or around Ottawa.',
+    url: 'https://ottawa.ca/en/arts-heritage-and-events/funding-calls-and-opportunities/cultural-funding',
+  },
+  {
+    id: 'ontario-creates-film',
+    name: 'Film Fund',
+    org: 'Ontario Creates',
+    cats: ['general'],
+    regions: ['on'],
+    amount: 'Up to $400,000',
+    text: 'For Ontario-based filmmakers with feature films. Open to all, with enhanced support for films with diverse elements through the Diversity Enhancement Addendum.',
+    url: 'https://www.ontariocreates.ca/our-sectors/film-tv/film-fund/film-fund-production',
+  },
+  {
+    id: 'frameline-completion',
+    name: 'Completion Fund',
+    org: 'Frameline',
+    cats: ['lgbtq'],
+    regions: ['intl'],
+    amount: 'Up to $5,000',
+    text: 'Grants to complete films that represent and reflect the complexity and richness of the LGBTQ+ community. Applications from women, people of colour, and trans, intersex, asexual, non-binary, disabled and other underrepresented people are especially encouraged.',
+    url: 'https://cms.frameline.org/artist-development/completion-fund/',
+  },
+  {
+    id: 'women-in-film',
+    name: 'Women in Film',
+    cats: ['women'],
+    regions: ['intl'],
+    text: 'A nonprofit advancing equal opportunities for women in the screen industries. Through ongoing events, programs and networking, WIF supports emerging and established filmmakers. Explore their offerings and watch for future funding opportunities.',
+    url: 'https://womeninfilm.org/sponsor/',
+    status: 'Film Finishing Fund paused since COVID-19',
+  },
+  {
+    id: 'wgc-sondra-kelly',
+    name: 'Sondra Kelly Award',
+    org: 'Writers Guild of Canada',
+    cats: ['women'],
+    regions: ['canada'],
+    amount: '$5,000',
+    text: 'Part of the WGC Screenwriting Awards, for mid-career female-identifying screenwriters developing a self-initiated project, honouring Sondra Kelly, a dedicated advocate for Canadian screenwriters.',
+    url: 'https://www.wgc.ca/sondra-kelly-award',
+  },
+  {
+    id: 'cmf-diverse-languages',
+    name: 'Broadcaster Envelope Program: Diverse Languages',
+    org: 'Canada Media Fund',
+    cats: ['bipoc'],
+    regions: ['canada'],
+    text: 'Funds Canadian projects in languages other than English, French or Indigenous languages. Projects must be made for distribution on at least two platforms, one of them television.',
+    url: 'https://cmf-fmc.ca/program/broadcaster-envelope-program-diverse-languages/',
+  },
+  {
+    id: 'cisf',
+    name: 'Canadian Independent Screen Fund',
+    org: 'For BPOC creators',
+    cats: ['bipoc'],
+    regions: ['canada'],
+    text: 'A certified independent production fund supporting BPOC-owned production companies, with business affairs programs, CISF Connect and a script development fund. A revival of the Canadian Independent Film and Video Fund, which ran from 1991 to 2008.',
+    url: 'https://independentfund.org/',
+  },
+  {
+    id: 'bipoc-filmmaker-grant',
+    name: 'BIPOC Filmmaker Grant',
+    org: 'Filmed by Bike',
+    cats: ['bipoc'],
+    regions: ['intl'],
+    amount: '$1,500–$2,000',
+    text: 'Open to the global BIPOC community, for films of 30 minutes or shorter with a strong central theme of bicycles. Recipients can be paired with an advisor for one-on-one support. No experience required.',
+    url: 'https://filmedbybike.org/flagship-festival?rq=grant',
+  },
+  {
+    id: 'telefilm-talent',
+    name: 'Talent to Watch: Indigenous Stream',
+    org: 'Telefilm Canada',
+    cats: ['indigenous'],
+    regions: ['canada'],
+    text: 'Finances first feature films and web projects and supports the career development of emerging Canadian filmmakers, with an Indigenous stream to amplify the voices of Indigenous creators.',
+    url: 'https://telefilm.ca/en/programmes/talent-to-watch-program',
+  },
+  {
+    id: 'cmf-indigenous',
+    name: 'Indigenous Production Program',
+    org: 'Canada Media Fund',
+    cats: ['indigenous'],
+    regions: ['canada'],
+    text: 'Finances the development and production of Indigenous film and television projects.',
+    url: 'https://cmf-fmc.ca/program/indigenous-production-program/',
+  },
+  {
+    id: 'canada-council-cks',
+    name: 'Creating, Knowing and Sharing',
+    org: 'Canada Council for the Arts',
+    cats: ['indigenous'],
+    regions: ['canada'],
+    text: 'Supports a wide range of First Nations, Inuit and Métis artistic and cultural activities, with components for micro-grants, short-term projects and long-term projects.',
+    url: 'https://canadacouncil.ca/funding/grants/creating-knowing-sharing',
+  },
+  {
+    id: 'afa-indigenous-individual',
+    name: 'Indigenous Arts Individual Project Funding',
+    org: 'Alberta Foundation for the Arts',
+    cats: ['indigenous'],
+    regions: ['ab'],
+    amount: 'Up to $18,000',
+    text: 'For Indigenous artists’ cultural or artistic projects. Applicants must be legally able to work in Canada and live in Alberta. Deadlines are March 1 and September 1 each year.',
+    url: 'https://www.affta.ab.ca/funding/find-funding/indigenous-arts-individual-project-funding',
+  },
+  {
+    id: 'toronto-iacpf',
+    name: 'Indigenous Arts + Culture Fund',
+    org: 'City of Toronto',
+    cats: ['indigenous'],
+    regions: ['on'],
+    text: 'Creates new opportunities and visibility for Indigenous-led arts and culture, through an Incubation stream (up to $10,000 per project) and an Activation stream for larger projects. Applicants must be Toronto-based.',
+    url: 'https://www.toronto.ca/services-payments/grants-incentives-rebates/arts-culture-grants/indigenous-arts-culture-fund/',
+  },
+  {
+    id: 'artsnb-equinox',
+    name: 'Equinox Program for Indigenous Artists',
+    org: 'artsnb',
+    cats: ['indigenous'],
+    regions: ['nb'],
+    amount: 'Up to $10,000',
+    text: 'Supports the development, creation and presentation of Canadian artistic work. Applicants must have lived in New Brunswick for at least a year and be Canadian citizens or permanent residents.',
+    url: 'https://artsnb.ca/web/programs/equinox-program-for-indigenous-artists/',
+  },
+  {
+    id: 'tac-indigenous',
+    name: 'Indigenous Arts Projects',
+    org: 'Toronto Arts Council',
+    cats: ['indigenous'],
+    regions: ['on'],
+    amount: 'Up to $15,000',
+    text: 'A multidisciplinary program for professional Indigenous artists: project development (up to $3,000), creation (up to $10,000), and exhibition, presentation and dissemination (up to $15,000). Individual applicants must live in Toronto. Applications open in the fall.',
+    url: 'https://torontoartscouncil.org/grants/indigenous-arts-projects/',
+  },
+  {
+    id: 'calq-inuit-fn',
+    name: 'Recognition, Inuit and First Nations Arts',
+    org: 'Conseil des arts et des lettres du Québec',
+    cats: ['indigenous'],
+    regions: ['qc'],
+    text: 'Grants for professional and emerging Inuit and First Nations artists through three components: revitalization, creation and transmission; micro-grants; and impetus. Applicants must be Canadian citizens living in Québec. Apply online at any time.',
+    url: 'https://www.calq.gouv.qc.ca/en/grants/obtaining-financial-aid',
+  },
+  {
+    id: 'oac-deaf-disability',
+    name: 'Deaf and Disability Arts Projects',
+    org: 'Ontario Arts Council',
+    cats: ['disability'],
+    regions: ['on'],
+    amount: 'Up to $10,000',
+    text: 'For Ontario-based artists who are Deaf and/or have a disability, across art practices including filmmaking, in three categories: creation, production and professional development. Applications open three months before each deadline.',
+    url: 'https://www.arts.on.ca/grants/deaf-and-disability-arts-projects',
+  },
+];
+
+const catName = Object.fromEntries(cats) as Record<Cat, string>;
+const regionName = Object.fromEntries(regions) as Record<Region, string>;
+---
+
+<Base
+  title="Film Grants + Funding — InFocus Film School"
+  description="Film grants and funding for Canadian filmmakers, including programs for LGBTQ+, women, BIPOC, Indigenous, and Deaf and disabled creators."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Film Grants + Funding"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Resources' }, { label: 'Project Funding' }]}
+    >
+      <p>
+        There are many funding opportunities for Canadian filmmakers, including programs
+        specifically for underrepresented artists and for projects by and for marginalized
+        communities.
+      </p>
+    </PageHero>
+
+    <section class="intro">
+      <div class="intro__inner">
+        <p class="intro__lede">
+          Funding and initiatives for diverse representation in film and TV are gaining momentum,
+          with a real push toward greater diversity in front of and behind the camera.
+        </p>
+        <p class="intro__text">
+          Mainstream hits like Netflix’s <em>To All the Boys I’ve Loved Before</em> (2018) and
+          Best Picture winner <em>Moonlight</em> (2016) prove there’s a hunger for diverse stories.
+          Use the filters below to find the programs that fit you and your project.
+        </p>
+      </div>
+    </section>
+
+    <section class="finder" aria-labelledby="finder-title">
+      <div class="finder__inner">
+        <h2 id="finder-title" class="visually-hidden">Find funding</h2>
+
+        <div class="filters">
+          <div class="filters__row" role="group" aria-label="Who it’s for">
+            <span class="filters__label">Who it’s for</span>
+            <button type="button" class="chip" data-cat="all" aria-pressed="true">All</button>
+            {cats.map(([key, label]) => (
+              <button type="button" class="chip" data-cat={key} aria-pressed="false">{label}</button>
+            ))}
+          </div>
+          <div class="filters__row" role="group" aria-label="Where you are">
+            <span class="filters__label">Where you are</span>
+            <button type="button" class="chip" data-region="all" aria-pressed="true">Anywhere</button>
+            {regions.map(([key, label]) => (
+              <button type="button" class="chip" data-region={key} aria-pressed="false">{label}</button>
+            ))}
+          </div>
+          <p class="filters__count" aria-live="polite"><strong data-count>{funds.length}</strong> programs</p>
+        </div>
+
+        <ul class="funds">
+          {funds.map((f) => {
+            const Tag = f.url ? 'a' : 'div';
+            return (
+              <li class="fund" data-cats={f.cats.join(' ')} data-regions={f.regions.join(' ')}>
+                <Tag class="fund__card" href={f.url ?? undefined} target={f.url ? '_blank' : undefined} rel={f.url ? 'noopener' : undefined}>
+                  <span class="fund__tags">
+                    {f.cats.map((c) => <span class={`tag tag--${c}`}>{catName[c]}</span>)}
+                  </span>
+                  {f.org && <span class="fund__org">{f.org}</span>}
+                  <span class="fund__name">{f.name}</span>
+                  <span class="fund__facts">
+                    {f.amount && <span class="fund__amount">{f.amount}</span>}
+                    <span class="fund__region">{f.regions.map((r) => regionName[r]).join(' · ')}</span>
+                  </span>
+                  <span class="fund__text">{f.text}</span>
+                  {f.status && <span class="fund__status">{f.status}</span>}
+                  <span class="fund__cta">{f.url ? <>Visit program <span aria-hidden="true">↗</span></> : 'Link coming soon'}</span>
+                </Tag>
+              </li>
+            );
+          })}
+        </ul>
+
+        <p class="empty" data-empty hidden>
+          No programs match both filters. Try “Anywhere” or “All”.
+        </p>
+
+        <p class="disclaimer">
+          Programs, amounts and deadlines change often. Always confirm eligibility and dates on
+          each program’s website before applying.
+        </p>
+      </div>
+    </section>
+
+    <section class="tuition" aria-labelledby="tuition-title">
+      <div class="tuition__inner">
+        <div>
+          <p class="tuition__eyebrow"><span aria-hidden="true"></span>Paying for school?</p>
+          <h2 id="tuition-title" class="tuition__title">Funding your education</h2>
+          <p class="tuition__text">
+            These programs fund projects. For help with tuition, see student loans, payment plans
+            and bursaries, including our own Diversity In Film Initiative.
+          </p>
+        </div>
+        <ul class="tuition__links">
+          <li><a href="/admissions/finances">Finances <span aria-hidden="true">→</span></a></li>
+          <li><a href="/admissions/lgbtq2sai-students#diversity-in-film">Diversity In Film Initiative <span aria-hidden="true">→</span></a></li>
+          <li><a href="/admissions/indigenous-students">Indigenous student funding <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---- Intro ---- */
+
+  .intro {
+    padding: clamp(44px, 5.5vw, 88px) var(--gutter) 0;
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .intro__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 72px);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .intro__lede {
+    margin: 0;
+    font-family: var(--font-quote);
+    font-size: clamp(21px, 2vw, 32px);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .intro__text {
+    margin: 0;
+    align-self: end;
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: #4a4a4a;
+  }
+
+  /* ---- Finder ---- */
+
+  .finder {
+    padding: clamp(36px, 4.4vw, 64px) var(--gutter) clamp(56px, 7vw, 110px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .finder__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .filters {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 5;
+    display: grid;
+    gap: 10px;
+    margin: 0 calc(var(--gutter) * -1) clamp(22px, 2.4vw, 32px);
+    padding: 16px var(--gutter);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .filters__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filters__label {
+    width: 110px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .chip {
+    padding: 8px 14px;
+    border: 1px solid rgba(51, 51, 51, 0.22);
+    border-radius: 999px;
+    font-size: 13px;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .chip:hover {
+    border-color: var(--charcoal);
+  }
+
+  .chip[aria-pressed='true'] {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .filters__count {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  .filters__count strong {
+    color: var(--red);
+  }
+
+  .funds {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fund[hidden] {
+    display: none;
+  }
+
+  .fund__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    padding: clamp(20px, 2vw, 28px);
+    border: 1px solid rgba(51, 51, 51, 0.16);
+    background: var(--white);
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.35s ease,
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  a.fund__card:hover {
+    border-color: rgba(189, 47, 47, 0.5);
+    box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.45);
+    transform: translateY(-3px);
+  }
+
+  .fund__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .tag {
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    font-family: var(--font-head);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  .tag--general { background: #efefef; }
+  .tag--lgbtq { background: #f3e8f7; color: #6b2f82; }
+  .tag--women { background: #fbeaea; color: #9c2424; }
+  .tag--bipoc { background: #fff1e0; color: #8a4a00; }
+  .tag--indigenous { background: #e8f1ec; color: #2f6546; }
+  .tag--disability { background: #e6eef6; color: #224466; }
+
+  .fund__org {
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  .fund__name {
+    font-family: var(--font-head);
+    font-size: clamp(18px, 1.45vw, 23px);
+    font-weight: 600;
+    line-height: 1.12;
+    text-transform: uppercase;
+  }
+
+  .fund__facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    margin: 2px 0 4px;
+    font-size: 13px;
+  }
+
+  .fund__amount {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .fund__region {
+    color: #6d6d6d;
+  }
+
+  .fund__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4a4a4a;
+  }
+
+  .fund__status {
+    padding: 8px 10px;
+    border-left: 2px solid #c98b00;
+    background: #fff8e6;
+    font-size: 13px;
+    color: #6b4f00;
+  }
+
+  .fund__cta {
+    margin-top: auto;
+    padding-top: 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  a.fund__card .fund__cta {
+    color: var(--red);
+  }
+
+  div.fund__card .fund__cta {
+    color: #9a9a9a;
+  }
+
+  .empty {
+    padding: 40px 0;
+    text-align: center;
+    color: #6d6d6d;
+  }
+
+  .disclaimer {
+    margin: clamp(26px, 3vw, 40px) 0 0;
+    padding: 14px 18px;
+    border-left: 2px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* ---- Tuition cross-links ---- */
+
+  .tuition {
+    padding: clamp(48px, 6vw, 96px) var(--gutter);
+    background:
+      radial-gradient(60% 100% at 100% 0%, rgba(189, 47, 47, 0.25), transparent 60%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .tuition__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 72px);
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .tuition__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .tuition__eyebrow span {
+    width: 32px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .tuition__title {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .tuition__text {
+    margin: 16px 0 0;
+    max-width: 50ch;
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .tuition__links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .tuition__links a {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    font-family: var(--font-head);
+    font-size: clamp(16px, 1.3vw, 20px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .tuition__links a:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 1100px) {
+    .funds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 800px) {
+    .intro__inner,
+    .tuition__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* On phones the filter bar scrolls sideways instead of towering. */
+    .filters {
+      position: static;
+    }
+
+    .filters__row {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filters__label {
+      flex: none;
+      width: auto;
+      margin-right: 4px;
+    }
+
+    .chip {
+      flex: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .funds {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  const catBtns = document.querySelectorAll<HTMLButtonElement>('[data-cat]');
+  const regionBtns = document.querySelectorAll<HTMLButtonElement>('[data-region]');
+  const funds = document.querySelectorAll<HTMLElement>('.fund');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  let cat = 'all';
+  let region = 'all';
+
+  const apply = () => {
+    let n = 0;
+    funds.forEach((f) => {
+      const okCat = cat === 'all' || f.dataset.cats!.split(' ').includes(cat);
+      // Canada-wide and international programs apply wherever you are.
+      const rs = f.dataset.regions!.split(' ');
+      const okRegion = region === 'all' || rs.includes(region) || rs.includes('canada') || rs.includes('intl');
+      f.hidden = !(okCat && okRegion);
+      if (!f.hidden) n++;
+    });
+    if (count) count.textContent = String(n);
+    if (empty) empty.hidden = n > 0;
+  };
+
+  const wire = (btns: NodeListOf<HTMLButtonElement>, set: (v: string) => void, key: 'cat' | 'region') =>
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        set(b.dataset[key]!);
+        apply();
+      })
+    );
+
+  wire(catBtns, (v) => (cat = v), 'cat');
+  wire(regionBtns, (v) => (region = v), 'region');
+</script>

@@ -1,0 +1,342 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { getPosts, toCard, CATEGORIES } from '../../lib/blog';
+
+const cards = (await getPosts()).map(toCard);
+const [featured, ...rest] = cards;
+const counts = Object.fromEntries(
+  Object.keys(CATEGORIES).map((k) => [k, cards.filter((c) => c.category === k).length])
+);
+---
+
+<Base
+  title="Blog — InFocus Film School"
+  description="Filmmaking guides, how-tos and industry insight from InFocus Film School: lenses, green screen, producing, auteur theory, production design and more."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="The InFocus Blog"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Resources' }, { label: 'Blog' }]}
+    >
+      <p>
+        Guides, how-tos and industry insight from working filmmakers, for new and experienced
+        artists alike.
+      </p>
+    </PageHero>
+
+    <div class="blog">
+      <div class="blog__inner">
+        {
+          featured && (
+            <section class="featured" aria-label="Latest article">
+              <p class="eyebrow"><span aria-hidden="true" />Latest</p>
+              <PostCard post={featured} featured eager />
+            </section>
+          )
+        }
+
+        <section class="all" aria-labelledby="all-title">
+          <div class="toolbar">
+            <h2 id="all-title" class="all__title">All articles</h2>
+
+            <div class="toolbar__controls">
+              <div class="filters" role="group" aria-label="Filter by category">
+                <button type="button" class="chip" data-filter="all" aria-pressed="true">
+                  All <span>{cards.length}</span>
+                </button>
+                {Object.entries(CATEGORIES).map(([key, label]) => (
+                  <button type="button" class="chip" data-filter={key} aria-pressed="false">
+                    {label} <span>{counts[key]}</span>
+                  </button>
+                ))}
+              </div>
+
+              <label class="search">
+                <span class="visually-hidden">Search articles</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
+                <input type="search" placeholder="Search articles" data-search autocomplete="off" />
+              </label>
+            </div>
+          </div>
+
+          <ul class="grid">
+            {[featured, ...rest].filter(Boolean).map((post, i) => (
+              <li
+                class="grid__item"
+                data-cat={post.category}
+                data-text={`${post.title} ${post.description} ${post.author ?? ''}`.toLowerCase()}
+                data-featured={i === 0 ? '' : undefined}
+                hidden={i === 0}
+                style={`--i:${i}`}
+              >
+                <PostCard post={post} />
+              </li>
+            ))}
+          </ul>
+
+          <p class="empty" data-empty hidden>
+            No articles match that search. <button type="button" data-reset>Clear filters</button>
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .blog {
+    padding: clamp(44px, 5.5vw, 92px) var(--gutter) clamp(64px, 8vw, 128px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .blog__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(16px, 1.8vw, 24px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .featured {
+    padding-bottom: clamp(44px, 5.5vw, 88px);
+    margin-bottom: clamp(36px, 4.4vw, 68px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  /* ---- Toolbar ---- */
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px 32px;
+    margin-bottom: clamp(26px, 3vw, 44px);
+  }
+
+  .all__title {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 50px);
+    line-height: 1;
+  }
+
+  .toolbar__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    border: 1px solid rgba(51, 51, 51, 0.22);
+    border-radius: 999px;
+    font-size: 14px;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .chip span {
+    font-size: 12px;
+    color: #9a9a9a;
+  }
+
+  .chip:hover {
+    border-color: var(--charcoal);
+  }
+
+  .chip[aria-pressed='true'] {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .chip[aria-pressed='true'] span {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search svg {
+    position: absolute;
+    left: 14px;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #8a8a8a;
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+
+  .search input {
+    width: clamp(200px, 18vw, 260px);
+    padding: 10px 16px 10px 38px;
+    border: 1px solid rgba(51, 51, 51, 0.22);
+    border-radius: 999px;
+    background: var(--white);
+    font: inherit;
+    font-size: 14px;
+    color: var(--charcoal);
+    transition: border-color 0.2s ease;
+  }
+
+  .search input:focus {
+    outline: none;
+    border-color: var(--charcoal);
+  }
+
+  /* ---- Grid ---- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(32px, 3.4vw, 56px) clamp(18px, 2vw, 32px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grid__item {
+    animation: card-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
+  .grid__item[hidden] {
+    display: none;
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  .empty {
+    padding: 48px 0;
+    text-align: center;
+    color: #6d6d6d;
+  }
+
+  .empty button {
+    margin-left: 6px;
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .toolbar__controls,
+    .search,
+    .search input {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const search = document.querySelector<HTMLInputElement>('[data-search]');
+  const items = document.querySelectorAll<HTMLElement>('.grid__item');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  let cat = 'all';
+
+  const apply = () => {
+    const q = (search?.value ?? '').trim().toLowerCase();
+    let n = 0;
+    items.forEach((item) => {
+      // The featured story already sits above the grid; it only rejoins the
+      // grid when someone filters or searches.
+      const featuredDup = item.dataset.featured !== undefined && cat === 'all' && !q;
+      const show = !featuredDup && (cat === 'all' || item.dataset.cat === cat) && (!q || item.dataset.text!.includes(q));
+      item.hidden = !show;
+      if (show) {
+        // Re-run the cascade so the filtered set eases in.
+        item.style.setProperty('--i', String(n++));
+        item.style.animation = 'none';
+        void item.offsetWidth;
+        item.style.animation = '';
+      }
+    });
+    if (empty) empty.hidden = n > 0;
+  };
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      cat = b.dataset.filter!;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply();
+    })
+  );
+
+  search?.addEventListener('input', apply);
+
+  document.querySelector('[data-reset]')?.addEventListener('click', () => {
+    cat = 'all';
+    if (search) search.value = '';
+    buttons.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.filter === 'all')));
+    apply();
+  });
+</script>

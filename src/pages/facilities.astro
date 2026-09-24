@@ -1,0 +1,720 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+
+// Everything listed here comes from IFFS_Amenities_Equipment-Services.pdf.
+// The floor plan is illustrative: rooms are real, positions are not.
+const PDF = '/docs/IFFS_Amenities_Equipment-Services.pdf';
+
+type Room = {
+  id: string;
+  name: string;
+  text: string;
+  items?: string[];
+};
+
+const rooms: Room[] = [
+  {
+    id: 'filming',
+    name: 'Filming Rooms',
+    text: 'Dedicated spaces for shooting scenes, lighting setups and auditions. Students and alumni can book rooms after hours through reception.',
+    items: ['Filming rooms', 'After-hours room booking', 'Natural light', 'Heating and air conditioning'],
+  },
+  {
+    id: 'sound',
+    name: 'Sound Room',
+    text: 'A dedicated room for recording and audio work, with the school’s audio kit available from the equipment room next door.',
+    items: ['Sound room', 'Sound blankets', 'Zoom H6 recorders', 'Headphones'],
+  },
+  {
+    id: 'equipment',
+    name: 'Equipment Room',
+    text: 'Professional gear for class projects is included in your tuition and/or material fee. Students who have paid the $400 gear deposit may also rent gear for personal use, subject to availability.',
+  },
+  {
+    id: 'classroom',
+    name: 'Classrooms',
+    text: 'Bright, comfortable classrooms set up for screenings, critiques and lectures.',
+    items: ['Speakers and projectors', 'Natural light', 'Heating', 'Air conditioning', 'Wi-Fi'],
+  },
+  {
+    id: 'lab',
+    name: 'Computer Lab',
+    text: 'Workstations for editing, compositing and design, available in class and after hours.',
+    items: ['Computer access', 'Computer peripherals', 'Wi-Fi and internet', 'After-hours access'],
+  },
+  {
+    id: 'reception',
+    name: 'Reception + Student Services',
+    text: 'Your first stop for printing, room bookings, and help with policies, tuition and daily life in Vancouver.',
+    items: [
+      'Printing: email your request to admin@infocusfilmschool.com',
+      'Room rental for after-hours study, filming and auditions',
+      'Student services: policies, tuition, deferrals, extended absences',
+      'Counselling and mental health referrals',
+      'Admissions support with housing, transportation and daily life',
+    ],
+  },
+  {
+    id: 'lunch',
+    name: 'Lunch Area',
+    text: 'Take a break between classes and shoots.',
+    items: ['Lunch area', 'Microwaves', 'Fridges', '2 drinking water stations'],
+  },
+  {
+    id: 'intl',
+    name: 'International Student Room',
+    text: 'A room set aside for international students.',
+    items: ['Room for international students'],
+  },
+  {
+    id: 'washrooms',
+    name: 'Washrooms',
+    text: 'Accessible washrooms on site.',
+    items: ['2 men’s washrooms', '2 women’s washrooms', '1 unisex washroom', '4 wheelchair-accessible stalls', 'Sinks'],
+  },
+  {
+    id: 'access',
+    name: 'Accessibility + Safety',
+    text: 'Getting around the building, safely.',
+    items: ['Elevator', 'Emergency exits', 'Fire escape staircase', 'Security system', 'First aid kit'],
+  },
+];
+
+const gear: [string, string[]][] = [
+  ['Camera + Lenses', ['Canon DSLR and cine cameras and lenses', 'Meike cine lenses']],
+  ['Audio', ['Rode/Sennheiser lavalier microphones', 'Rode microphones', 'Blimps', 'XLR audio cables', 'Zoom H6 recorders', 'Headphones', 'Sound blankets']],
+  ['Lighting', ['Amaran lights + light modifiers', 'Aputure lights + light modifiers', 'Kino Flo kits', 'Light reflectors/modifiers', 'Light meters']],
+  ['Grip + Rigging', ['Manfrotto tripods', 'Sachtler tripods', 'Dana Dollys', 'Tilta wireless follow focuses', 'Tilta/SHAPE matte boxes', 'Apple boxes, assorted sizes', 'C-stands / light stands', 'Sandbags', 'Clamps (Quaker, Cardellini, Pony)', 'Flags, assorted sizes', 'Production tent']],
+  ['Power + Storage', ['V-mount batteries', 'Battery chargers', 'Rechargeable AA batteries', 'SD / CFast cards + readers']],
+  ['Monitoring', ['Feelworld monitors', 'Director’s monitors', 'SDI / HDMI video cables']],
+  ['Misc', ['Gear cases (fabric and plastic)', 'Slates']],
+];
+
+const building = ['Natural light', 'Heating', 'Air conditioning', 'Wi-Fi', 'Elevator', 'Security system', 'First aid kit', 'Accessible washrooms'];
+---
+
+<Base
+  title="Campus + Equipment — InFocus Film School"
+  description="Explore InFocus Film School’s Vancouver campus: filming rooms, sound room, computer lab, and the professional camera, lighting, audio and grip gear students use."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Campus + Equipment"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Campus + Equipment' }]}
+    >
+      <p>
+        Take a look around 554 Seymour Street in downtown Vancouver. Select a room to see what’s
+        inside, from filming rooms and a sound room to the equipment room stocked with
+        professional cameras, lighting, audio and grip gear.
+      </p>
+    </PageHero>
+
+    <section class="explore" aria-labelledby="explore-title">
+      <div class="explore__inner">
+        <header class="explore__head">
+          <p class="explore__eyebrow"><span aria-hidden="true"></span>Explore the campus</p>
+          <h2 id="explore-title" class="explore__title">Select a room</h2>
+        </header>
+
+        <div class="explore__grid">
+          <div class="plan">
+            <svg class="plan__svg" viewBox="0 0 1000 640" role="group" aria-label="Campus floor plan">
+              <defs>
+                <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1="0" y1="0" x2="0" y2="10" />
+                </pattern>
+              </defs>
+
+              {/* Hallway */}
+              <rect class="plan__hall" x="20" y="220" width="960" height="70" />
+              <text class="plan__hall-label" x="500" y="260">Hallway</text>
+
+              {/* Filming rooms (two, one entry) */}
+              <g class="room" data-room="filming" tabindex="0" role="button" aria-label="Filming Rooms">
+                <rect x="20" y="20" width="280" height="200" />
+                <rect x="300" y="20" width="220" height="200" />
+                <path class="f" d="M40 200V64Q40 40 64 40H282" />
+                <path class="f" d="M200 170l-14 26M200 170l14 26M200 170v26" />
+                <circle class="f" cx="90" cy="170" r="10" />
+                <circle class="f" cx="250" cy="96" r="10" />
+                <rect class="f" x="320" y="36" width="180" height="10" />
+                <path class="f" d="M410 150l-14 26M410 150l14 26M410 150v26" />
+                <text x="160" y="126">Filming A</text>
+                <text x="410" y="118">Filming B</text>
+              </g>
+
+              {/* Sound room */}
+              <g class="room" data-room="sound" tabindex="0" role="button" aria-label="Sound Room">
+                <rect x="520" y="20" width="160" height="200" />
+                <rect class="f hatch" x="532" y="32" width="136" height="16" />
+                <rect class="f hatch" x="532" y="192" width="136" height="16" />
+                <path class="f" d="M600 96a10 10 0 0 1 10 10v16a10 10 0 0 1-20 0v-16a10 10 0 0 1 10-10ZM586 124a14 14 0 0 0 28 0M600 138v12" />
+                <text x="600" y="176">Sound</text>
+              </g>
+
+              {/* Equipment room */}
+              <g class="room" data-room="equipment" tabindex="0" role="button" aria-label="Equipment Room">
+                <rect x="680" y="20" width="300" height="200" />
+                <rect class="f" x="696" y="34" width="268" height="16" />
+                <rect class="f" x="696" y="58" width="268" height="16" />
+                <rect class="f" x="712" y="150" width="46" height="30" rx="3" />
+                <rect class="f" x="768" y="150" width="46" height="30" rx="3" />
+                <rect class="f" x="824" y="150" width="46" height="30" rx="3" />
+                <rect class="f" x="880" y="150" width="70" height="30" rx="3" />
+                <text x="830" y="124">Equipment</text>
+              </g>
+
+              {/* Lunch */}
+              <g class="room" data-room="lunch" tabindex="0" role="button" aria-label="Lunch Area">
+                <rect x="20" y="290" width="230" height="130" />
+                <circle class="f" cx="68" cy="336" r="15" />
+                <circle class="f" cx="134" cy="336" r="15" />
+                <circle class="f" cx="200" cy="336" r="15" />
+                <rect class="f" x="34" y="394" width="100" height="14" />
+                <text x="135" y="382">Lunch</text>
+              </g>
+
+              {/* Reception */}
+              <g class="room" data-room="reception" tabindex="0" role="button" aria-label="Reception and Student Services">
+                <rect x="20" y="420" width="230" height="180" />
+                <path class="f" d="M56 500Q135 456 214 500" />
+                <path class="f" d="M100 600v-6M170 600v-6" />
+                <text x="135" y="548">Reception</text>
+              </g>
+
+              {/* Classroom */}
+              <g class="room" data-room="classroom" tabindex="0" role="button" aria-label="Classrooms">
+                <rect x="250" y="290" width="230" height="310" />
+                <path class="f" d="M282 308H448" />
+                {[350, 400, 450, 500, 550].map((y) => (
+                  <>
+                    <rect class="f" x="272" y={y} width="54" height="16" />
+                    <rect class="f" x="338" y={y} width="54" height="16" />
+                    <rect class="f" x="404" y={y} width="54" height="16" />
+                  </>
+                ))}
+                <text x="365" y="338">Classroom</text>
+              </g>
+
+              {/* Computer lab */}
+              <g class="room" data-room="lab" tabindex="0" role="button" aria-label="Computer Lab">
+                <rect x="480" y="290" width="250" height="310" />
+                {[360, 420, 480, 540].map((y) => (
+                  <>
+                    <rect class="f" x="500" y={y} width="210" height="14" />
+                    {[516, 566, 616, 666].map((x) => <rect class="f" x={x} y={y - 14} width="28" height="10" />)}
+                  </>
+                ))}
+                <text x="605" y="326">Computer Lab</text>
+              </g>
+
+              {/* International student room */}
+              <g class="room" data-room="intl" tabindex="0" role="button" aria-label="International Student Room">
+                <rect x="730" y="290" width="140" height="150" />
+                <circle class="f" cx="800" cy="350" r="16" />
+                <rect class="f" x="750" y="398" width="100" height="22" rx="6" />
+                <text x="800" y="318">Int’l Room</text>
+              </g>
+
+              {/* Washrooms */}
+              <g class="room" data-room="washrooms" tabindex="0" role="button" aria-label="Washrooms">
+                <rect x="870" y="290" width="110" height="150" />
+                <path class="f" d="M896 300v56M924 300v56M952 300v56M884 356h84" />
+                <text x="925" y="404">WC</text>
+              </g>
+
+              {/* Elevator + stairs */}
+              <g class="room" data-room="access" tabindex="0" role="button" aria-label="Accessibility and Safety">
+                <rect x="730" y="440" width="250" height="160" />
+                <rect class="f" x="748" y="458" width="70" height="70" />
+                <path class="f" d="M748 458l70 70M818 458l-70 70" />
+                {Array.from({ length: 11 }, (_, i) => 838 + i * 12).map((x) => (
+                  <path class="f" d={`M${x} 458V540`} />
+                ))}
+                <text x="855" y="578">Elevator + Stairs</text>
+              </g>
+
+              {/* Entrance */}
+              <path class="plan__entry" d="M135 632V612M125 622l10 -10 10 10" />
+              <text class="plan__entry-label" x="170" y="630">Entrance · 554 Seymour St</text>
+            </svg>
+            <p class="plan__note">Illustrative plan, not to scale.</p>
+          </div>
+
+          <div class="panel" aria-live="polite">
+            {rooms.map((r, i) => (
+              <div class="panel__room" data-panel={r.id} hidden={i !== 0}>
+                <span class="panel__n">{String(i + 1).padStart(2, '0')} / {String(rooms.length).padStart(2, '0')}</span>
+                <h3 class="panel__name">{r.name}</h3>
+                <p class="panel__text">{r.text}</p>
+
+                {r.id === 'equipment' ? (
+                  <div class="gear">
+                    <div class="gear__tabs" role="tablist" aria-label="Equipment categories">
+                      {gear.map(([cat], g) => (
+                        <button type="button" role="tab" class="gear__tab" aria-selected={g === 0 ? 'true' : 'false'} data-gear={g}>
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                    {gear.map(([cat, list], g) => (
+                      <ul class="panel__list gear__list" data-gear-list={g} hidden={g !== 0} aria-label={cat}>
+                        {list.map((item) => <li>{item}</li>)}
+                      </ul>
+                    ))}
+                  </div>
+                ) : (
+                  <ul class="panel__list">
+                    {r.items?.map((item) => <li>{item}</li>)}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Same rooms as buttons: keyboard- and phone-friendly way in. */}
+        <ul class="chips" aria-label="Rooms">
+          {rooms.map((r, i) => (
+            <li>
+              <button type="button" class="chip" data-room-btn={r.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {r.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="building" aria-labelledby="building-title">
+      <div class="building__inner">
+        <h2 id="building-title" class="building__title">Throughout the building</h2>
+        <ul class="building__list">
+          {building.map((b) => <li>{b}</li>)}
+        </ul>
+        <a class="building__pdf" href={PDF} target="_blank" rel="noopener">
+          Download the full amenities list (PDF) <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  /* ---- Explorer ---- */
+
+  .explore {
+    padding: clamp(52px, 6.5vw, 108px) var(--gutter);
+    background:
+      radial-gradient(60% 80% at 100% 0%, rgba(189, 47, 47, 0.16), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.4), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .explore__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .explore__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(12px, 1.4vw, 20px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .explore__eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .explore__title {
+    margin: 0 0 clamp(24px, 3vw, 44px);
+    font-size: clamp(30px, 3.4vw, 60px);
+    line-height: 1;
+  }
+
+  .explore__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 52px);
+    align-items: start;
+  }
+
+  /* ---- Floor plan ---- */
+
+  .plan__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .plan__hall {
+    fill: rgba(255, 255, 255, 0.03);
+    stroke: rgba(255, 255, 255, 0.25);
+    stroke-dasharray: 6 6;
+  }
+
+  .plan__hall-label,
+  .plan__entry-label {
+    fill: rgba(255, 255, 255, 0.35);
+    font-family: var(--font-head);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-anchor: middle;
+    text-transform: uppercase;
+  }
+
+  .plan__entry-label {
+    text-anchor: start;
+    fill: rgba(255, 255, 255, 0.55);
+  }
+
+  .plan__entry {
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 2;
+  }
+
+  #hatch line {
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 1.5;
+  }
+
+  .room {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .room > rect:not(.f) {
+    fill: rgba(255, 255, 255, 0);
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 2;
+    transition:
+      fill 0.3s ease,
+      stroke 0.3s ease;
+  }
+
+  /* Furniture: quiet line work inside each room. */
+  .room .f {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 1.5;
+    transition: stroke 0.3s ease;
+  }
+
+  .room .f.hatch {
+    fill: url(#hatch);
+  }
+
+  .room text {
+    fill: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-head);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-anchor: middle;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: fill 0.3s ease;
+  }
+
+  .room:hover > rect:not(.f),
+  .room:focus-visible > rect:not(.f) {
+    fill: rgba(189, 47, 47, 0.14);
+  }
+
+  .room:focus-visible > rect:not(.f) {
+    stroke: var(--white);
+  }
+
+  .room.is-active > rect:not(.f) {
+    fill: rgba(189, 47, 47, 0.3);
+    stroke: var(--red);
+  }
+
+  .room.is-active .f {
+    stroke: rgba(255, 255, 255, 0.6);
+  }
+
+  .room.is-active text {
+    fill: var(--white);
+  }
+
+  /* Active room's outline draws on top of its neighbours. */
+  .room.is-active {
+    filter: drop-shadow(0 0 18px rgba(189, 47, 47, 0.35));
+  }
+
+  .plan__note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  /* ---- Detail panel ---- */
+
+  .panel {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    min-height: 360px;
+    padding: clamp(24px, 2.6vw, 40px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-top: 3px solid var(--red);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+  }
+
+  .panel__room:not([hidden]) {
+    animation: panel-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  .panel__n {
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+  }
+
+  .panel__name {
+    margin: 8px 0 12px;
+    font-size: clamp(24px, 2.2vw, 36px);
+    line-height: 1.05;
+  }
+
+  .panel__text {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .panel__list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .panel__list li {
+    position: relative;
+    padding: 10px 0 10px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 14px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .panel__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.05em;
+    width: 8px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* `display: grid` above would otherwise override the hidden attribute. */
+  .gear__list[hidden] {
+    display: none;
+  }
+
+  .gear__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .gear__tab {
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .gear__tab:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .gear__tab[aria-selected='true'] {
+    border-color: var(--red);
+    background: var(--red);
+    color: var(--white);
+  }
+
+  /* ---- Room chips ---- */
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: clamp(22px, 2.4vw, 34px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chip {
+    padding: 9px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .chip:hover {
+    border-color: rgba(255, 255, 255, 0.55);
+  }
+
+  .chip[aria-pressed='true'] {
+    border-color: var(--red);
+    background: rgba(189, 47, 47, 0.25);
+    color: var(--white);
+  }
+
+  /* ---- Building-wide ---- */
+
+  .building {
+    padding: clamp(44px, 5.5vw, 88px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .building__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .building__title {
+    margin: 0 0 clamp(18px, 2vw, 28px);
+    font-size: clamp(22px, 2.2vw, 36px);
+  }
+
+  .building__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .building__list li {
+    padding: 10px 16px;
+    border: 1px solid rgba(51, 51, 51, 0.2);
+    border-radius: 999px;
+    font-size: 14px;
+  }
+
+  .building__pdf {
+    display: inline-flex;
+    gap: 10px;
+    margin-top: clamp(24px, 2.6vw, 36px);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .building__pdf:hover {
+    color: var(--red);
+  }
+
+  @media (max-width: 1000px) {
+    .explore__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel {
+      position: static;
+      min-height: 0;
+    }
+  }
+
+  /* Room labels get too small to read on phones; the chips carry the names. */
+  @media (max-width: 560px) {
+    .room text {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>('.explore');
+
+  for (const root of roots) {
+    const rooms = root.querySelectorAll<SVGGElement>('.room');
+    const panels = root.querySelectorAll<HTMLElement>('[data-panel]');
+    const chips = root.querySelectorAll<HTMLButtonElement>('[data-room-btn]');
+
+    const select = (id: string) => {
+      rooms.forEach((r) => r.classList.toggle('is-active', r.dataset.room === id));
+      panels.forEach((p) => (p.hidden = p.dataset.panel !== id));
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.roomBtn === id)));
+    };
+
+    rooms.forEach((r) => {
+      r.addEventListener('click', () => select(r.dataset.room!));
+      r.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          select(r.dataset.room!);
+        }
+      });
+    });
+
+    chips.forEach((c) => c.addEventListener('click', () => select(c.dataset.roomBtn!)));
+
+    // Equipment categories.
+    const tabs = root.querySelectorAll<HTMLButtonElement>('[data-gear]');
+    const lists = root.querySelectorAll<HTMLElement>('[data-gear-list]');
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+        lists.forEach((l) => (l.hidden = l.dataset.gearList !== t.dataset.gear));
+      })
+    );
+
+    select(rooms[0]?.dataset.room ?? 'filming');
+  }
+</script>

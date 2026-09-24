@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
 import Footer from '../../components/Footer.astro';
 
@@ -40,37 +41,17 @@ const contents = [
   <Nav />
 
   <main>
-    <header class="hero">
-      <img
-        class="hero__bg"
-        src="/images/about-2.jpg"
-        alt=""
-        aria-hidden="true"
-        width="1200"
-        height="800"
-        loading="eager"
-        decoding="async"
-      />
-      <span class="hero__scrim" aria-hidden="true"></span>
-
-      <div class="hero__inner">
-        <nav class="crumbs" aria-label="Breadcrumb">
-          <ol>
-            <li><a href="/">Home</a></li>
-            <li><a href="/admissions/how-to-apply">Admissions</a></li>
-            <li aria-current="page">Finances</li>
-          </ol>
-        </nav>
-
-        <h1>Paying for Your Studies</h1>
-        <p class="hero__lede">
-          As a world-class city, moving to and living in Vancouver can be daunting, but options
-          exist to make studying in Vancouver easier and more affordable. With InFocus Film
-          School’s competitive tuition, scholarship opportunities, loans and funding options, and
-          student resources, we make your investment in your education easy and affordable.
-        </p>
-      </div>
-    </header>
+    <PageHero
+      title="Paying for Your Studies"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Admissions', href: '/admissions/how-to-apply' }, { label: 'Finances' }]}
+    >
+      <p>
+        As a world-class city, moving to and living in Vancouver can be daunting, but options
+        exist to make studying in Vancouver easier and more affordable. With InFocus Film
+        School’s competitive tuition, scholarship opportunities, loans and funding options, and
+        student resources, we make your investment in your education easy and affordable.
+      </p>
+    </PageHero>
 
     <div class="page">
       <div class="page__inner">
@@ -261,99 +242,6 @@ const contents = [
   .page__inner {
     max-width: 1320px;
     margin: 0 auto;
-  }
-
-  /* ---- Hero ---- */
-
-  .hero {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    min-height: clamp(300px, 34vw, 480px);
-    background: var(--black);
-    color: var(--white);
-    padding: clamp(56px, 7vw, 116px) var(--gutter) clamp(36px, 4.4vw, 68px);
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .hero__bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 44%;
-    filter: brightness(1.1) saturate(1.04);
-    z-index: 0;
-  }
-
-  /* Same weighting as the How to Apply header, so the two read as a set. */
-  .hero__scrim {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background:
-      linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.86) 0%,
-        rgba(0, 0, 0, 0.68) 36%,
-        rgba(0, 0, 0, 0.44) 70%,
-        rgba(0, 0, 0, 0.34) 100%
-      ),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.2) 42%, rgba(0, 0, 0, 0.62) 100%);
-  }
-
-  .hero__inner {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-
-  .hero h1 {
-    margin: 0;
-    max-width: 20ch;
-    font-size: clamp(32px, 4vw, 66px);
-    font-weight: 600;
-    line-height: 1.04;
-  }
-
-  .hero__lede {
-    margin: clamp(16px, 1.8vw, 26px) 0 0;
-    max-width: 68ch;
-    font-size: clamp(15px, 1.1vw, 18px);
-    line-height: 1.62;
-    color: rgba(255, 255, 255, 0.72);
-  }
-
-  /* ---- Breadcrumb ---- */
-
-  .crumbs ol {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 0 clamp(14px, 1.6vw, 22px);
-    padding: 0;
-    list-style: none;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .crumbs li + li::before {
-    content: '/';
-    margin-right: 8px;
-    color: rgba(255, 255, 255, 0.35);
-  }
-
-  .crumbs a {
-    color: rgba(255, 255, 255, 0.6);
-    transition: color 0.2s ease;
-  }
-
-  .crumbs a:hover {
-    color: var(--white);
   }
 
   /* ---- Layout ---- */

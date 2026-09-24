@@ -1,0 +1,113 @@
+{
+  "slug": "acting-program",
+  "oldPath": "/acting",
+  "title": "Acting Program",
+  "shortTitle": "Acting Program",
+  "group": "film",
+  "summary": "A 10-month, in-person certificate in acting for film and TV: scene study, auditions and self-tapes, on-set experience and the business of the screen industry.",
+  "hero": {
+    "image": "/images/programs/acting-program/hero.jpg",
+    "imageAlt": "Acting students seated on a black-box studio floor watching two classmates perform a scene"
+  },
+  "intro": {
+    "heading": "Acting for Film & TV",
+    "paras": [
+      "The Acting for Film & TV program at InFocus Film School is a hands-on, performance-centred course designed for aspiring actors ready to work on camera. Vancouver is one of North America’s busiest film cities — this program puts you right at the centre of it. Work alongside industry-professional instructors, build your demo reel, and learn the business skills needed to launch your acting career."
+    ]
+  },
+  "facts": [
+    {
+      "label": "Delivery",
+      "value": "In-person"
+    },
+    {
+      "label": "Credential",
+      "value": "Certificate"
+    },
+    {
+      "label": "Program length",
+      "value": "10 months"
+    }
+  ],
+  "about": {
+    "heading": "About InFocus Acting Program",
+    "cards": [
+      {
+        "title": "Know the biz",
+        "text": "As a screen actor, shooting your scenes is the easy part. Gain not only the technical and performance skills required of a working actor, but also a deep understanding of the business of the screen industry through hands-on practice completing self-tape submissions, sourcing agent representation, building your audition toolkit, and identifying and marketing yourself to productions, casting directors, and broadcasters."
+      },
+      {
+        "title": "Learn from industry pros",
+        "text": "Your mentors in the Acting for Film & TV Program are all industry professionals and some of the best working actors and directors in Canada. You’ll learn from multi-credit performers and directors who are able to provide the most up-to-date instruction on the techniques and state of the screen industry, networking opportunities, references, and casting intel, right in the classroom!"
+      },
+      {
+        "title": "Sell your projects",
+        "text": "Auditioning is a core element of the program, providing you with real-world experience presenting your work to industry professionals. You’ll gain the experience and skills necessary to get cast, booked, and working on set. Build connections with top screen professionals and learn how to access production and casting channels to successfully deliver your career to an audience."
+      }
+    ]
+  },
+  "sections": [
+    {
+      "heading": "Become a screen actor",
+      "paras": [
+        "Refine your performance skills through scene study, improvisation, sketch comedy, voice, and movement training. Perfect your audition technique and self-tape skills while building real on-set experience across multiple projects. Learn to write, pitch, and direct your own short film — then step in front of the camera and act in it. Master the business side of the industry, from career planning and social media strategy to pitching and funding your own projects. Graduate as a confident, versatile, and market-savvy actor ready to work in film, television, and beyond."
+      ],
+      "image": "/images/programs/acting-program/on-set.jpg",
+      "imageAlt": "Black-and-white photo of a student and a mentor reviewing a take together on set"
+    }
+  ],
+  "stats": {
+    "heading": "Our students win awards",
+    "text": "With InFocus, you are more than just a student. We are dedicated to your success, both during the program and in launching your professional career after graduation. InFocus alumni win awards, receive grants, and often make the selection of prestigious festivals right out of school. In addition, the producers and industry mentors you work with will be your best references after graduation and will help connect you to productions, casting directors, and agents, greatly accelerating your career in film, television, and streaming.",
+    "items": [
+      {
+        "value": "100+",
+        "label": "Festival selections"
+      },
+      {
+        "value": "87%",
+        "label": "Employment rate"
+      }
+    ]
+  },
+  "costs": {
+    "heading": "Launch your future without mortgaging it",
+    "text": "InFocus Film School is one of the most financially-competitive schools in North America. We offer program costs comparable to public institutions, but with the high quality and expediency of private education. That said, financial assistance is always available, and all programs are eligible for student loans. Interest-free payment plans tailored to your specific financial needs can be arranged, and scholarships are available to qualified students.",
+    "domestic": "$17,290",
+    "international": "$19,690",
+    "breakdown": "https://infocusfilmschool.com/program-cost-breakdown/#tab-id-9"
+  },
+  "details": [
+    {
+      "label": "Program structure",
+      "text": "710 hours"
+    },
+    {
+      "label": "Delivery method(s)",
+      "text": "On-campus"
+    },
+    {
+      "label": "Academic progress",
+      "text": "Students are expected to make satisfactory progress in their studies and meet all assignment deadlines. Any student who fails two or more courses in a term must meet with the department head to discuss their academic performance. Passing grade equals 50%."
+    },
+    {
+      "label": "Post-grad work permit",
+      "text": "Not eligible"
+    },
+    {
+      "label": "Services & facilities",
+      "text": "[School amenities](/facilities)"
+    }
+  ],
+  "startDates": "We offer multiple intakes throughout the year. Please contact an Admissions Advisor for upcoming start dates and availability.",
+  "requirements": {
+    "intro": "To be accepted into the Acting Program, students must:",
+    "items": [
+      "Meet the terms of InFocus Film School’s [English Proficiency Policy](/policies#english-proficiency-policy)",
+      "If under the age of 19, submit proof of successful completion of grade 12 (or equivalent)"
+    ]
+  },
+  "links": {
+    "apply": "https://infocusfilmschool.com/application-advanced-doc-step-1/"
+  }
+}
