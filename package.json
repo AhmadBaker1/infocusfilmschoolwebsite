@@ -11,6 +11,7 @@
     "db:migrate": "wrangler d1 migrations apply infocus --local",
     "db:migrate:remote": "wrangler d1 migrations apply infocus --remote",
     "admin:invite": "node scripts/invite-admin.mjs",
+    "staff:password": "node scripts/set-password.mjs",
     "deploy": "astro build && wrangler deploy"
   },
   "dependencies": {
