@@ -25,6 +25,10 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   ctx.locals.user = null;
 
   if (!PRIVATE.test(path)) return next();
+  // Prerendered pages (the 404 page for an unknown /admin URL, at build time
+  // or in dev) come through without headers, so there is no session to check
+  // and nothing private to protect. Gating them would loop through /login.
+  if (ctx.isPrerendered) return next();
 
   const env = ctx.locals.runtime?.env;
   if (!env) return next();
