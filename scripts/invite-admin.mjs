@@ -8,11 +8,11 @@
 import { spawnSync } from 'node:child_process';
 import { randomBytes, createHash, randomUUID } from 'node:crypto';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const wranglerBin = createRequire(import.meta.url).resolve('wrangler/bin/wrangler.js');
+const wranglerBin = fileURLToPath(new URL('../node_modules/wrangler/bin/wrangler.js', import.meta.url));
 
 const args = process.argv.slice(2);
 const remote = args.includes('--remote');

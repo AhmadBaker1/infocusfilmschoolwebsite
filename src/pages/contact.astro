@@ -20,7 +20,14 @@ const emails = [
 // Campus hours (Pacific). Edit here; the open/closed badge follows these.
 const hours = { days: 'Monday to Friday', open: '9:00 am', close: '5:00 pm', openH: 9, closeH: 17 };
 
-const teams = [
+interface TeamLink {
+  label: string;
+  href: string;
+  arrow?: boolean;
+  external?: boolean;
+}
+
+const teams: { title: string; text: string; links: TeamLink[] }[] = [
   {
     title: 'Admissions',
     text: 'Programs, start dates, tuition and how to apply. Talk to an advisor before you commit to anything.',
@@ -405,8 +412,9 @@ const landmarks = [
   <Footer />
 </Base>
 
-<script define:vars={{ openH: hours.openH, closeH: hours.closeH }}>
-  // Vancouver clock + open/closed badge.
+<script is:inline define:vars={{ openH: hours.openH, closeH: hours.closeH }}>
+  // Vancouver clock + open/closed badge. Inline so define:vars can pass the
+  // campus hours in.
   const timeEl = document.querySelector('[data-clock-time]');
   const statusEl = document.querySelector('[data-clock-status]');
   const clock = document.querySelector('[data-clock]');
