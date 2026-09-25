@@ -44,7 +44,7 @@ const ld = {
   location:
     ev.mode === 'online'
       ? { '@type': 'VirtualLocation', url: ev.register_url ?? url }
-      : { '@type': 'Place', name: ev.location || 'InFocus Film School', address: { '@type': 'PostalAddress', addressLocality: 'Calgary', addressRegion: 'AB', addressCountry: 'CA' } },
+      : { '@type': 'Place', name: ev.location || 'InFocus Film School', address: { '@type': 'PostalAddress', streetAddress: '554 Seymour Street', addressLocality: 'Vancouver', addressRegion: 'BC', postalCode: 'V6B 3J5', addressCountry: 'CA' } },
   organizer: { '@type': 'Organization', name: 'InFocus Film School', url: Astro.site?.toString() },
   offers: ev.register_url ? { '@type': 'Offer', url: ev.register_url, availability: 'https://schema.org/InStock' } : undefined,
 };
