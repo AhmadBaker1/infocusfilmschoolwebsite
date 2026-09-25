@@ -38,9 +38,9 @@ const apply = `/apply?program=${p.slug}`;
           <p class="hero__lede">{p.summary}</p>
           <div class="hero__actions">
             <a class="btn btn--light" href={apply} target={ext(apply) ? '_blank' : undefined} rel={ext(apply) ? 'noopener' : undefined}>
-              Apply now <span aria-hidden="true">↗</span>
+              Apply now <span class="arw arw--ext" aria-hidden="true"></span>
             </a>
-            <a class="link" href="#details">Program details <span aria-hidden="true">↓</span></a>
+            <a class="link" href="#details">Program details <span class="arw arw--d" aria-hidden="true"></span></a>
           </div>
         </div>
 
@@ -97,7 +97,7 @@ const apply = `/apply?program=${p.slug}`;
               <p set:html={renderInline(c.text)} />
               {c.link && (
                 <a class="card__link" href={mapHref(c.link.href)} target={ext(mapHref(c.link.href)) ? '_blank' : undefined} rel={ext(mapHref(c.link.href)) ? 'noopener' : undefined}>
-                  {c.link.label} <span aria-hidden="true">→</span>
+                  {c.link.label} <span class="arw arw--r" aria-hidden="true"></span>
                 </a>
               )}
             </li>
@@ -120,7 +120,7 @@ const apply = `/apply?program=${p.slug}`;
             <h2 class="h2">{s.heading}</h2>
             {s.paras.map((t) => <p set:html={renderInline(t)} />)}
             {s.link && (
-              <a class="link link--dark" href={mapHref(s.link.href)}>{s.link.label} <span aria-hidden="true">→</span></a>
+              <a class="link link--dark" href={mapHref(s.link.href)}>{s.link.label} <span class="arw arw--r" aria-hidden="true"></span></a>
             )}
           </div>
         </div>
@@ -155,7 +155,7 @@ const apply = `/apply?program=${p.slug}`;
             </ol>
             {p.links.curriculum && (
               <a class="link" href={p.links.curriculum} target="_blank" rel="noopener">
-                Full curriculum breakdown <span aria-hidden="true">↗</span>
+                Full curriculum breakdown <span class="arw arw--ext" aria-hidden="true"></span>
               </a>
             )}
           </div>
@@ -216,7 +216,7 @@ const apply = `/apply?program=${p.slug}`;
 
             {p.links.studentWork && (
               <a class="link" href={p.links.studentWork} target="_blank" rel="noopener">
-                Watch student work <span aria-hidden="true">↗</span>
+                Watch student work <span class="arw arw--ext" aria-hidden="true"></span>
               </a>
             )}
           </div>
@@ -235,7 +235,7 @@ const apply = `/apply?program=${p.slug}`;
                 <span class="pathway__tag">Degree pathway</span>
                 <span class="pathway__title">{p.pathway.heading}</span>
                 <span class="pathway__text">{p.pathway.text}</span>
-                <span class="pathway__cta">{p.pathway.link.label} <span aria-hidden="true">→</span></span>
+                <span class="pathway__cta">{p.pathway.link.label} <span class="arw arw--r" aria-hidden="true"></span></span>
               </span>
             </a>
           </div>
@@ -253,10 +253,10 @@ const apply = `/apply?program=${p.slug}`;
               <h2 id="costs-title" class="h2">{p.costs.heading}</h2>
               <p class="costs__text" set:html={renderInline(p.costs.text)} />
               <div class="costs__links">
-                <a class="link link--dark" href="/admissions/finances">Finances + funding <span aria-hidden="true">→</span></a>
+                <a class="link link--dark" href="/admissions/finances">Finances + funding <span class="arw arw--r" aria-hidden="true"></span></a>
                 {p.costs.breakdown && (
                   <a class="link link--dark" href={p.costs.breakdown} target="_blank" rel="noopener">
-                    Cost breakdown <span aria-hidden="true">↗</span>
+                    Cost breakdown <span class="arw arw--ext" aria-hidden="true"></span>
                   </a>
                 )}
               </div>
@@ -338,9 +338,9 @@ const apply = `/apply?program=${p.slug}`;
             <p>Talk to an admissions advisor about start dates, funding and your portfolio.</p>
             <div class="side__actions">
               <a class="btn btn--light" href={apply} target={ext(apply) ? '_blank' : undefined} rel={ext(apply) ? 'noopener' : undefined}>
-                Apply now <span aria-hidden="true">↗</span>
+                Apply now <span class="arw arw--ext" aria-hidden="true"></span>
               </a>
-              <a class="link" href="/contact">Request info <span aria-hidden="true">→</span></a>
+              <a class="link" href="/contact">Request info <span class="arw arw--r" aria-hidden="true"></span></a>
             </div>
           </div>
         </aside>
@@ -362,7 +362,7 @@ const apply = `/apply?program=${p.slug}`;
                       {o.facts.find((f) => f.label === 'Program length')?.value ?? ''}
                       {o.facts.find((f) => f.label === 'Credential') && ` · ${o.facts.find((f) => f.label === 'Credential')!.value}`}
                     </span>
-                    <span class="others__arrow" aria-hidden="true">→</span>
+                    <span class="arw arw--r others__arrow" aria-hidden="true"></span>
                   </a>
                 </li>
               ))}

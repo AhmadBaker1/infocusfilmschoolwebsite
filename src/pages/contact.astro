@@ -167,7 +167,7 @@ const landmarks = [
 
           <div class="open__actions">
             <a class="btn btn--light" href={`https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`} target="_blank" rel="noopener">
-              Get directions <span aria-hidden="true">↗</span>
+              Get directions <span class="arw arw--ext" aria-hidden="true"></span>
             </a>
             <a class="open__link" href={`https://maps.apple.com/?daddr=${mapsQuery}`} target="_blank" rel="noopener">Apple Maps</a>
             <button class="open__link" type="button" data-copy={`${address.street}, ${address.city}`}>Copy address</button>
@@ -274,7 +274,7 @@ const landmarks = [
           </svg>
           <figcaption class="map__cap">
             <span>Illustrated. Hover a <strong>T</strong> for SkyTrain stations.</span>
-            <a href="#getting-here">Real map + directions <span aria-hidden="true">↓</span></a>
+            <a href="#getting-here">Real map + directions <span class="arw arw--d" aria-hidden="true"></span></a>
           </figcaption>
         </figure>
       </div>
@@ -342,7 +342,7 @@ const landmarks = [
                   <li>
                     <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined} class:list={{ 'is-arrow': l.arrow }}>
                       {l.label}
-                      {l.arrow && <span aria-hidden="true">{l.external ? ' ↗' : ' →'}</span>}
+                      {l.arrow && <span class:list={['arw', l.external ? 'arw--ext' : 'arw--r']} aria-hidden="true"></span>}
                     </a>
                   </li>
                 ))}
@@ -385,7 +385,7 @@ const landmarks = [
           </div>
           <div class="gmap__bar">
             <span>{address.street}, {address.city}</span>
-            <a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noopener">Open in Google Maps <span aria-hidden="true">↗</span></a>
+            <a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noopener">Open in Google Maps <span class="arw arw--ext" aria-hidden="true"></span></a>
           </div>
         </div>
       </div>
@@ -399,10 +399,10 @@ const landmarks = [
           <h2 id="social-title" class="social__title">See what students are making this week.</h2>
         </div>
         <ul class="social__list">
-          <li><a href="https://www.instagram.com/infocusfilmschool/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://www.youtube.com/@infocusfilmschooltv" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://www.facebook.com/infocusfilmschool" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a></li>
-          <li><a href="https://twitter.com/iffilmschool" target="_blank" rel="noopener">X <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://www.instagram.com/infocusfilmschool/" target="_blank" rel="noopener">Instagram <span class="arw arw--ext" aria-hidden="true"></span></a></li>
+          <li><a href="https://www.youtube.com/@infocusfilmschooltv" target="_blank" rel="noopener">YouTube <span class="arw arw--ext" aria-hidden="true"></span></a></li>
+          <li><a href="https://www.facebook.com/infocusfilmschool" target="_blank" rel="noopener">Facebook <span class="arw arw--ext" aria-hidden="true"></span></a></li>
+          <li><a href="https://twitter.com/iffilmschool" target="_blank" rel="noopener">X <span class="arw arw--ext" aria-hidden="true"></span></a></li>
         </ul>
       </div>
     </section>

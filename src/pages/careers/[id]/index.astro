@@ -56,7 +56,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
         </dl>
         <div class="top__actions">
           {open ? (
-            <a class="btn btn--light" href={`/careers/${job.id}/apply`}>Apply for this role <span aria-hidden="true">→</span></a>
+            <a class="btn btn--light" href={`/careers/${job.id}/apply`}>Apply for this role <span class="arw arw--r" aria-hidden="true"></span></a>
           ) : (
             <span class="closed-tag">Applications closed</span>
           )}
@@ -79,7 +79,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
             <div><dt>Pay</dt><dd class="card__pay">{job.pay}</dd></div>
           </dl>
           {open ? (
-            <a class="btn btn--dark btn--block" href={`/careers/${job.id}/apply`}>Apply now <span aria-hidden="true">→</span></a>
+            <a class="btn btn--dark btn--block" href={`/careers/${job.id}/apply`}>Apply now <span class="arw arw--r" aria-hidden="true"></span></a>
           ) : (
             <p class="card__closed">This role is no longer accepting applications.</p>
           )}
@@ -103,7 +103,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
                 <li><span>02</span>Our team reviews applications on a rolling basis.</li>
                 <li><span>03</span>Shortlisted candidates are contacted for an interview.</li>
               </ol>
-              <a class="btn btn--light apply__btn" href={`/careers/${job.id}/apply`}>Start your application <span aria-hidden="true">→</span></a>
+              <a class="btn btn--light apply__btn" href={`/careers/${job.id}/apply`}>Start your application <span class="arw arw--r" aria-hidden="true"></span></a>
             </div>
           </div>
         </section>
@@ -121,7 +121,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
                 file for future roles.
               </p>
               <div class="apply__links">
-                <a class="btn btn--light" href="/careers">See open roles <span aria-hidden="true">→</span></a>
+                <a class="btn btn--light" href="/careers">See open roles <span class="arw arw--r" aria-hidden="true"></span></a>
                 <a class="apply__general" href="/careers/apply">Send a general application</a>
               </div>
             </div>
@@ -137,7 +137,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
           <div class="wrap">
             <div class="more__head">
               <h2 class="more__title">Other open roles</h2>
-              <a class="more__all" href="/careers">All roles <span aria-hidden="true">→</span></a>
+              <a class="more__all" href="/careers">All roles <span class="arw arw--r" aria-hidden="true"></span></a>
             </div>
             <ul class="more__list">
               {others.map((o) => (
@@ -160,7 +160,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=60');
       open && (
         <a class="bar" href={`/careers/${job.id}/apply`} data-bar>
           <span>{job.title}</span>
-          <span class="bar__cta">Apply →</span>
+          <span class="bar__cta">Apply <span class="arw arw--r" aria-hidden="true"></span></span>
         </a>
       )
     }

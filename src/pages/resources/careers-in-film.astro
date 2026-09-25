@@ -137,7 +137,7 @@ const studios = [
                   <a class="union" href={u.url} target="_blank" rel="noopener">
                     <span class="union__name">{u.name}</span>
                     <span class="union__who">{u.who}</span>
-                    <span class="union__cta">Visit site <span aria-hidden="true">↗</span></span>
+                    <span class="union__cta">Visit site <span class="arw arw--ext" aria-hidden="true"></span></span>
                   </a>
                 ) : (
                   <div class="union">
@@ -146,7 +146,7 @@ const studios = [
                   </div>
                 )}
                 {u.join && (
-                  <a class="union__join" href={u.join} target="_blank" rel="noopener">How to join / permittee info <span aria-hidden="true">↗</span></a>
+                  <a class="union__join" href={u.join} target="_blank" rel="noopener">How to join / permittee info <span class="arw arw--ext" aria-hidden="true"></span></a>
                 )}
               </li>
             ))}
@@ -166,7 +166,7 @@ const studios = [
                   <a href={b.url} target="_blank" rel="noopener">
                     <span class="boards__name">{b.name}</span>
                     <span class="boards__text">{b.text}</span>
-                    <span class="boards__arrow" aria-hidden="true">↗</span>
+                    <span class="arw arw--ext boards__arrow" aria-hidden="true"></span>
                   </a>
                 </li>
               ) : (

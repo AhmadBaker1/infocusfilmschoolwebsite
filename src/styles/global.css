@@ -113,6 +113,71 @@ h4 {
   outline-offset: 3px;
 }
 
+/* Link arrows. A drawn line arrow in the link's own colour, instead of the
+   typed → and ↗ characters: <span class="arw arw--r" aria-hidden="true"></span>.
+   Variants: --r right, --ext external (up-right), --l left, --d down, --u up. */
+.arw {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-left: 0.15em;
+  vertical-align: -0.1em;
+  background-color: currentColor;
+  -webkit-mask: var(--arw) center / contain no-repeat;
+  mask: var(--arw) center / contain no-repeat;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h16M13 5l7 7-7 7'/%3E%3C/svg%3E");
+}
+
+.arw--ext {
+  --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 18L18 6M8 6h10v10'/%3E%3C/svg%3E");
+}
+
+.arw--l {
+  margin-left: 0;
+  margin-right: 0.15em;
+  --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 12H4M11 5l-7 7 7 7'/%3E%3C/svg%3E");
+}
+
+.arw--d {
+  --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 4v16M5 13l7 7 7-7'/%3E%3C/svg%3E");
+}
+
+.arw--u {
+  --arw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20V4M5 11l7-7 7 7'/%3E%3C/svg%3E");
+}
+
+a:hover .arw--r,
+button:hover .arw--r {
+  transform: translateX(4px);
+}
+
+a:hover .arw--ext,
+button:hover .arw--ext {
+  transform: translate(3px, -3px);
+}
+
+a:hover .arw--l {
+  transform: translateX(-4px);
+}
+
+a:hover .arw--d {
+  transform: translateY(3px);
+}
+
+/* Text links that carry an arrow get an underline; buttons and links that
+   already draw their own rule (class names with btn/link/bar) do not. */
+a:has(> .arw):not([class*='btn']):not([class*='link']):not([class*='bar']):not([class*='card']):not([class*='job']):not([class*='tile']) {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+a:has(> .arw):hover {
+  text-decoration-color: currentColor;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -80,7 +80,7 @@ const total = data.instructors.length;
                     {list.length} {list.length === 1 ? 'instructor' : 'instructors'}
                   </h2>
                 </div>
-                <a class="prog__link" href={`/programs/${p.slug}`}>About the program <span aria-hidden="true">→</span></a>
+                <a class="prog__link" href={`/programs/${p.slug}`}>About the program <span class="arw arw--r" aria-hidden="true"></span></a>
               </header>
 
               <ul class="grid">
@@ -102,7 +102,7 @@ const total = data.instructors.length;
                           <span class="card__name">{x.name}</span>
                           {role && <span class="card__role">{role}</span>}
                           {x === lead && !x.former && x.bio[0] && <span class="card__excerpt">{x.bio[0]}</span>}
-                          <span class="card__more">Read bio <span aria-hidden="true">→</span></span>
+                          <span class="card__more">Read bio <span class="arw arw--r" aria-hidden="true"></span></span>
                         </span>
                       </button>
                     </li>

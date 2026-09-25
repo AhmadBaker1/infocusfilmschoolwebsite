@@ -46,7 +46,7 @@ const { post, featured = false, eager = false } = Astro.props;
       <time datetime={post.dateIso}>{post.dateText}</time>
       <span>{post.minutes} min read</span>
     </span>
-    {featured && <span class="post__cta">Read the article <span aria-hidden="true">→</span></span>}
+    {featured && <span class="post__cta">Read the article <span class="arw arw--r" aria-hidden="true"></span></span>}
   </span>
 </a>
 

@@ -176,7 +176,7 @@ const community = [
                       <span class="fund__tag">{f.tag}</span>
                       <span class="fund__name">{f.name}</span>
                       <span class="fund__text">{f.text}</span>
-                      <span class="fund__arrow" aria-hidden="true">{f.external ? '↗' : '↑'}</span>
+                      <span class:list={['arw', f.external ? 'arw--ext' : 'arw--u', 'fund__arrow']} aria-hidden="true"></span>
                     </a>
                   </li>
                 ))}
@@ -193,7 +193,7 @@ const community = [
                 {community.map((c) => (
                   <li>
                     <a href={c.url} target="_blank" rel="noopener">
-                      <span class="community__name">{c.name} <span aria-hidden="true">↗</span></span>
+                      <span class="community__name">{c.name} <span class="arw arw--ext" aria-hidden="true"></span></span>
                       <span class="community__text">{c.text}</span>
                     </a>
                   </li>

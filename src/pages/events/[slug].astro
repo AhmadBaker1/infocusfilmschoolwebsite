@@ -90,7 +90,7 @@ const ldJson = JSON.stringify(ld).replace(/</g, '\\u003c');
         </p>
         <div class="top__actions">
           {ev.register_url && !ended && (
-            <a class="btn btn--red" href={ev.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+            <a class="btn btn--red" href={ev.register_url} target="_blank" rel="noopener">Register <span class="arw arw--ext" aria-hidden="true"></span></a>
           )}
           {!ended && (
             <a class="cal" href={`/events/${ev.slug}.ics`} download>
@@ -118,11 +118,11 @@ const ldJson = JSON.stringify(ld).replace(/</g, '\\u003c');
             <div><dt>Format</dt><dd>{MODE_LABELS[ev.mode]}</dd></div>
           </dl>
           {ev.register_url && !ended && (
-            <a class="btn btn--dark btn--block" href={ev.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+            <a class="btn btn--dark btn--block" href={ev.register_url} target="_blank" rel="noopener">Register <span class="arw arw--ext" aria-hidden="true"></span></a>
           )}
           {!ended && <a class="facts__cal" href={`/events/${ev.slug}.ics`} download>Add to calendar (.ics)</a>}
           {ended && <p class="facts__note">This event has already taken place.</p>}
-          <a class="facts__all" href="/events">All events <span aria-hidden="true">→</span></a>
+          <a class="facts__all" href="/events">All events <span class="arw arw--r" aria-hidden="true"></span></a>
         </aside>
       </div>
     </section>
@@ -133,7 +133,7 @@ const ldJson = JSON.stringify(ld).replace(/</g, '\\u003c');
         <div class="wrap">
           <div class="more__head">
             <h2 class="more__title">More events</h2>
-            <a class="more__all" href="/events">All events <span aria-hidden="true">→</span></a>
+            <a class="more__all" href="/events">All events <span class="arw arw--r" aria-hidden="true"></span></a>
           </div>
           <ul class="more__list">
             {more.map((o) => (

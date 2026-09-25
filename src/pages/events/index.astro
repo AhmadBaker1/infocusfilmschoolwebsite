@@ -72,11 +72,11 @@ const INSTAGRAM = 'https://www.instagram.com/infocusfilmschool/';
                 </p>
                 <div class="feat__actions">
                   {featured.register_url ? (
-                    <a class="btn btn--red" href={featured.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+                    <a class="btn btn--red" href={featured.register_url} target="_blank" rel="noopener">Register <span class="arw arw--ext" aria-hidden="true"></span></a>
                   ) : (
-                    <a class="btn btn--red" href={`/events/${featured.slug}`}>Details <span aria-hidden="true">→</span></a>
+                    <a class="btn btn--red" href={`/events/${featured.slug}`}>Details <span class="arw arw--r" aria-hidden="true"></span></a>
                   )}
-                  {featured.register_url && <a class="feat__link" href={`/events/${featured.slug}`}>Details <span aria-hidden="true">→</span></a>}
+                  {featured.register_url && <a class="feat__link" href={`/events/${featured.slug}`}>Details <span class="arw arw--r" aria-hidden="true"></span></a>}
                 </div>
               </div>
             </article>

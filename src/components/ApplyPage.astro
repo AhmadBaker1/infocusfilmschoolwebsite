@@ -49,7 +49,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
           <a class="panel__logo" href="/" aria-label="InFocus Film School home">
             <img src="/images/logo-on-dark.png" alt="InFocus Film School" width="1090" height="390" />
           </a>
-          <a class="panel__back" href={back}><span aria-hidden="true">←</span> {job ? 'Back to role' : 'Back to careers'}</a>
+          <a class="panel__back" href={back}><span class="arw arw--l" aria-hidden="true"></span> {job ? 'Back to role' : 'Back to careers'}</a>
         </div>
 
         <div class="role">
@@ -97,7 +97,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
               </div>
             )
           }
-          {job && <a class="role__full" href={back}>Read the full job description <span aria-hidden="true">→</span></a>}
+          {job && <a class="role__full" href={back}>Read the full job description <span class="arw arw--r" aria-hidden="true"></span></a>}
         </div>
 
         <p class="panel__foot">
@@ -266,7 +266,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
             <div class="submit">
               <p class="submit__status" data-status role="status" aria-live="polite"></p>
               <button type="submit" class="submit__btn" data-submit>
-                Submit application <span aria-hidden="true">→</span>
+                Submit application <span class="arw arw--r" aria-hidden="true"></span>
               </button>
             </div>
 
@@ -293,7 +293,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
             rolling basis, and we’ll be in touch if there’s a match.
           </p>
           <div class="done__actions">
-            <a class="submit__btn" href="/careers">See other roles <span aria-hidden="true">→</span></a>
+            <a class="submit__btn" href="/careers">See other roles <span class="arw arw--r" aria-hidden="true"></span></a>
             <a class="done__link" href="/">Back to home</a>
           </div>
         </div>

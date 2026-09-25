@@ -318,7 +318,7 @@ const regionName = Object.fromEntries(regions) as Record<Region, string>;
                   </span>
                   <span class="fund__text">{f.text}</span>
                   {f.status && <span class="fund__status">{f.status}</span>}
-                  <span class="fund__cta">{f.url ? <>Visit program <span aria-hidden="true">↗</span></> : 'Link coming soon'}</span>
+                  <span class="fund__cta">{f.url ? <>Visit program <span class="arw arw--ext" aria-hidden="true"></span></> : 'Link coming soon'}</span>
                 </Tag>
               </li>
             );
@@ -347,9 +347,9 @@ const regionName = Object.fromEntries(regions) as Record<Region, string>;
           </p>
         </div>
         <ul class="tuition__links">
-          <li><a href="/admissions/finances">Finances <span aria-hidden="true">→</span></a></li>
-          <li><a href="/admissions/lgbtq2sai-students#diversity-in-film">Diversity In Film Initiative <span aria-hidden="true">→</span></a></li>
-          <li><a href="/admissions/indigenous-students">Indigenous student funding <span aria-hidden="true">→</span></a></li>
+          <li><a href="/admissions/finances">Finances <span class="arw arw--r" aria-hidden="true"></span></a></li>
+          <li><a href="/admissions/lgbtq2sai-students#diversity-in-film">Diversity In Film Initiative <span class="arw arw--r" aria-hidden="true"></span></a></li>
+          <li><a href="/admissions/indigenous-students">Indigenous student funding <span class="arw arw--r" aria-hidden="true"></span></a></li>
         </ul>
       </div>
     </section>

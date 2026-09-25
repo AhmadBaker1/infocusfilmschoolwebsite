@@ -195,7 +195,7 @@ const employment: { title: string; facts: [string, string][] }[] = [
                 {homestays.map((h) => (
                   <li>
                     {h.url ? (
-                      <a href={h.url} target="_blank" rel="noopener">{h.name} <span aria-hidden="true">↗</span></a>
+                      <a href={h.url} target="_blank" rel="noopener">{h.name} <span class="arw arw--ext" aria-hidden="true"></span></a>
                     ) : (
                       <span>{h.name}</span>
                     )}
@@ -210,7 +210,7 @@ const employment: { title: string; facts: [string, string][] }[] = [
               <ul class="chips">
                 {listings.map((l) => (
                   <li>
-                    <a href={l.url} target="_blank" rel="noopener">{l.name} <span aria-hidden="true">↗</span></a>
+                    <a href={l.url} target="_blank" rel="noopener">{l.name} <span class="arw arw--ext" aria-hidden="true"></span></a>
                   </li>
                 ))}
               </ul>
