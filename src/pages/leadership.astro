@@ -13,7 +13,8 @@ interface Leader {
   name: string;
   credentials?: string;
   role: string;
-  image: string;
+  /* null until a portrait lands in /public/images/leadership; initials show meanwhile. */
+  image: string | null;
   focus: string;
   quote?: string;
   bio: string[];
@@ -22,6 +23,7 @@ interface Leader {
 const leaders = data.leaders as Leader[];
 const [president, ...team] = leaders;
 const slate = (i: number) => String(i + 1).padStart(2, '0');
+const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2);
 ---
 
 <Base
@@ -63,11 +65,15 @@ const slate = (i: number) => String(i + 1).padStart(2, '0');
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>
-          <ol class="strip__list" data-strip-list>
+          <ol class="strip__list" data-strip-list style={`--n:${leaders.length}`}>
             {leaders.map((l, i) => (
               <li>
                 <a class="strip__frame" href={`#${l.slug}`}>
-                  <img src={l.image} alt="" width="1000" height="1250" style={`object-position:${l.focus}`} loading="eager" decoding="async" />
+                  {l.image ? (
+                    <img src={l.image} alt="" width="1000" height="1250" style={`object-position:${l.focus}`} loading="eager" decoding="async" />
+                  ) : (
+                    <span class="initials initials--strip" aria-hidden="true">{initials(l.name)}</span>
+                  )}
                   <span class="strip__num" aria-hidden="true">{slate(i)}</span>
                   <span class="strip__cap">
                     <span class="strip__name">{l.name}</span>
@@ -133,7 +139,11 @@ const slate = (i: number) => String(i + 1).padStart(2, '0');
               <span class="corner corner--tr" aria-hidden="true"></span>
               <span class="corner corner--bl" aria-hidden="true"></span>
               <span class="corner corner--br" aria-hidden="true"></span>
-              <img src={l.image} alt={l.name} width="1000" height="1250" style={`object-position:${l.focus}`} loading="lazy" decoding="async" />
+              {l.image ? (
+                <img src={l.image} alt={l.name} width="1000" height="1250" style={`object-position:${l.focus}`} loading="lazy" decoding="async" />
+              ) : (
+                <span class="initials" aria-hidden="true">{initials(l.name)}</span>
+              )}
               <figcaption class="member__slate" aria-hidden="true">
                 <span class="slate__num">{slate(i + 1)}</span>
               </figcaption>
@@ -232,6 +242,26 @@ const slate = (i: number) => String(i + 1).padStart(2, '0');
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.14em;
+  }
+
+  /* Placeholder until a portrait is supplied. */
+  .initials {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(60% 80% at 100% 0%, rgba(189, 47, 47, 0.45), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.6), transparent 70%),
+      var(--charcoal);
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-size: clamp(64px, 9vw, 140px);
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .initials--strip {
+    font-size: clamp(28px, 3vw, 48px);
   }
 
   /* ---- Opening ---- */
@@ -350,7 +380,7 @@ const slate = (i: number) => String(i + 1).padStart(2, '0');
 
   .strip__list {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr));
     gap: 8px;
     margin: 0;
     padding: 14px 16px 12px;
@@ -623,6 +653,7 @@ const slate = (i: number) => String(i + 1).padStart(2, '0');
   }
 
   .member__figure {
+    width: 100%;
     max-width: 460px;
     box-shadow: 0 30px 60px -36px rgba(0, 0, 0, 0.45);
   }
