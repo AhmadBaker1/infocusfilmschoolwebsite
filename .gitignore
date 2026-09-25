@@ -17,3 +17,6 @@ source-photos/
 .dev.vars
 .wrangler/
 worker-configuration.d.ts
+
+# Production secrets kept locally (never commit)
+.secrets/
