@@ -1,24 +1,28 @@
 ---
 // Blog articles live at the site root (/how-to-use-lenses-in-film/) to match
-// the old WordPress URLs. Static pages always win over this route.
-import { render } from 'astro:content';
+// the old WordPress URLs. Static pages always win over this route. Articles
+// come from D1 (published in /admin/blog); an unknown or unpublished slug
+// returns 404, which shows the site's 404 page.
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import PageHero from '../components/PageHero.astro';
 import PostCard from '../components/PostCard.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
-import { getPosts, toCard, type Post } from '../lib/blog';
+import { db } from '../lib/server/db';
+import { coverUrl, getBySlug, headings, listPublished, toCard } from '../lib/server/posts';
 
-export async function getStaticPaths() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
-}
+export const prerender = false;
 
-const { post } = Astro.props as { post: Post };
-const { Content, headings } = await render(post);
-const { title, description, author, cover } = post.data;
+const d1 = db(Astro.locals);
+const post = await getBySlug(d1, Astro.params.slug ?? '', { publishedOnly: true });
+if (!post) return new Response(null, { status: 404 });
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
+
+const { title, excerpt: description, author } = post;
+const cover = coverUrl(post) ?? undefined;
 const card = toCard(post);
+const { html: body, headings: found } = headings(post.body_html);
 
 // Headings are all-caps in the source; the contents list reads better in
 // title case.
@@ -29,16 +33,16 @@ const titleCase = (t: string) =>
     .split(/(\s+)/)
     .map((w, i) => (i > 0 && SMALL.has(w) ? w : w.replace(/\p{L}/u, (c) => c.toUpperCase())))
     .join('');
-const toc = headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: titleCase(h.text) }));
+const toc = found.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: titleCase(h.text) }));
 
 // Up to three others, same category first, then newest.
-const others = (await getPosts())
+const others = (await listPublished(d1))
   .filter((p) => p.id !== post.id)
-  .sort((a, b) => Number(b.data.category === post.data.category) - Number(a.data.category === post.data.category))
+  .sort((a, b) => Number(b.category === post.category) - Number(a.category === post.category))
   .slice(0, 3)
   .map(toCard);
 
-const url = new URL(`/${post.id}/`, Astro.site).toString();
+const url = new URL(`/${post.slug}/`, Astro.site).toString();
 const share = [
   { label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
   { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
@@ -58,16 +62,16 @@ const share = [
       eyebrow={card.categoryLabel}
       crumbs={[
         { label: 'Home', href: '/' },
-        post.data.category === 'success'
+        post.category === 'success'
           ? { label: 'Student Success', href: '/student-success' }
           : { label: 'Blog', href: '/resources/blog' },
-        { label: post.data.category === 'success' ? 'Story' : card.categoryLabel },
+        { label: post.category === 'success' ? 'Story' : card.categoryLabel },
       ]}
     >
       <p>{description}</p>
       <p class="meta">
         {author && <span>By {author}</span>}
-        <time datetime={card.date.toISOString().slice(0, 10)}>{card.dateText}</time>
+        <time datetime={card.dateIso}>{card.dateText}</time>
         <span>{card.minutes} min read</span>
       </p>
     </PageHero>
@@ -104,7 +108,16 @@ const share = [
 
         <div class="read__main">
           <article class="prose" data-prose>
-            <Content />
+            {
+              /* Covers uploaded in the staff area are real photos, so they open
+                 the article. The legacy title-card covers are share images only. */
+              post.cover_key && (
+                <figure class="cover">
+                  <img src={cover} alt={post.cover_alt} loading="eager" decoding="async" />
+                </figure>
+              )
+            }
+            <Fragment set:html={body} />
           </article>
 
           <footer class="end">
@@ -214,6 +227,7 @@ const share = [
 
   /* The opening paragraph reads as a standfirst. */
   .prose > :global(p:first-child),
+  .prose > :global(.cover + p),
   .prose > :global(.embed + p) {
     font-size: clamp(18px, 1.4vw, 22px);
     line-height: 1.65;
@@ -293,6 +307,10 @@ const share = [
   .prose > :global(.embed) {
     max-width: 1000px;
     margin-block: clamp(28px, 3.4vw, 48px);
+  }
+
+  .prose > :global(.cover) {
+    margin-top: 0;
   }
 
   .prose :global(figure img) {

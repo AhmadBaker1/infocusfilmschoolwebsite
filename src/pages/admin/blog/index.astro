@@ -1,0 +1,128 @@
+---
+// Blog articles for marketing: published / drafts, with a search box and the
+// quick actions that do not need the full editor.
+import Admin from '../../../layouts/Admin.astro';
+import { db } from '../../../lib/server/db';
+import { CATEGORY_LABELS, TABS, listAdmin, tabCounts, type AdminTab } from '../../../lib/server/posts';
+import { fmtDate, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const q = (Astro.url.searchParams.get('q') ?? '').trim().slice(0, 100);
+const tabParam = Astro.url.searchParams.get('tab') ?? '';
+const tab: AdminTab = (TABS as string[]).includes(tabParam) ? (tabParam as AdminTab) : 'published';
+
+const [posts, counts] = await Promise.all([listAdmin(d1, { tab, q }), tabCounts(d1, q)]);
+const nowIso = new Date().toISOString();
+
+const TAB_LABELS: Record<AdminTab, string> = { published: 'Published', drafts: 'Drafts' };
+const tabHref = (t: AdminTab) => `/admin/blog?tab=${t}${q ? `&q=${encodeURIComponent(q)}` : ''}`;
+const here = tabHref(tab);
+const catBadge = { howto: 'a-badge--blue', industry: '', success: 'a-badge--ok' };
+const EMPTY: Record<AdminTab, string> = {
+  published: 'Articles on the public blog show up here.',
+  drafts: 'Articles that are saved but not on the public site yet.',
+};
+---
+
+<Admin title="Blog" section="blog" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Blog' }]}>
+  <div slot="actions">
+    <a class="a-btn" href="/resources/blog" target="_blank" rel="noopener">View blog</a>
+    <a class="a-btn a-btn--primary" href="/admin/blog/new">+ New article</a>
+  </div>
+
+  <ul class="a-tabs">
+    {TABS.map((t) => (
+      <li>
+        <a href={tabHref(t)} aria-current={t === tab ? 'page' : undefined}>
+          {TAB_LABELS[t]} <span class="count">{counts[t]}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <form class="a-toolbar" method="get" action="/admin/blog" role="search">
+    <input type="hidden" name="tab" value={tab} />
+    <input class="a-input" type="search" name="q" value={q} placeholder="Search title, address or author" aria-label="Search articles" />
+    <button class="a-btn" type="submit">Search</button>
+    {q && <a class="a-btn a-btn--ghost" href={`/admin/blog?tab=${tab}`}>Clear</a>}
+  </form>
+
+  {posts.length === 0 ? (
+    <div class="a-empty">
+      <strong>{q ? 'No matches' : `No ${tab === 'drafts' ? 'drafts' : 'published articles'}`}</strong>
+      {q ? `Nothing in ${TAB_LABELS[tab].toLowerCase()} matches "${q}".` : EMPTY[tab]}
+      <div style="margin-top:16px">
+        <a class="a-btn a-btn--primary" href="/admin/blog/new">+ New article</a>
+      </div>
+    </div>
+  ) : (
+    <section class="a-card a-card--flush">
+      <div class="a-table-wrap">
+        <table class="a-table">
+          <thead>
+            <tr>
+              <th>Article</th>
+              <th>Category</th>
+              <th>Author</th>
+              <th>Published</th>
+              <th>Updated</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post) => (
+              <tr>
+                <td class="primary">
+                  <a href={`/admin/blog/${post.id}`}>{post.title}</a>
+                  <span class="sub">/{post.slug}/</span>
+                </td>
+                <td><span class:list={['a-badge', catBadge[post.category]]}>{CATEGORY_LABELS[post.category]}</span></td>
+                <td>{post.author || <span class="a-muted">No author</span>}</td>
+                <td class="nowrap">
+                  {post.published_at ? fmtDate(post.published_at) : <span class="a-muted">Not yet</span>}
+                  {post.status === 'published' && post.published_at && post.published_at > nowIso && (
+                    <span class="sub"><span class="a-badge a-badge--warn">Scheduled</span></span>
+                  )}
+                </td>
+                <td class="nowrap">{timeAgo(post.updated_at)}</td>
+                <td class="actions">
+                  <a class="a-btn a-btn--sm" href={`/admin/blog/${post.id}`}>Edit</a>
+                  {post.status === 'published' ? (
+                    <form class="a-inline-form" method="post" action={`/api/admin/blog/${post.id}`}>
+                      <input type="hidden" name="_action" value="unpublish" />
+                      <input type="hidden" name="next" value={here} />
+                      <button class="a-btn a-btn--sm" type="submit">Unpublish</button>
+                    </form>
+                  ) : (
+                    <form class="a-inline-form" method="post" action={`/api/admin/blog/${post.id}`}>
+                      <input type="hidden" name="_action" value="publish" />
+                      <input type="hidden" name="next" value={here} />
+                      <button class="a-btn a-btn--sm" type="submit">Publish</button>
+                    </form>
+                  )}
+                  <form class="a-inline-form" method="post" action={`/api/admin/blog/${post.id}`}>
+                    <input type="hidden" name="_action" value="duplicate" />
+                    <button class="a-btn a-btn--sm a-btn--ghost" type="submit">Duplicate</button>
+                  </form>
+                  <form class="a-inline-form" method="post" action={`/api/admin/blog/${post.id}`} data-confirm={`Delete "${post.title}"? This cannot be undone.`}>
+                    <input type="hidden" name="_action" value="delete" />
+                    <input type="hidden" name="next" value={here} />
+                    <button class="a-btn a-btn--sm a-btn--ghost a-btn--danger" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )}
+</Admin>
+
+<style>
+  .a-table .actions .a-inline-form {
+    margin-left: 6px;
+  }
+</style>

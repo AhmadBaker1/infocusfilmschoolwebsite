@@ -5,10 +5,16 @@ import PageHero from '../components/PageHero.astro';
 import PostCard from '../components/PostCard.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
-import { getPosts, toCard } from '../lib/blog';
+import { db } from '../lib/server/db';
+import { listPublished, toCard } from '../lib/server/posts';
 
-const stories = (await getPosts()).filter((p) => p.data.category === 'success').map(toCard);
+// Stories are blog articles in the Student Success category, published from
+// /admin/blog, so this page renders on request with a short public cache.
+export const prerender = false;
+
+const stories = (await listPublished(db(Astro.locals), { category: 'success' })).map(toCard);
 const [featured, ...rest] = stories;
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
 
 // Names for the rolling credits band.
 const alumni = [

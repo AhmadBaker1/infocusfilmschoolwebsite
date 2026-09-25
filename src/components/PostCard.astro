@@ -1,6 +1,6 @@
 ---
 // Blog post card, shared by the blog index and the article footer.
-import type { PostCard } from '../lib/blog';
+import type { PostCard } from '../lib/server/posts';
 
 interface Props {
   post: PostCard;
@@ -43,7 +43,7 @@ const { post, featured = false, eager = false } = Astro.props;
     <span class="post__text">{post.description}</span>
     <span class="post__meta">
       {post.author && <span>{post.author}</span>}
-      <time datetime={post.date.toISOString().slice(0, 10)}>{post.dateText}</time>
+      <time datetime={post.dateIso}>{post.dateText}</time>
       <span>{post.minutes} min read</span>
     </span>
     {featured && <span class="post__cta">Read the article <span aria-hidden="true">→</span></span>}

@@ -1,10 +1,8 @@
 ---
 // Testimonial reel. The active voice's card stretches open while the others
 // squeeze to slivers, and its quote takes over the copy column.
-// TODO: Nada's photo is still to come — set `img` (and a focal `pos`) once
-// it lands in /public/images. Until then a branded panel with initials
-// stands in. Monika's and Dmetri's quotes are drawn from their bios; Nada's
-// is a placeholder.
+// Portraits are the 4:5 crops in /public/images/leadership (shared with the
+// Leadership page). Quotes are drawn from each person's bio.
 const voices = [
   {
     name: 'Dr. Monika Chhabra Gupta',
@@ -25,8 +23,8 @@ const voices = [
   {
     name: 'Nada Jankowski',
     role: 'Campus Director',
-    img: null,
-    pos: '50% 30%',
+    img: '/images/leadership/nada-jankowski.jpg',
+    pos: '50% 25%',
     quote:
       'We lead the campus with precision and purpose: operational excellence in service of student success, and a real appreciation for the art our students are here to make.',
   },

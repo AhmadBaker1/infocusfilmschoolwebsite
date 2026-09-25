@@ -1,0 +1,53 @@
+---
+// Edit one article. Duplicate and delete live in the header; everything else
+// is the shared form.
+import Admin from '../../../layouts/Admin.astro';
+import PostForm from '../../../components/admin/PostForm.astro';
+import { db } from '../../../lib/server/db';
+import { CATEGORY_LABELS, getById } from '../../../lib/server/posts';
+import { fmtDateTime } from '../../../lib/format';
+
+export const prerender = false;
+
+const post = await getById(db(Astro.locals), Astro.params.id!);
+if (!post) return new Response(null, { status: 404 });
+
+const action = `/api/admin/blog/${post.id}`;
+const statusBadge = { draft: 'a-badge--warn', published: 'a-badge--ok' };
+---
+
+<Admin title={post.title} section="blog" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Blog', href: '/admin/blog' }, { label: post.title }]}>
+  <div slot="actions">
+    {post.status === 'published' && (
+      <a class="a-btn" href={`/${post.slug}/`} target="_blank" rel="noopener">View on site</a>
+    )}
+    <form class="a-inline-form" method="post" action={action}>
+      <input type="hidden" name="_action" value="duplicate" />
+      <button class="a-btn" type="submit">Duplicate</button>
+    </form>
+    <form class="a-inline-form" method="post" action={action} data-confirm={`Delete "${post.title}"? This cannot be undone.`}>
+      <input type="hidden" name="_action" value="delete" />
+      <button class="a-btn a-btn--danger" type="submit">Delete</button>
+    </form>
+  </div>
+
+  <p class="meta">
+    <span class:list={['a-badge', statusBadge[post.status]]}>{post.status}</span>
+    <span>{CATEGORY_LABELS[post.category]}</span>
+    {post.published_at && <span>Published {fmtDateTime(post.published_at)}</span>}
+    <span class="a-muted">Updated {fmtDateTime(post.updated_at)}</span>
+  </p>
+
+  <PostForm post={post} />
+</Admin>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin: 0 0 18px;
+    font-size: 14px;
+  }
+</style>

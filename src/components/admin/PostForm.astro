@@ -1,0 +1,218 @@
+---
+// Article editor shared by /admin/blog/new and /admin/blog/[id]. The main
+// form holds the copy; the sidebar controls (status, date, cover, buttons)
+// sit outside it and attach with form="post-form", so the "Remove image"
+// form can live beside the file picker without nesting.
+import { CATEGORIES, CATEGORY_LABELS, STATUSES, coverUrl, hasMedia, toEditable, type Post } from '../../lib/server/posts';
+import { toLocalInput } from '../../lib/format';
+import RichEditor from './RichEditor.astro';
+
+interface Props {
+  post: Post | null;
+}
+
+const { post } = Astro.props;
+const isNew = !post;
+const action = post ? `/api/admin/blog/${post.id}` : '/api/admin/blog';
+const cover = post ? coverUrl(post) : null;
+const STATUS_LABELS = { draft: 'Draft (staff only)', published: 'Published (on the site)' };
+---
+
+<div class="a-grid a-grid--side">
+  <form id="post-form" method="post" action={action} enctype="multipart/form-data" data-post-form data-new={isNew ? '1' : undefined}>
+    <section class="a-card">
+      <h2 class="a-h2">Article</h2>
+      <div class="a-form">
+        <div class="a-field">
+          <label for="title">Title <span class="req">*</span></label>
+          <input class="a-input" id="title" name="title" value={post?.title ?? ''} required maxlength="160" autocomplete="off" data-title />
+        </div>
+        <div class="a-field">
+          <label for="slug">Web address</label>
+          <div class="slug">
+            <span class="slug__prefix">infocusfilmschool.com/</span>
+            <input class="a-input" id="slug" name="slug" value={post?.slug ?? ''} maxlength="80" autocomplete="off" pattern="[a-z0-9\-]*" placeholder="from-the-title" data-slug />
+          </div>
+          <p class="a-help">Lower-case letters, numbers and dashes. {isNew ? 'Filled in from the title until you edit it.' : 'Changing this breaks links people already have, including search results.'}</p>
+        </div>
+        <div class="a-field">
+          <label for="excerpt">Excerpt</label>
+          <textarea class="a-textarea" id="excerpt" name="excerpt" maxlength="300" rows="3" style="min-height:0" data-excerpt>{post?.excerpt ?? ''}</textarea>
+          <p class="a-help">Shown on article cards, at the top of the article and in search results. <span data-excerpt-count>{post?.excerpt.length ?? 0}</span>/300.</p>
+        </div>
+        <div class="a-row">
+          <div class="a-field">
+            <label for="category">Category</label>
+            <select class="a-select" id="category" name="category">
+              {CATEGORIES.map((c) => (
+                <option value={c} selected={(post?.category ?? 'howto') === c}>{CATEGORY_LABELS[c]}</option>
+              ))}
+            </select>
+            <p class="a-help">Student Success stories also appear on /student-success.</p>
+          </div>
+          <div class="a-field">
+            <label for="author">Author</label>
+            <input class="a-input" id="author" name="author" value={post?.author ?? ''} maxlength="120" placeholder="Name shown on the article" />
+          </div>
+        </div>
+        <div class="a-field">
+          <span class="a-field__label">Body</span>
+          <RichEditor name="html" value={post ? toEditable(post.body_html) : ''} placeholder="Write the article, paste from Word or Google Docs, or import a document." />
+          <p class="a-help">Use Heading for the sections; they become the "In this article" list beside the text. Bold, italics, bullets and links are in the toolbar.</p>
+          {post && hasMedia(post.body_html) && (
+            <p class="a-help">
+              The photos and videos in this article show up as <code>[[Photo 1: ...]]</code> lines. Move a line to move the photo, delete it to remove the photo. Editing the text inside the brackets has no effect.
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <aside>
+    <section class="a-card">
+      <h2 class="a-h2">Publish</h2>
+      <div class="a-form">
+        <div class="a-field">
+          <label for="status">Status</label>
+          <select class="a-select" id="status" name="status" form="post-form">
+            {STATUSES.map((s) => (
+              <option value={s} selected={(post?.status ?? 'draft') === s}>{STATUS_LABELS[s]}</option>
+            ))}
+          </select>
+        </div>
+        <div class="a-field">
+          <label for="published_at">Publish date</label>
+          <input class="a-input" id="published_at" type="datetime-local" name="published_at" value={post?.published_at ? toLocalInput(post.published_at) : ''} />
+          <p class="a-help">Mountain Time (Calgary). Leave empty to use the moment you publish. A future date keeps the article off the site until then.</p>
+        </div>
+        <div class="a-form__actions" style="padding-top:0">
+          <button class="a-btn a-btn--primary" type="submit" form="post-form" name="_action" value={isNew ? 'create' : 'update'}>Save</button>
+          {(!post || post.status !== 'published') && (
+            <button class="a-btn a-btn--dark" type="submit" form="post-form" name="_action" value={isNew ? 'create_publish' : 'publish'}>Save + publish</button>
+          )}
+        </div>
+        {post?.status === 'published' && (
+          <p class="a-help" style="margin:0">
+            Live at <a class="a-link" href={`/${post.slug}/`} target="_blank" rel="noopener">/{post.slug}/</a>
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="a-card">
+      <h2 class="a-h2">Cover image</h2>
+      {cover && post && (
+        <div class="current">
+          <img src={cover} alt={post.cover_alt} width="600" height="400" />
+          {!post.cover_key && <p class="a-help" style="margin:0">Original cover from the old site. It is only used when the link is shared; the card thumbnail is the first photo in the article.</p>}
+          <form method="post" action={action} data-confirm="Remove this cover image from the article?">
+            <input type="hidden" name="_action" value="remove_image" />
+            <button class="a-btn a-btn--sm a-btn--danger" type="submit">Remove image</button>
+          </form>
+        </div>
+      )}
+      <div class="a-form">
+        <div class="a-field">
+          <label for="image">{cover ? 'Replace image' : 'Upload image'}</label>
+          <input class="a-input" id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" form="post-form" />
+          <p class="a-help">JPG, PNG or WebP up to 5 MB. Landscape (3:2) works best. Shown on the article cards, at the top of the article and when the link is shared.</p>
+        </div>
+        <div class="a-field">
+          <label for="cover_alt">Image description</label>
+          <input class="a-input" id="cover_alt" name="cover_alt" value={post?.cover_alt ?? ''} maxlength="200" form="post-form" placeholder="What is in the picture, for screen readers" />
+        </div>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<style>
+  .slug {
+    display: flex;
+    align-items: center;
+  }
+
+  .slug__prefix {
+    padding: 11px 10px 11px 12px;
+    border: 1px solid var(--a-line);
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+    background: var(--a-bg);
+    font-size: 14px;
+    color: var(--a-ink-3);
+    white-space: nowrap;
+  }
+
+  .slug .a-input {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .a-help code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    font-size: 12px;
+  }
+
+  .current {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+    margin-bottom: 18px;
+  }
+
+  .current img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--a-line);
+  }
+
+  input[type='file'].a-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-post-form]');
+  if (form) {
+    const title = form.querySelector<HTMLInputElement>('[data-title]')!;
+    const slug = form.querySelector<HTMLInputElement>('[data-slug]')!;
+    const excerpt = form.querySelector<HTMLTextAreaElement>('[data-excerpt]')!;
+    const count = form.querySelector<HTMLElement>('[data-excerpt-count]')!;
+
+    // Slug follows the title on new articles until someone edits it by hand.
+    const slugify = (s: string) =>
+      s
+        .normalize('NFKD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80);
+    let auto = form.dataset.new === '1' && !slug.value;
+    title.addEventListener('input', () => {
+      if (auto) slug.value = slugify(title.value);
+    });
+    slug.addEventListener('input', () => {
+      auto = false;
+    });
+
+    // On an existing article, changing the address gets a warning once.
+    if (form.dataset.new !== '1') {
+      const original = slug.value;
+      let warned = false;
+      slug.addEventListener('change', () => {
+        if (warned || slug.value === original) return;
+        warned = true;
+        window.alert(`Changing the web address means /${original}/ will stop working. Anyone with the old link, including search engines, will get a "page not found".`);
+      });
+    }
+
+    excerpt.addEventListener('input', () => (count.textContent = String(excerpt.value.length)));
+  }
+</script>

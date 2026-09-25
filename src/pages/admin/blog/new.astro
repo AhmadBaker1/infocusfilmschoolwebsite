@@ -1,0 +1,12 @@
+---
+// New article. Saving opens the edit page for it.
+import Admin from '../../../layouts/Admin.astro';
+import PostForm from '../../../components/admin/PostForm.astro';
+
+export const prerender = false;
+---
+
+<Admin title="New article" section="blog" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Blog', href: '/admin/blog' }, { label: 'New' }]}>
+  <a slot="actions" class="a-btn a-btn--ghost" href="/admin/blog">Cancel</a>
+  <PostForm post={null} />
+</Admin>

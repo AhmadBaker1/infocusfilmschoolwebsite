@@ -5,13 +5,17 @@ import PageHero from '../../components/PageHero.astro';
 import PostCard from '../../components/PostCard.astro';
 import Cta from '../../components/Cta.astro';
 import Footer from '../../components/Footer.astro';
-import { getPosts, toCard, CATEGORIES } from '../../lib/blog';
+import { db } from '../../lib/server/db';
+import { CATEGORIES, CATEGORY_LABELS, listPublished, toCard } from '../../lib/server/posts';
 
-const cards = (await getPosts()).map(toCard);
+// Articles come from D1 (staff publish them in /admin/blog), so this page
+// renders on request; a short public cache keeps it cheap.
+export const prerender = false;
+
+const cards = (await listPublished(db(Astro.locals))).map(toCard);
 const [featured, ...rest] = cards;
-const counts = Object.fromEntries(
-  Object.keys(CATEGORIES).map((k) => [k, cards.filter((c) => c.category === k).length])
-);
+const counts = Object.fromEntries(CATEGORIES.map((k) => [k, cards.filter((c) => c.category === k).length]));
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
 ---
 
 <Base
@@ -51,9 +55,9 @@ const counts = Object.fromEntries(
                 <button type="button" class="chip" data-filter="all" aria-pressed="true">
                   All <span>{cards.length}</span>
                 </button>
-                {Object.entries(CATEGORIES).map(([key, label]) => (
+                {CATEGORIES.map((key) => (
                   <button type="button" class="chip" data-filter={key} aria-pressed="false">
-                    {label} <span>{counts[key]}</span>
+                    {CATEGORY_LABELS[key]} <span>{counts[key]}</span>
                   </button>
                 ))}
               </div>
