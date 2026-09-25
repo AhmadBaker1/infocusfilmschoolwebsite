@@ -403,6 +403,16 @@ import SiteCredit from './SiteCredit.astro';
   }
 
   @media (max-width: 560px) {
+    /* Credit gets its own line on phones instead of wrapping mid-phrase. */
+    .foot__sep {
+      display: none;
+    }
+
+    .foot__bar p :global(.site-credit) {
+      display: block;
+      margin-top: 8px;
+    }
+
     .foot__grid {
       grid-template-columns: minmax(0, 1fr);
     }

@@ -1576,8 +1576,27 @@ const apply = `/apply?program=${p.slug}`;
       width: min(100%, 360px);
     }
 
+    /* Two tidy columns; no side dividers, so rows always line up. */
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+
+    .facts > div,
+    .facts > div + div {
+      padding-left: 0;
+      padding-right: 0;
+      border-left: 0;
+    }
+
     .feature--flip .feature__media {
       order: 0;
+    }
+
+    /* Keep the offset frame inside the screen on tablets and phones. */
+    .feature__media::before,
+    .feature--flip .feature__media::before {
+      inset: 12px -8px -12px 8px;
     }
 
     .about__cards,
@@ -1604,14 +1623,6 @@ const apply = `/apply?program=${p.slug}`;
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .facts > div:nth-child(odd) {
-      padding-left: 0;
-      border-left: 0;
-    }
-
-    .facts {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
 
     .pathway__card,
     .accred__grid {

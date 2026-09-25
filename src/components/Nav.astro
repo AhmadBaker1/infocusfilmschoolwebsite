@@ -196,6 +196,11 @@ const rightLinks = [{ label: 'Contact Us', href: '/contact' }];
     {
       panelMenus.map((m) => (
         <div class="panel" id={`panel-${m.key}`} data-panel={m.key} hidden>
+          {/* Phone drawer only: each menu is a section you tap to open. */}
+          <button type="button" class="panel__toggle" aria-expanded="false" data-panel-toggle>
+            <span>{m.label}</span>
+            <span class="panel__chev" aria-hidden="true"></span>
+          </button>
           <div class="panel__main">
             {m.groups.map((g) => (
               <div class="grp">
@@ -385,6 +390,10 @@ const rightLinks = [{ label: 'Contact Us', href: '/contact' }];
     transition-delay: 0.18s;
   }
 
+  .panel__toggle {
+    display: none;
+  }
+
   .mega__mark {
     position: absolute;
     right: clamp(-64px, -3.8vw, -20px);
@@ -549,22 +558,87 @@ const rightLinks = [{ label: 'Contact Us', href: '/contact' }];
       position: fixed;
       top: var(--nav-h);
       bottom: 0;
+      z-index: 90;
       height: auto !important;
       overflow-y: auto;
+      overscroll-behavior: contain;
       transition: none;
+      /* The glow backdrop only spans the bar on phones, so the drawer needs
+         its own solid ground or the page shows through. */
+      background:
+        radial-gradient(80% 40% at 100% 0%, rgba(189, 47, 47, 0.22), transparent 70%),
+        radial-gradient(70% 40% at 0% 100%, rgba(34, 68, 102, 0.35), transparent 70%),
+        #0a0a0a;
     }
 
     .nav:not(.is-open) .mega {
       display: none;
     }
 
+    .mega__mark {
+      display: none;
+    }
+
     .panel {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .panel__toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 20px var(--gutter);
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-align: left;
+    }
+
+    .panel__chev {
+      position: relative;
+      width: 16px;
+      height: 16px;
+    }
+
+    .panel__chev::before,
+    .panel__chev::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 16px;
+      height: 2px;
+      margin-top: -1px;
+      background: var(--red);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .panel__chev::after {
+      transform: rotate(90deg);
+    }
+
+    .panel.is-expanded .panel__chev::after {
+      transform: rotate(0deg);
+    }
+
+    .panel:not(.is-expanded) .panel__main,
+    .panel:not(.is-expanded) .panel__foot {
+      display: none !important;
     }
 
     .panel__main {
       grid-template-columns: minmax(0, 1fr);
       gap: 22px;
+      padding: 0 var(--gutter) 18px !important;
+    }
+
+    .panel__foot {
+      padding: 16px var(--gutter) 22px !important;
     }
 
     .feat {
@@ -671,6 +745,16 @@ const rightLinks = [{ label: 'Contact Us', href: '/contact' }];
     document.addEventListener('click', (e) => {
       if (current && !nav.contains(e.target as Node)) hide();
     });
+
+    // Phone drawer: each menu opens and closes on its own.
+    document.querySelectorAll<HTMLButtonElement>('[data-panel-toggle]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const panel = btn.closest<HTMLElement>('.panel')!;
+        const open = !panel.classList.contains('is-expanded');
+        panel.classList.toggle('is-expanded', open);
+        btn.setAttribute('aria-expanded', String(open));
+      })
+    );
 
     // Mobile: the burger shows every panel stacked in a scrolling drawer.
     burger?.addEventListener('click', () => {
