@@ -1,0 +1,1330 @@
+---
+// Contact Us: no form. Where we are (illustrated downtown map + real map),
+// how to reach the right team, and how to get to campus. The clock and
+// open/closed status are computed client-side in Vancouver time.
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+
+const address = { street: '554 Seymour Street', city: 'Vancouver, BC V6B 3J5' };
+const mapsQuery = encodeURIComponent('554 Seymour Street, Vancouver, BC V6B 3J5');
+const phones = [
+  { label: 'General', display: '604-915-6900', href: 'tel:+16049156900' },
+  { label: 'Admissions', display: '604-779-1145', href: 'tel:+16047791145' },
+];
+const emails = [
+  { label: 'General', address: 'info@infocusfilmschool.com' },
+  { label: 'Admissions', address: 'admissions@infocusfilmschool.com' },
+];
+// Campus hours (Pacific). Edit here; the open/closed badge follows these.
+const hours = { days: 'Monday to Friday', open: '9:00 am', close: '5:00 pm', openH: 9, closeH: 17 };
+
+const teams = [
+  {
+    title: 'Admissions',
+    text: 'Programs, start dates, tuition and how to apply. Talk to an advisor before you commit to anything.',
+    links: [
+      { label: '604-779-1145', href: 'tel:+16047791145' },
+      { label: 'admissions@infocusfilmschool.com', href: 'mailto:admissions@infocusfilmschool.com' },
+      { label: 'Apply now', href: '/apply', arrow: true },
+    ],
+  },
+  {
+    title: 'International students',
+    text: 'Study permits, arrival, housing and the Yorkville University pathway for students coming from abroad.',
+    links: [
+      { label: 'admissions@infocusfilmschool.com', href: 'mailto:admissions@infocusfilmschool.com' },
+      { label: 'International students guide', href: '/admissions/international-students', arrow: true },
+    ],
+  },
+  {
+    title: 'Current students',
+    text: 'Schedules, records, forms and student services. Sign in to the student portal or come by the front desk.',
+    links: [
+      { label: '604-915-6900', href: 'tel:+16049156900' },
+      { label: 'Student login', href: 'https://infocus.ampeducator.ca/', external: true, arrow: true },
+    ],
+  },
+  {
+    title: 'Careers and hiring',
+    text: 'Teaching and staff roles. Every posting has its own application page; general applications are welcome too.',
+    links: [{ label: 'Open positions', href: '/careers', arrow: true }],
+  },
+  {
+    title: 'Industry, media and partners',
+    text: 'Press, guest speakers, crew calls, sponsorships and hiring our graduates.',
+    links: [{ label: 'info@infocusfilmschool.com', href: 'mailto:info@infocusfilmschool.com' }],
+  },
+  {
+    title: 'Alumni',
+    text: 'Stay connected, share what you are working on, and come back for screenings and events.',
+    links: [
+      { label: 'info@infocusfilmschool.com', href: 'mailto:info@infocusfilmschool.com' },
+      { label: 'Student success stories', href: '/student-success', arrow: true },
+    ],
+  },
+];
+
+const transit = [
+  {
+    title: 'SkyTrain',
+    text: 'Granville Station (Expo Line) is at Granville and Dunsmuir, a two-minute walk. Vancouver City Centre (Canada Line) and Waterfront (Expo, Canada Line, SeaBus, West Coast Express) are both within six minutes on foot.',
+  },
+  {
+    title: 'Bus',
+    text: 'Frequent routes run along Granville, Seymour, Hastings and Georgia. Most downtown buses stop within two blocks of the door.',
+  },
+  {
+    title: 'From the airport',
+    text: 'Take the Canada Line from YVR to Vancouver City Centre, about 26 minutes, then walk three blocks to Seymour and Dunsmuir.',
+  },
+  {
+    title: 'Bike',
+    text: 'The Dunsmuir Street separated bike lane runs right past the corner. Mobi bike share stations are nearby.',
+  },
+  {
+    title: 'Driving and parking',
+    text: 'Street parking on Seymour is metered. Paid parkades are on Seymour, Richards and at Pacific Centre, all within a block or two.',
+  },
+];
+
+// Illustrated map. Streets are drawn in a straight grid; the compass shows
+// how the real downtown grid sits against north.
+const acrossStreets = [
+  { name: 'W Cordova St', y: 90 },
+  { name: 'W Hastings St', y: 180 },
+  { name: 'W Pender St', y: 270 },
+  { name: 'Dunsmuir St', y: 360 },
+  { name: 'W Georgia St', y: 450 },
+  { name: 'Robson St', y: 540 },
+];
+const alongStreets = [
+  { name: 'Burrard St', x: 100 },
+  { name: 'Hornby St', x: 200 },
+  { name: 'Howe St', x: 300 },
+  { name: 'Granville St', x: 400 },
+  { name: 'Seymour St', x: 500 },
+  { name: 'Richards St', x: 600 },
+  { name: 'Homer St', x: 700 },
+];
+const stations = [
+  { name: 'Granville Station', line: 'Expo Line', x: 400, y: 360, walk: '2 min walk' },
+  { name: 'Vancouver City Centre', line: 'Canada Line', x: 400, y: 450, walk: '5 min walk' },
+  { name: 'Waterfront Station', line: 'Expo · Canada Line · SeaBus', x: 470, y: 80, walk: '6 min walk' },
+];
+const landmarks = [
+  { name: 'Harbour Centre', x: 500, y: 180 },
+  { name: 'Pacific Centre', x: 350, y: 495 },
+  { name: 'Vancouver Art Gallery', x: 200, y: 495 },
+];
+---
+
+<Base
+  title="Contact Us — InFocus Film School"
+  description="Visit InFocus Film School at 554 Seymour Street in downtown Vancouver, or reach admissions, student services and the front desk by phone and email."
+>
+  <Nav />
+
+  <main>
+    <!-- ===== Opening: copy + illustrated map ===== -->
+    <header class="open" aria-labelledby="open-title">
+      <span class="open__grain" aria-hidden="true"></span>
+      <div class="open__inner">
+        <div class="open__copy">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li aria-current="page">Contact Us</li>
+            </ol>
+          </nav>
+          <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Contact us</p>
+          <h1 id="open-title" class="open__title">Come find us<br /><em>downtown.</em></h1>
+          <p class="open__lede">
+            Our campus is in the heart of Vancouver, one block from Granville SkyTrain station and a
+            short walk from the waterfront. Call, write, or drop by.
+          </p>
+
+          <div class="clock" data-clock>
+            <span class="clock__dot" data-clock-dot aria-hidden="true"></span>
+            <span class="clock__text">
+              <span class="clock__time" data-clock-time>--:--</span>
+              <span class="clock__meta">in Vancouver · <span data-clock-status>checking hours</span></span>
+            </span>
+          </div>
+
+          <address class="addr">
+            <span class="addr__street">{address.street}</span>
+            <span class="addr__city">{address.city}</span>
+          </address>
+
+          <div class="open__actions">
+            <a class="btn btn--light" href={`https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`} target="_blank" rel="noopener">
+              Get directions <span aria-hidden="true">↗</span>
+            </a>
+            <a class="open__link" href={`https://maps.apple.com/?daddr=${mapsQuery}`} target="_blank" rel="noopener">Apple Maps</a>
+            <button class="open__link" type="button" data-copy={`${address.street}, ${address.city}`}>Copy address</button>
+          </div>
+        </div>
+
+        <figure class="map" aria-label="Illustrated map of downtown Vancouver around 554 Seymour Street">
+          <span class="corner corner--tl" aria-hidden="true"></span>
+          <span class="corner corner--tr" aria-hidden="true"></span>
+          <span class="corner corner--bl" aria-hidden="true"></span>
+          <span class="corner corner--br" aria-hidden="true"></span>
+
+          <svg class="map__svg" viewBox="0 0 800 620" role="img" aria-hidden="true">
+            <defs>
+              <pattern id="ct-dots" width="18" height="18" patternUnits="userSpaceOnUse">
+                <circle cx="9" cy="9" r="1" fill="rgba(255,255,255,0.14)" />
+              </pattern>
+              <linearGradient id="ct-water" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1c3a58" />
+                <stop offset="1" stop-color="#22405f" stop-opacity="0.2" />
+              </linearGradient>
+            </defs>
+
+            <rect width="800" height="620" fill="url(#ct-dots)" />
+            <!-- Burrard Inlet -->
+            <path d="M0 0H800V34C700 44 560 58 430 46 300 34 140 56 0 40Z" fill="url(#ct-water)" />
+            <text x="24" y="26" class="map__water">Burrard Inlet</text>
+
+            <!-- blocks -->
+            <g class="map__blocks">
+              {acrossStreets.slice(0, -1).map((s, i) =>
+                alongStreets.slice(0, -1).map((a) => (
+                  <rect x={a.x + 9} y={s.y + 9} width={82} height={acrossStreets[i + 1].y - s.y - 18} rx="3" />
+                ))
+              )}
+            </g>
+
+            <!-- streets -->
+            <g class="map__streets">
+              {acrossStreets.map((s) => <line x1="40" y1={s.y} x2="760" y2={s.y} />)}
+              {alongStreets.map((s) => <line x1={s.x} y1="60" x2={s.x} y2="600" />)}
+            </g>
+            <g class="map__streets map__streets--main">
+              <line x1="400" y1="60" x2="400" y2="600" />
+              <line x1="40" y1="450" x2="760" y2="450" />
+              <line x1="40" y1="180" x2="760" y2="180" />
+            </g>
+
+            <!-- Dunsmuir bike lane -->
+            <line class="map__bike" x1="40" y1="366" x2="760" y2="366" />
+
+            <!-- labels -->
+            <g class="map__labels">
+              {acrossStreets.map((s) => <text x="46" y={s.y - 7}>{s.name}</text>)}
+              {alongStreets.map((s) => <text transform={`translate(${s.x - 7} 596) rotate(-90)`}>{s.name}</text>)}
+            </g>
+
+            <g class="map__landmarks">
+              {landmarks.map((l) => (
+                <g transform={`translate(${l.x} ${l.y})`}>
+                  <rect x="-5" y="-5" width="10" height="10" />
+                  <text x="12" y="4">{l.name}</text>
+                </g>
+              ))}
+            </g>
+
+            <!-- SkyTrain -->
+            <g class="map__stations">
+              {stations.map((s) => (
+                <g class="station" transform={`translate(${s.x} ${s.y})`} tabindex="0">
+                  <circle r="14" class="station__halo" />
+                  <circle r="7" class="station__ring" />
+                  <text class="station__t" y="-1">T</text>
+                  <g class="station__tip">
+                    <rect x="20" y="-30" width="176" height="58" rx="6" />
+                    <text x="30" y="-9" class="station__name">{s.name}</text>
+                    <text x="30" y="8" class="station__line">{s.line}</text>
+                    <text x="30" y="22" class="station__walk">{s.walk}</text>
+                  </g>
+                </g>
+              ))}
+            </g>
+
+            <!-- Us -->
+            <g class="pin" transform="translate(512 318)">
+              <circle class="pin__pulse" r="18" />
+              <circle class="pin__pulse pin__pulse--2" r="18" />
+              <path class="pin__body" d="M0 -30c-11 0-18 8-18 18 0 13 18 34 18 34s18-21 18-34c0-10-7-18-18-18z" />
+              <circle class="pin__dot" cy="-12" r="6" />
+              <g class="pin__label" transform="translate(28 -46)">
+                <rect x="0" y="0" width="138" height="44" rx="6" />
+                <text x="12" y="18" class="pin__name">InFocus Film School</text>
+                <text x="12" y="34" class="pin__addr">554 Seymour St</text>
+              </g>
+            </g>
+
+            <!-- compass -->
+            <g class="compass" transform="translate(738 566) rotate(-32)">
+              <circle r="22" />
+              <path d="M0 -16L6 4 0 0 -6 4Z" class="compass__n" />
+              <path d="M0 16L6 -4 0 0 -6 -4Z" class="compass__s" />
+              <text y="-26">N</text>
+            </g>
+          </svg>
+          <figcaption class="map__cap">
+            <span>Illustrated. Hover a <strong>T</strong> for SkyTrain stations.</span>
+            <a href="#getting-here">Real map + directions <span aria-hidden="true">↓</span></a>
+          </figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <!-- ===== Reach us ===== -->
+    <section class="reach" aria-labelledby="reach-title">
+      <div class="reach__inner">
+        <h2 id="reach-title" class="visually-hidden">Reach us</h2>
+        <ul class="reach__grid">
+          <li class="reach__card">
+            <span class="reach__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" /></svg>
+            </span>
+            <span class="reach__label">Call</span>
+            {phones.map((p) => (
+              <a class="reach__big" href={p.href}>
+                <span class="reach__sub">{p.label}</span>
+                {p.display}
+              </a>
+            ))}
+          </li>
+          <li class="reach__card">
+            <span class="reach__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
+            </span>
+            <span class="reach__label">Email</span>
+            {emails.map((e) => (
+              <a class="reach__big reach__big--mail" href={`mailto:${e.address}`}>
+                <span class="reach__sub">{e.label}</span>
+                {e.address}
+              </a>
+            ))}
+          </li>
+          <li class="reach__card">
+            <span class="reach__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></svg>
+            </span>
+            <span class="reach__label">Visit</span>
+            <span class="reach__big reach__big--static">
+              <span class="reach__sub">{hours.days}</span>
+              {hours.open} to {hours.close} PT
+            </span>
+            <span class="reach__small">Tours by appointment. Call admissions to book one.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Who to reach ===== -->
+    <section class="teams" aria-labelledby="teams-title">
+      <div class="teams__inner">
+        <div class="teams__head">
+          <p class="eyebrow"><span aria-hidden="true"></span>Who to reach</p>
+          <h2 id="teams-title" class="teams__title">The right people, first time.</h2>
+        </div>
+        <ul class="teams__grid">
+          {teams.map((t, i) => (
+            <li class="team" style={`--i:${i}`}>
+              <span class="team__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="team__title">{t.title}</h3>
+              <p class="team__text">{t.text}</p>
+              <ul class="team__links">
+                {t.links.map((l) => (
+                  <li>
+                    <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined} class:list={{ 'is-arrow': l.arrow }}>
+                      {l.label}
+                      {l.arrow && <span aria-hidden="true">{l.external ? ' ↗' : ' →'}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Getting here ===== -->
+    <section class="here" id="getting-here" aria-labelledby="here-title">
+      <div class="here__inner">
+        <div class="here__copy">
+          <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Getting here</p>
+          <h2 id="here-title" class="here__title">554 Seymour Street</h2>
+          <p class="here__lede">
+            Between Dunsmuir and West Pender, one block up from Granville Station. Look for the
+            InFocus sign at street level.
+          </p>
+          <ul class="ways">
+            {transit.map((t) => (
+              <li class="way">
+                <h3 class="way__title">{t.title}</h3>
+                <p class="way__text">{t.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="here__map">
+          <div class="gmap">
+            <iframe
+              src={`https://www.google.com/maps?q=${mapsQuery}&z=16&output=embed`}
+              title="Map of 554 Seymour Street, Vancouver"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="gmap__bar">
+            <span>{address.street}, {address.city}</span>
+            <a href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`} target="_blank" rel="noopener">Open in Google Maps <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Social ===== -->
+    <section class="social" aria-labelledby="social-title">
+      <div class="social__inner">
+        <div>
+          <p class="eyebrow"><span aria-hidden="true"></span>Follow along</p>
+          <h2 id="social-title" class="social__title">See what students are making this week.</h2>
+        </div>
+        <ul class="social__list">
+          <li><a href="https://www.instagram.com/infocusfilmschool/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://www.youtube.com/@infocusfilmschooltv" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://www.facebook.com/infocusfilmschool" target="_blank" rel="noopener">Facebook <span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://twitter.com/iffilmschool" target="_blank" rel="noopener">X <span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<script define:vars={{ openH: hours.openH, closeH: hours.closeH }}>
+  // Vancouver clock + open/closed badge.
+  const timeEl = document.querySelector('[data-clock-time]');
+  const statusEl = document.querySelector('[data-clock-status]');
+  const clock = document.querySelector('[data-clock]');
+  const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Vancouver', hour: 'numeric', minute: '2-digit' });
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Vancouver', hour: 'numeric', hour12: false, weekday: 'short' });
+  function tick() {
+    const now = new Date();
+    if (timeEl) timeEl.textContent = fmt.format(now).replace(/\./g, '').toLowerCase();
+    const p = parts.formatToParts(now);
+    const hour = Number(p.find((x) => x.type === 'hour')?.value) % 24;
+    const day = p.find((x) => x.type === 'weekday')?.value ?? '';
+    const weekday = !/^(Sat|Sun)/.test(day);
+    const open = weekday && hour >= openH && hour < closeH;
+    if (statusEl) statusEl.textContent = open ? 'campus is open' : weekday && hour < openH ? 'opens at 9 am' : 'campus is closed';
+    clock?.classList.toggle('is-open', open);
+  }
+  tick();
+  setInterval(tick, 15000);
+
+  // Copy address.
+  const copy = document.querySelector('[data-copy]');
+  copy?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(copy.dataset.copy || '');
+      const was = copy.textContent;
+      copy.textContent = 'Copied';
+      setTimeout(() => (copy.textContent = was), 1600);
+    } catch {}
+  });
+</script>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .eyebrow--light {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .corner {
+    position: absolute;
+    z-index: 2;
+    width: 22px;
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.7);
+  }
+
+  .corner--tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+  .corner--tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+  .corner--bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+  .corner--br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* ---- Opening ---- */
+
+  .open {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: calc(var(--nav-h) + clamp(36px, 5vw, 80px)) var(--gutter) clamp(56px, 6vw, 96px);
+    background:
+      radial-gradient(55% 80% at 100% 0%, rgba(189, 47, 47, 0.3), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.55), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .open__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.2s steps(6) infinite;
+  }
+
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-4%, 3%); }
+    40% { transform: translate(3%, -5%); }
+    60% { transform: translate(-6%, -2%); }
+    80% { transform: translate(5%, 6%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .open__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin: 0 0 clamp(24px, 3vw, 44px);
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 10px;
+    opacity: 0.5;
+  }
+
+  .crumbs a:hover,
+  .crumbs [aria-current] {
+    color: var(--white);
+  }
+
+  .open__title {
+    margin: 0;
+    font-size: clamp(44px, 6vw, 96px);
+    line-height: 0.94;
+    letter-spacing: -0.01em;
+  }
+
+  .open__title em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .open__lede {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    max-width: 46ch;
+    font-size: clamp(16px, 1.15vw, 19px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(22px, 2.6vw, 34px);
+    padding: 10px 16px 10px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .clock__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 0 0 0 rgba(63, 185, 106, 0.5);
+  }
+
+  .clock.is-open .clock__dot {
+    background: #3fb96a;
+    animation: live 2s ease-out infinite;
+  }
+
+  @keyframes live {
+    0% { box-shadow: 0 0 0 0 rgba(63, 185, 106, 0.55); }
+    100% { box-shadow: 0 0 0 10px rgba(63, 185, 106, 0); }
+  }
+
+  .clock__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .clock__time {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .clock__meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .addr {
+    display: flex;
+    flex-direction: column;
+    margin-top: clamp(22px, 2.6vw, 34px);
+    font-style: normal;
+  }
+
+  .addr__street {
+    font-family: var(--font-head);
+    font-size: clamp(24px, 2.2vw, 34px);
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  .addr__city {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .open__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: clamp(22px, 2.6vw, 34px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 24px;
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn--light {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .btn--light:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .open__link {
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+  }
+
+  .open__link:hover {
+    color: var(--white);
+  }
+
+  /* ---- Illustrated map ---- */
+
+  .map {
+    position: relative;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #2a2a2a;
+    box-shadow: 0 50px 90px -50px rgba(0, 0, 0, 0.8);
+  }
+
+  .map__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font-head);
+  }
+
+  .map__water {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    fill: rgba(140, 190, 235, 0.7);
+  }
+
+  .map__blocks rect {
+    fill: rgba(255, 255, 255, 0.035);
+    stroke: rgba(255, 255, 255, 0.05);
+  }
+
+  .map__streets line {
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .map__streets--main line {
+    stroke: rgba(255, 255, 255, 0.32);
+    stroke-width: 9;
+  }
+
+  .map__bike {
+    stroke: #3fb96a;
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+    opacity: 0.7;
+  }
+
+  .map__labels text {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    fill: rgba(255, 255, 255, 0.55);
+  }
+
+  .map__landmarks rect {
+    fill: rgba(255, 255, 255, 0.35);
+    transform: rotate(45deg);
+  }
+
+  .map__landmarks text {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    fill: rgba(255, 255, 255, 0.55);
+  }
+
+  .station {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .station__halo {
+    fill: rgba(34, 68, 102, 0);
+    transition: fill 0.3s ease;
+  }
+
+  .station__ring {
+    fill: #224466;
+    stroke: var(--white);
+    stroke-width: 2;
+  }
+
+  .station__t {
+    font-size: 9px;
+    font-weight: 700;
+    fill: var(--white);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .station__tip {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+
+  .station__tip rect {
+    fill: rgba(0, 0, 0, 0.85);
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+
+  .station__name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    fill: var(--white);
+  }
+
+  .station__line,
+  .station__walk {
+    font-family: var(--font-body);
+    font-size: 11px;
+    fill: rgba(255, 255, 255, 0.7);
+  }
+
+  .station__walk {
+    fill: #3fb96a;
+  }
+
+  .station:hover .station__tip,
+  .station:focus .station__tip {
+    opacity: 1;
+    transform: none;
+  }
+
+  .station:hover .station__halo,
+  .station:focus .station__halo {
+    fill: rgba(34, 68, 102, 0.55);
+  }
+
+  .pin__body {
+    fill: var(--red);
+    stroke: var(--white);
+    stroke-width: 2;
+  }
+
+  .pin__dot {
+    fill: var(--white);
+  }
+
+  .pin__pulse {
+    fill: none;
+    stroke: var(--red);
+    stroke-width: 2;
+    transform-origin: 0 0;
+    animation: pulse 2.6s ease-out infinite;
+  }
+
+  .pin__pulse--2 {
+    animation-delay: 1.3s;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.4); opacity: 0.9; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  .pin__label rect {
+    fill: var(--white);
+  }
+
+  .pin__name {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    fill: var(--charcoal);
+  }
+
+  .pin__addr {
+    font-family: var(--font-body);
+    font-size: 11px;
+    fill: rgba(51, 51, 51, 0.7);
+  }
+
+  .compass circle {
+    fill: rgba(0, 0, 0, 0.35);
+    stroke: rgba(255, 255, 255, 0.3);
+  }
+
+  .compass__n {
+    fill: var(--red);
+  }
+
+  .compass__s {
+    fill: rgba(255, 255, 255, 0.35);
+  }
+
+  .compass text {
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--white);
+    text-anchor: middle;
+  }
+
+  .map__cap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 12px 18px;
+    background: rgba(0, 0, 0, 0.35);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .map__cap strong {
+    color: var(--white);
+  }
+
+  .map__cap a {
+    color: var(--white);
+    font-family: var(--font-head);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .map__cap a:hover {
+    color: var(--red);
+  }
+
+  /* ---- Reach ---- */
+
+  .reach {
+    padding: 0 var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .reach__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    transform: translateY(-40px);
+  }
+
+  .reach__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.45);
+  }
+
+  .reach__card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(22px, 2.6vw, 36px);
+    border-right: 1px solid rgba(51, 51, 51, 0.1);
+  }
+
+  .reach__card:last-child {
+    border-right: 0;
+  }
+
+  .reach__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    background: rgba(189, 47, 47, 0.1);
+    color: var(--red);
+  }
+
+  .reach__icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .reach__label {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.55);
+  }
+
+  .reach__big {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    font-family: var(--font-head);
+    font-size: clamp(22px, 1.9vw, 30px);
+    font-weight: 600;
+    line-height: 1.1;
+    transition: color 0.2s ease;
+  }
+
+  .reach__big--mail {
+    font-size: clamp(16px, 1.25vw, 20px);
+    font-family: var(--font-body);
+    font-weight: 600;
+    word-break: break-all;
+  }
+
+  a.reach__big:hover {
+    color: var(--red);
+  }
+
+  .reach__sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .reach__small {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(51, 51, 51, 0.6);
+  }
+
+  /* ---- Teams ---- */
+
+  .teams {
+    padding: clamp(40px, 5vw, 80px) var(--gutter) clamp(72px, 8vw, 128px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .teams__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .teams__head {
+    margin-bottom: clamp(30px, 3.6vw, 56px);
+  }
+
+  .teams__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(32px, 3.8vw, 62px);
+    line-height: 1;
+  }
+
+  .teams__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: rgba(51, 51, 51, 0.12);
+    border: 1px solid rgba(51, 51, 51, 0.12);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .team {
+    position: relative;
+    padding: clamp(24px, 2.6vw, 36px);
+    background: var(--white);
+    transition: background-color 0.3s ease;
+  }
+
+  .team:hover {
+    background: #faf7f7;
+  }
+
+  .team__num {
+    display: block;
+    margin-bottom: 18px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--red);
+  }
+
+  .team__title {
+    margin: 0 0 10px;
+    font-size: clamp(20px, 1.6vw, 26px);
+    line-height: 1.05;
+  }
+
+  .team__text {
+    margin: 0 0 16px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(51, 51, 51, 0.75);
+  }
+
+  .team__links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+  }
+
+  .team__links a {
+    text-decoration: underline;
+    text-decoration-color: rgba(189, 47, 47, 0.4);
+    text-underline-offset: 4px;
+    overflow-wrap: anywhere;
+    transition: color 0.2s ease;
+  }
+
+  .team__links a:hover {
+    color: var(--red);
+  }
+
+  .team__links a.is-arrow {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--red);
+  }
+
+  /* ---- Getting here ---- */
+
+  .here {
+    padding: clamp(64px, 8vw, 128px) var(--gutter);
+    background:
+      radial-gradient(50% 70% at 0% 0%, rgba(189, 47, 47, 0.26), transparent 65%),
+      radial-gradient(50% 80% at 100% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .here__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .here__title {
+    margin: 0;
+    font-size: clamp(34px, 4vw, 64px);
+    line-height: 1;
+  }
+
+  .here__lede {
+    margin: 16px 0 0;
+    max-width: 48ch;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .ways {
+    margin: clamp(26px, 3vw, 40px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .way {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .way__title {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+
+  .way__text {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .here__map {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    border-radius: 16px;
+    overflow: hidden;
+    background: #222;
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+  }
+
+  .gmap {
+    aspect-ratio: 4 / 3;
+    filter: saturate(0.85);
+  }
+
+  .gmap iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .gmap__bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .gmap__bar a {
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    border-bottom: 2px solid var(--red);
+  }
+
+  /* ---- Social ---- */
+
+  .social {
+    padding: clamp(56px, 6vw, 96px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .social__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px 40px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .social__title {
+    margin: 0;
+    max-width: 18ch;
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1.02;
+  }
+
+  .social__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social__list a {
+    display: inline-flex;
+    gap: 8px;
+    padding: 12px 18px;
+    border: 1px solid rgba(51, 51, 51, 0.2);
+    border-radius: 999px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .social__list a:hover {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--white);
+  }
+
+  /* ---- Responsive ---- */
+
+  @media (max-width: 1000px) {
+    .open__inner,
+    .here__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .here__map {
+      position: static;
+    }
+
+    .teams__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .reach__inner {
+      transform: translateY(-24px);
+    }
+
+    .reach__grid,
+    .teams__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reach__card {
+      border-right: 0;
+      border-bottom: 1px solid rgba(51, 51, 51, 0.1);
+    }
+
+    .reach__card:last-child {
+      border-bottom: 0;
+    }
+
+    .way {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .map__cap {
+      font-size: 11px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .open__grain,
+    .pin__pulse,
+    .clock.is-open .clock__dot {
+      animation: none;
+    }
+  }
+</style>
