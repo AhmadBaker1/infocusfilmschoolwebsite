@@ -20,11 +20,25 @@ self-register and there is no sign-in button on the site: share
 | Role | Sections |
 | --- | --- |
 | `admin` | Everything, plus staff accounts |
-| `marketing` | Events |
+| `marketing` | Events, blog, and Apply Now submissions (admissions) |
 | `hr` | Job postings, applicants, talent pool, résumé downloads |
 | `admissions` | Apply Now submissions |
 
-A person can hold several roles. Role checks live in `src/middleware.ts`.
+A person can hold several roles. Which roles open which section is the
+`SECTIONS` table in `src/lib/server/auth.ts`; `src/middleware.ts` enforces it.
+
+## Writing content
+
+Job postings, events and articles use the rich text editor
+(`src/components/admin/RichEditor.astro`): a toolbar for headings, bold,
+italic, lists and links; pasting from Word or Google Docs is cleaned up;
+and **Import from a document** reads a PDF, Word (.docx) or text file in
+the browser and turns its headings, bullets and paragraphs into content
+(scanned PDFs have no text and are refused with a message). The server
+re-sanitizes everything (`src/lib/server/sanitize.ts`) before storing.
+Postings and events store section headings as bold paragraphs, which is
+what the public pages and the application-page summary expect; articles
+keep real headings for their table of contents.
 
 ## Security notes
 
@@ -73,6 +87,22 @@ Open the printed `/login/setup?token=...` link, set a password, sign in at
 
 Later deploys: `npm run deploy`. New migrations: add
 `migrations/000N_name.sql`, then `npm run db:migrate:remote`.
+
+## Initial staff (agreed 2026-09-25)
+
+Run once against production after the first deploy (drop `--remote` to do
+the same on the local database). Each prints a one-time setup link to send
+to that person.
+
+```sh
+npm run admin:invite -- ahmad.baker@mcgcollege.com "Ahmad Baker" --remote
+npm run admin:invite -- dj.gupta@mcgcollege.com "DJ Gupta" --remote
+npm run admin:invite -- dmetri.berko@mcgcollege.com "Dmetri Berko" --remote
+npm run admin:invite -- marketing@infocusfilmschool.com "Marketing" --roles marketing --remote
+npm run admin:invite -- nada@infocusfilmschool.com "Nada" --roles hr --remote
+```
+
+Super admins can add or change anyone afterwards under Staff accounts.
 
 ## Where things are
 

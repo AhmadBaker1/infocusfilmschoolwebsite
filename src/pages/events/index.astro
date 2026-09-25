@@ -1,0 +1,677 @@
+---
+// Public events page: the featured (or soonest) upcoming event, the rest of
+// the upcoming list, and a muted strip of recent past events. Rendered on
+// the edge from D1, cached for a minute.
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { db } from '../../lib/server/db';
+import { MODE_LABELS, dateBlock, imageUrl, listPublicPast, listPublicUpcoming, whenParts } from '../../lib/server/events';
+
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
+
+const d1 = db(Astro.locals);
+const [upcoming, past] = await Promise.all([listPublicUpcoming(d1), listPublicPast(d1, 6)]);
+const featured = upcoming.find((e) => e.featured) ?? upcoming[0] ?? null;
+const rest = upcoming.filter((e) => e !== featured);
+const INSTAGRAM = 'https://www.instagram.com/infocusfilmschool/';
+---
+
+<Base
+  title="Events — InFocus Film School"
+  description="Screenings, open houses, workshops and industry nights at InFocus Film School in Calgary. See what is coming up and reserve your seat."
+>
+  <Nav />
+
+  <main>
+    <PageHero title="Events" crumbs={[{ label: 'Home', href: '/' }, { label: 'Events' }]}>
+      <p>
+        Screenings, open houses, workshops and industry nights, on campus in Calgary and online.
+        Most are free. Reserve a seat where a link is shown.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="wrap">
+        {featured ? (
+          <section class="feat" aria-labelledby="feat-title">
+            <p class="eyebrow"><span aria-hidden="true" />{featured.featured ? 'Featured' : 'Next up'}</p>
+            <article class="feat__card">
+              <a class="feat__media" href={`/events/${featured.slug}`} aria-hidden="true" tabindex="-1">
+                {imageUrl(featured) ? (
+                  <img src={imageUrl(featured)} alt={featured.image_alt ?? ''} width="1200" height="800" loading="eager" decoding="async" />
+                ) : (
+                  <span class="slate">
+                    <span class="slate__corner slate__corner--tl" />
+                    <span class="slate__corner slate__corner--tr" />
+                    <span class="slate__corner slate__corner--bl" />
+                    <span class="slate__corner slate__corner--br" />
+                    <span class="slate__title">{featured.title}</span>
+                  </span>
+                )}
+              </a>
+              <div class="feat__body">
+                <div class="feat__top">
+                  <span class="date date--lg" aria-hidden="true">
+                    <span class="date__m">{dateBlock(featured.starts_at).month}</span>
+                    <span class="date__d">{dateBlock(featured.starts_at).day}</span>
+                  </span>
+                  <p class="feat__when">
+                    <span>{whenParts(featured).date}</span>
+                    <span>{whenParts(featured).time}</span>
+                  </p>
+                </div>
+                <h2 id="feat-title" class="feat__title"><a href={`/events/${featured.slug}`}>{featured.title}</a></h2>
+                {featured.summary && <p class="feat__text">{featured.summary}</p>}
+                <p class="meta">
+                  {featured.location && <span>{featured.location}</span>}
+                  <span class:list={['mode', `mode--${featured.mode}`]}>{MODE_LABELS[featured.mode]}</span>
+                </p>
+                <div class="feat__actions">
+                  {featured.register_url ? (
+                    <a class="btn btn--red" href={featured.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+                  ) : (
+                    <a class="btn btn--red" href={`/events/${featured.slug}`}>Details <span aria-hidden="true">→</span></a>
+                  )}
+                  {featured.register_url && <a class="feat__link" href={`/events/${featured.slug}`}>Details <span aria-hidden="true">→</span></a>}
+                </div>
+              </div>
+            </article>
+          </section>
+        ) : (
+          <section class="none" aria-labelledby="none-title">
+            <p class="eyebrow"><span aria-hidden="true" />Upcoming</p>
+            <h2 id="none-title" class="none__title">No upcoming events right now.</h2>
+            <p class="none__text">
+              Follow <a href={INSTAGRAM} target="_blank" rel="noopener">@infocusfilmschool</a> on Instagram for announcements.
+            </p>
+          </section>
+        )}
+
+        {rest.length > 0 && (
+          <section class="list" aria-labelledby="list-title">
+            <div class="head">
+              <h2 id="list-title" class="head__title">Coming up</h2>
+              <span class="head__n">{rest.length} more</span>
+            </div>
+            <ul class="grid">
+              {rest.map((ev, i) => (
+                <li style={`--i:${i}`}>
+                  <a class="card" href={`/events/${ev.slug}`}>
+                    <span class="card__media">
+                      {imageUrl(ev) ? (
+                        <img src={imageUrl(ev)} alt={ev.image_alt ?? ''} width="900" height="600" loading="lazy" decoding="async" />
+                      ) : (
+                        <span class="slate slate--sm">
+                          <span class="slate__corner slate__corner--tl" />
+                          <span class="slate__corner slate__corner--tr" />
+                          <span class="slate__corner slate__corner--bl" />
+                          <span class="slate__corner slate__corner--br" />
+                          <span class="slate__title">{ev.title}</span>
+                        </span>
+                      )}
+                      <span class="date" aria-hidden="true">
+                        <span class="date__m">{dateBlock(ev.starts_at).month}</span>
+                        <span class="date__d">{dateBlock(ev.starts_at).day}</span>
+                      </span>
+                    </span>
+                    <span class="card__body">
+                      <span class="card__when">{whenParts(ev).date} · {whenParts(ev).time}</span>
+                      <span class="card__title">{ev.title}</span>
+                      {ev.summary && <span class="card__text">{ev.summary}</span>}
+                      <span class="meta">
+                        {ev.location && <span>{ev.location}</span>}
+                        <span class:list={['mode', `mode--${ev.mode}`]}>{MODE_LABELS[ev.mode]}</span>
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {past.length > 0 && (
+          <section class="past" aria-labelledby="past-title">
+            <div class="head">
+              <h2 id="past-title" class="head__title">Past events</h2>
+            </div>
+            <ul class="past__list">
+              {past.map((ev) => (
+                <li>
+                  <a href={`/events/${ev.slug}`}>
+                    <span class="past__date">{whenParts(ev).date}</span>
+                    <span class="past__title">{ev.title}</span>
+                    <span class="past__meta">{[ev.location, MODE_LABELS[ev.mode]].filter(Boolean).join(' · ')}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .page {
+    padding: clamp(40px, 5vw, 80px) var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(16px, 1.8vw, 24px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn--red {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .btn--red:hover {
+    background: var(--charcoal);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Shared bits: date block, meta, mode pill, slate fallback ---- */
+
+  .date {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    padding: 8px 0 9px;
+    border-radius: 10px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-head);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .date__m {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--red);
+  }
+
+  .date__d {
+    margin-top: 3px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .date--lg {
+    width: 76px;
+    padding: 12px 0 13px;
+  }
+
+  .date--lg .date__d {
+    font-size: 34px;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+    margin: 0;
+    font-size: 14px;
+    color: #5a5a5a;
+  }
+
+  .mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(51, 51, 51, 0.2);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+
+  .mode::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .mode--online::before {
+    background: var(--blue);
+  }
+
+  .mode--hybrid::before {
+    background: linear-gradient(90deg, var(--red) 50%, var(--blue) 50%);
+  }
+
+  .slate {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: clamp(20px, 2.4vw, 32px);
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgba(189, 47, 47, 0.45), transparent 60%),
+      radial-gradient(60% 80% at 0% 100%, rgba(34, 68, 102, 0.6), transparent 70%),
+      #1c1c1c;
+    color: var(--white);
+  }
+
+  .slate__title {
+    font-family: var(--font-head);
+    font-size: clamp(22px, 2.2vw, 34px);
+    font-weight: 600;
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+
+  .slate--sm .slate__title {
+    font-size: clamp(18px, 1.5vw, 22px);
+  }
+
+  .slate__corner {
+    position: absolute;
+    width: 16px;
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.5);
+  }
+
+  .slate__corner--tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+  .slate__corner--tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+  .slate__corner--bl { bottom: 12px; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+  .slate__corner--br { bottom: 12px; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* ---- Featured ---- */
+
+  .feat {
+    padding-bottom: clamp(40px, 5vw, 80px);
+    margin-bottom: clamp(36px, 4.4vw, 68px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .feat__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(24px, 3.6vw, 64px);
+    align-items: center;
+  }
+
+  .feat__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--charcoal);
+  }
+
+  .feat__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .feat__card:hover .feat__media img {
+    transform: scale(1.04);
+  }
+
+  .feat__top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: clamp(16px, 1.8vw, 24px);
+  }
+
+  .feat__when {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .feat__when span + span {
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  .feat__title {
+    margin: 0 0 14px;
+    font-size: clamp(30px, 3.2vw, 54px);
+    line-height: 1;
+  }
+
+  .feat__title a:hover {
+    color: var(--red);
+  }
+
+  .feat__text {
+    margin: 0 0 18px;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.65;
+    color: #4a4a4a;
+  }
+
+  .feat__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: clamp(22px, 2.4vw, 32px);
+  }
+
+  .feat__link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .feat__link:hover {
+    color: var(--red);
+  }
+
+  /* ---- Empty ---- */
+
+  .none {
+    padding: clamp(28px, 4vw, 56px) clamp(22px, 3vw, 44px);
+    margin-bottom: clamp(36px, 4.4vw, 68px);
+    border-radius: 16px;
+    background: #f4f4f2;
+  }
+
+  .none__title {
+    margin: 0 0 12px;
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1;
+  }
+
+  .none__text {
+    margin: 0;
+    font-size: clamp(15px, 1.1vw, 17px);
+    color: #5a5a5a;
+  }
+
+  .none__text a {
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---- Upcoming grid ---- */
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(22px, 2.6vw, 36px);
+  }
+
+  .head__title {
+    margin: 0;
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1;
+  }
+
+  .head__n {
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 48px) clamp(18px, 2vw, 32px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grid li {
+    animation: card-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: var(--charcoal);
+  }
+
+  .card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--charcoal);
+  }
+
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .card__media img {
+    transform: scale(1.05);
+  }
+
+  .card__media .date {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  }
+
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+  }
+
+  .card__when {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .card__title {
+    font-family: var(--font-head);
+    font-size: clamp(19px, 1.5vw, 24px);
+    font-weight: 600;
+    line-height: 1.12;
+    text-transform: uppercase;
+    transition: color 0.25s ease;
+  }
+
+  .card:hover .card__title {
+    color: var(--red);
+  }
+
+  .card__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #5a5a5a;
+  }
+
+  .card .meta {
+    margin-top: auto;
+    padding-top: 6px;
+    font-size: 13px;
+  }
+
+  /* ---- Past ---- */
+
+  .past {
+    margin-top: clamp(44px, 5.5vw, 88px);
+    padding-top: clamp(32px, 4vw, 56px);
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .past .head__title {
+    font-size: clamp(20px, 2vw, 30px);
+    color: #6d6d6d;
+  }
+
+  .past__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .past__list a {
+    display: grid;
+    gap: 4px;
+    height: 100%;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: #f4f4f2;
+    color: #6d6d6d;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .past__list a:hover {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .past__date {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .past__title {
+    font-family: var(--font-head);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.15;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    transition: color 0.25s ease;
+  }
+
+  .past__list a:hover .past__title {
+    color: var(--white);
+  }
+
+  .past__meta {
+    font-size: 13px;
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .feat__card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .past__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid li {
+      animation: none;
+    }
+  }
+</style>

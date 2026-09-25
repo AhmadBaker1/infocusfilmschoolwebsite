@@ -4,15 +4,18 @@
 // stored or crawled. Public pages are untouched (and prerendered pages never
 // hit this at request time).
 import { defineMiddleware } from 'astro:middleware';
-import { SESSION_COOKIE, can, getSessionUser, type Role } from './lib/server/auth';
+import { SESSION_COOKIE, canSection, getSessionUser, type Section } from './lib/server/auth';
 import { json, safeNext } from './lib/server/http';
 
-// Which role each section needs. Admins pass everything.
-const GATES: [RegExp, Role][] = [
-  [/^\/(admin|api\/admin)\/events(\/|$)/, 'marketing'],
-  [/^\/(admin|api\/admin)\/(jobs|applicants|files)(\/|$)/, 'hr'],
+// Which section each path belongs to; roles per section live in SECTIONS.
+const GATES: [RegExp, Section][] = [
+  [/^\/(admin|api\/admin)\/events(\/|$)/, 'events'],
+  [/^\/(admin|api\/admin)\/blog(\/|$)/, 'blog'],
+  [/^\/(admin|api\/admin)\/jobs(\/|$)/, 'jobs'],
+  [/^\/(admin|api\/admin)\/applicants(\/|$)/, 'applicants'],
+  [/^\/(admin|api\/admin)\/files(\/|$)/, 'files'],
   [/^\/(admin|api\/admin)\/admissions(\/|$)/, 'admissions'],
-  [/^\/(admin|api\/admin)\/users(\/|$)/, 'admin'],
+  [/^\/(admin|api\/admin)\/users(\/|$)/, 'users'],
 ];
 
 const PRIVATE = /^\/(admin|login|api\/(admin|auth))(\/|$)/;
@@ -37,8 +40,8 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
       const back = safeNext(path + ctx.url.search);
       return ctx.redirect(`/login?next=${encodeURIComponent(back)}`, 302);
     }
-    for (const [re, role] of GATES) {
-      if (re.test(path) && !can(user, role)) {
+    for (const [re, section] of GATES) {
+      if (re.test(path) && !canSection(user, section)) {
         if (isApi) return json({ ok: false, message: 'Your account does not have access to this section.' }, 403);
         return ctx.rewrite('/admin/forbidden');
       }

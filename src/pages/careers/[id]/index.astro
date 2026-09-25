@@ -2,15 +2,22 @@
 import Base from '../../../layouts/Base.astro';
 import Nav from '../../../components/Nav.astro';
 import Footer from '../../../components/Footer.astro';
-import { jobs, DEPTS, EMAIL, type Job } from '../../../lib/jobs';
+import { DEPTS, EMAIL } from '../../../lib/jobs';
+import { db } from '../../../lib/server/db';
+import { getById, isAccepting, listOpen } from '../../../lib/server/jobs';
 
-export function getStaticPaths() {
-  return jobs.map((job) => ({ params: { id: job.id }, props: { job } }));
-}
+// Rendered on Cloudflare from D1. Drafts and unknown ids are 404; closed
+// postings keep their page (old links, search results) but cannot be
+// applied to.
+export const prerender = false;
 
-const { job } = Astro.props as { job: Job };
-const others = jobs.filter((j) => j.id !== job.id).slice(0, 3);
+const d1 = db(Astro.locals);
+const job = await getById(d1, Astro.params.id ?? '');
+if (!job || job.status === 'draft') return new Response(null, { status: 404 });
+const open = isAccepting(job);
+const others = (await listOpen(d1)).filter((j) => j.id !== job.id).slice(0, 3);
 const url = new URL(`/careers/${job.id}`, Astro.site).toString();
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
 ---
 
 <Base
@@ -48,7 +55,11 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
           </div>
         </dl>
         <div class="top__actions">
-          <a class="btn btn--light" href={`/careers/${job.id}/apply`}>Apply for this role <span aria-hidden="true">→</span></a>
+          {open ? (
+            <a class="btn btn--light" href={`/careers/${job.id}/apply`}>Apply for this role <span aria-hidden="true">→</span></a>
+          ) : (
+            <span class="closed-tag">Applications closed</span>
+          )}
           <button type="button" class="copy" data-copy={url}>Copy link</button>
         </div>
       </div>
@@ -67,29 +78,57 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
             <div><dt>Type</dt><dd>{job.type}</dd></div>
             <div><dt>Pay</dt><dd class="card__pay">{job.pay}</dd></div>
           </dl>
-          <a class="btn btn--dark btn--block" href={`/careers/${job.id}/apply`}>Apply now <span aria-hidden="true">→</span></a>
+          {open ? (
+            <a class="btn btn--dark btn--block" href={`/careers/${job.id}/apply`}>Apply now <span aria-hidden="true">→</span></a>
+          ) : (
+            <p class="card__closed">This role is no longer accepting applications.</p>
+          )}
           <a class="card__mail" href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Question: ${job.title}`)}`}>Questions? {EMAIL}</a>
         </aside>
       </div>
     </section>
 
-    <!-- ===== Apply CTA ===== -->
-    <section class="apply" aria-labelledby="apply-title">
-      <div class="wrap apply__grid">
-        <div>
-          <p class="apply__eyebrow"><span aria-hidden="true"></span>Interested?</p>
-          <h2 id="apply-title" class="apply__title">Apply for<br /><em>{job.title}</em></h2>
-        </div>
-        <div>
-          <ol class="steps">
-            <li><span>01</span>Fill in the application. It takes about five minutes.</li>
-            <li><span>02</span>Our team reviews applications on a rolling basis.</li>
-            <li><span>03</span>Shortlisted candidates are contacted for an interview.</li>
-          </ol>
-          <a class="btn btn--light apply__btn" href={`/careers/${job.id}/apply`}>Start your application <span aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
+    <!-- ===== Apply CTA (or the closed notice) ===== -->
+    {
+      open ? (
+        <section class="apply" aria-labelledby="apply-title">
+          <div class="wrap apply__grid">
+            <div>
+              <p class="apply__eyebrow"><span aria-hidden="true"></span>Interested?</p>
+              <h2 id="apply-title" class="apply__title">Apply for<br /><em>{job.title}</em></h2>
+            </div>
+            <div>
+              <ol class="steps">
+                <li><span>01</span>Fill in the application. It takes about five minutes.</li>
+                <li><span>02</span>Our team reviews applications on a rolling basis.</li>
+                <li><span>03</span>Shortlisted candidates are contacted for an interview.</li>
+              </ol>
+              <a class="btn btn--light apply__btn" href={`/careers/${job.id}/apply`}>Start your application <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section class="apply" aria-labelledby="apply-title">
+          <div class="wrap apply__grid">
+            <div>
+              <p class="apply__eyebrow"><span aria-hidden="true"></span>Applications closed</p>
+              <h2 id="apply-title" class="apply__title">This role is no longer<br /><em>accepting applications</em></h2>
+            </div>
+            <div>
+              <p class="apply__text">
+                Thanks for your interest in the {job.title} position. This posting has closed, but we are always looking for
+                talented people. Browse our other openings or send a general application and we will keep your details on
+                file for future roles.
+              </p>
+              <div class="apply__links">
+                <a class="btn btn--light" href="/careers">See open roles <span aria-hidden="true">→</span></a>
+                <a class="apply__general" href="/careers/apply">Send a general application</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
 
     <!-- ===== Other roles ===== -->
     {
@@ -117,10 +156,14 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
     }
 
     <!-- Mobile apply bar -->
-    <a class="bar" href={`/careers/${job.id}/apply`} data-bar>
-      <span>{job.title}</span>
-      <span class="bar__cta">Apply →</span>
-    </a>
+    {
+      open && (
+        <a class="bar" href={`/careers/${job.id}/apply`} data-bar>
+          <span>{job.title}</span>
+          <span class="bar__cta">Apply →</span>
+        </a>
+      )
+    }
   </main>
 
   <Footer />
@@ -302,6 +345,28 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
     color: var(--charcoal);
   }
 
+  .closed-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .closed-tag::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
   /* ===== Posting ===== */
 
   .post {
@@ -424,6 +489,19 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
     font-size: 17px !important;
   }
 
+  .card__closed {
+    margin: 0;
+    padding: 14px 16px;
+    border: 1px solid rgba(189, 47, 47, 0.35);
+    border-radius: 10px;
+    background: rgba(189, 47, 47, 0.06);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--red);
+  }
+
   .card__mail {
     font-size: 13px;
     color: #6d6d6d;
@@ -454,6 +532,34 @@ const url = new URL(`/careers/${job.id}`, Astro.site).toString();
 
   .apply__btn {
     margin-top: 28px;
+  }
+
+  .apply__text {
+    margin: 0;
+    max-width: 52ch;
+    font-size: clamp(15px, 1.08vw, 17px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .apply__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: 28px;
+  }
+
+  .apply__general {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 5px;
   }
 
   .apply__eyebrow {

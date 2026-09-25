@@ -1,0 +1,124 @@
+---
+// Admissions: Apply Now submissions by program, with filters, an inline
+// status change per row and a CSV export of the current view.
+import Admin from '../../../layouts/Admin.astro';
+import { getPrograms } from '../../../lib/programs';
+import {
+  ADMISSION_BADGE,
+  ADMISSION_STATUSES,
+  admissionFilters,
+  admissionQuery,
+  admissionWhere,
+  fullName,
+  statusLabel,
+  type AdmissionRow,
+} from '../../../lib/server/applications';
+import { all, count, db } from '../../../lib/server/db';
+import { fmtDateTime, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const f = admissionFilters(Astro.url.searchParams);
+const where = admissionWhere(f);
+
+const [rows, total, newCount] = await Promise.all([
+  all<AdmissionRow>(d1.prepare(`SELECT * FROM admissions_applications WHERE ${where.sql} ORDER BY created_at DESC LIMIT 500`).bind(...where.binds)),
+  count(d1, 'SELECT COUNT(*) AS n FROM admissions_applications'),
+  count(d1, "SELECT COUNT(*) AS n FROM admissions_applications WHERE status = 'new'"),
+]);
+
+const programs = getPrograms();
+const here = Astro.url.pathname + Astro.url.search;
+const exportHref = `/api/admin/admissions/export.csv${admissionQuery(f)}`;
+const programTitle = f.program ? programs.find((p) => p.slug === f.program)?.title ?? f.program : '';
+const filtered = !!(f.status || f.program || f.q);
+---
+
+<Admin title="Admissions" section="admissions" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Admissions' }]} counts={{ admissions: newCount }}>
+  <div slot="actions">
+    <a class="a-btn" href={exportHref}>Export CSV</a>
+    <a class="a-btn a-btn--ghost" href="/apply" target="_blank" rel="noopener">View Apply Now page</a>
+  </div>
+
+  <form class="a-toolbar" method="get" action="/admin/admissions">
+    <select class="a-select" name="status" aria-label="Status">
+      <option value="">All statuses</option>
+      {ADMISSION_STATUSES.map((s) => (
+        <option value={s} selected={f.status === s}>{statusLabel(s)}</option>
+      ))}
+    </select>
+    <select class="a-select" name="program" aria-label="Program">
+      <option value="">All programs</option>
+      {programs.map((p) => (
+        <option value={p.slug} selected={f.program === p.slug}>{p.shortTitle}</option>
+      ))}
+    </select>
+    <input class="a-input" type="search" name="q" value={f.q} placeholder="Search name or email" aria-label="Search" />
+    <button class="a-btn" type="submit">Filter</button>
+    {filtered && <a class="a-btn a-btn--ghost" href="/admin/admissions">Clear</a>}
+  </form>
+
+  <section class="a-card a-card--flush">
+    <div class="a-card__head">
+      <h2 class="a-h2" style="margin:0">
+        {rows.length}{filtered ? ` of ${total}` : ''} application{rows.length === 1 ? '' : 's'}
+        {programTitle && <span class="a-muted"> for {programTitle}</span>}
+      </h2>
+      <span class="a-help" style="margin:0">Newest first. Change a status right here or open an applicant for the full record.</span>
+    </div>
+    {rows.length === 0 ? (
+      <div class="a-empty" style="margin:20px">
+        <strong>No applications{filtered ? ' match' : ' yet'}</strong>
+        {filtered ? 'Try clearing the filters.' : 'Submissions from the Apply Now page land here.'}
+      </div>
+    ) : (
+      <div class="a-table-wrap">
+        <table class="a-table">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Program</th>
+              <th>Location</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Set status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td class="primary">
+                  <a href={`/admin/admissions/${r.id}`}>{fullName(r) || 'Unnamed'}</a>
+                  <span class="sub">{r.email}</span>
+                </td>
+                <td>{r.program_name}</td>
+                <td>{[r.city, r.country].filter(Boolean).join(', ') || <span class="a-muted">Not given</span>}</td>
+                <td class="nowrap"><time datetime={r.created_at} title={`${fmtDateTime(r.created_at)} MT`}>{timeAgo(r.created_at)}</time></td>
+                <td><span class:list={['a-badge', ADMISSION_BADGE[r.status]]}>{statusLabel(r.status)}</span></td>
+                <td class="nowrap">
+                  <form method="post" action={`/api/admin/admissions/${r.id}`} data-autosubmit>
+                    <input type="hidden" name="_action" value="status" />
+                    <input type="hidden" name="back" value={here} />
+                    <select class="a-select" name="status" aria-label={`Status for ${fullName(r)}`} style="padding:6px 30px 6px 10px;font-size:13px;min-width:0">
+                      {ADMISSION_STATUSES.map((s) => (
+                        <option value={s} selected={r.status === s}>{statusLabel(s)}</option>
+                      ))}
+                    </select>
+                    <noscript><button class="a-btn a-btn--sm" type="submit">Save</button></noscript>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+</Admin>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('form[data-autosubmit] select').forEach((s) => {
+    s.addEventListener('change', () => s.form?.requestSubmit());
+  });
+</script>

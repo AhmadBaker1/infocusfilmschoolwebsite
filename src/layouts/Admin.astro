@@ -5,7 +5,7 @@
 import '../styles/global.css';
 import '../styles/admin.css';
 import SiteCredit from '../components/SiteCredit.astro';
-import { ROLE_LABELS, can, type Role } from '../lib/server/auth';
+import { ROLE_LABELS, canSection, type Section } from '../lib/server/auth';
 import { takeFlash } from '../lib/server/http';
 
 interface Crumb {
@@ -16,7 +16,7 @@ interface Crumb {
 interface Props {
   title: string;
   /* Which sidebar item is current. */
-  section?: 'dashboard' | 'events' | 'jobs' | 'applicants' | 'admissions' | 'users';
+  section?: 'dashboard' | 'events' | 'blog' | 'jobs' | 'applicants' | 'admissions' | 'users';
   crumbs?: Crumb[];
   /* Optional badge counts for the sidebar, e.g. { applicants: 3 }. */
   counts?: Partial<Record<string, number>>;
@@ -29,21 +29,23 @@ const flash = takeFlash(Astro.cookies);
 const icons = {
   dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
   events: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  blog: '<path d="M4 20h16M4 4h10l6 6v10H4z"/><path d="M14 4v6h6M8 13h8M8 17h5"/>',
   jobs: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18"/>',
   applicants: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2"/>',
   admissions: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20M9 8h6"/>',
   users: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/><path d="M19 4l1 1-3 3"/>',
 };
 
-const items: { key: keyof typeof icons; label: string; href: string; role?: Role }[] = [
+const items: { key: keyof typeof icons; label: string; href: string; section?: Section }[] = [
   { key: 'dashboard', label: 'Dashboard', href: '/admin' },
-  { key: 'events', label: 'Events', href: '/admin/events', role: 'marketing' },
-  { key: 'jobs', label: 'Job postings', href: '/admin/jobs', role: 'hr' },
-  { key: 'applicants', label: 'Applicants', href: '/admin/applicants', role: 'hr' },
-  { key: 'admissions', label: 'Admissions', href: '/admin/admissions', role: 'admissions' },
-  { key: 'users', label: 'Staff accounts', href: '/admin/users', role: 'admin' },
+  { key: 'events', label: 'Events', href: '/admin/events', section: 'events' },
+  { key: 'blog', label: 'Blog', href: '/admin/blog', section: 'blog' },
+  { key: 'jobs', label: 'Job postings', href: '/admin/jobs', section: 'jobs' },
+  { key: 'applicants', label: 'Applicants', href: '/admin/applicants', section: 'applicants' },
+  { key: 'admissions', label: 'Admissions', href: '/admin/admissions', section: 'admissions' },
+  { key: 'users', label: 'Staff accounts', href: '/admin/users', section: 'users' },
 ];
-const visible = items.filter((i) => !i.role || can(user, i.role));
+const visible = items.filter((i) => !i.section || canSection(user, i.section));
 ---
 
 <!doctype html>

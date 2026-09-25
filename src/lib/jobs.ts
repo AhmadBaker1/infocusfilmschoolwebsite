@@ -1,17 +1,32 @@
-// Job postings (copied from infocusfilmschool.com/jobs, 2026-09-24). Add,
-// edit or remove roles in src/data/jobs.json; each gets a page at
-// /careers/<id> and an application page at /careers/<id>/apply.
-import data from '../data/jobs.json';
+// Job postings: the shape shared by the public careers pages, the
+// application form and the staff area. Postings live in D1 (table `jobs`,
+// edited at /admin/jobs); src/data/jobs.json is only the original seed.
+// Each open posting gets a page at /careers/<id> and an application page at
+// /careers/<id>/apply.
 
-export type Job = (typeof data)[number];
-
-export const jobs: Job[] = data;
+export interface Job {
+  /* Slug, used in /careers/<id>. */
+  id: string;
+  title: string;
+  /* Key into DEPTS. */
+  dept: string;
+  location: string;
+  type: string;
+  pay: string;
+  /* Rendered posting body (safe to set:html). */
+  html: string;
+  status?: 'draft' | 'open' | 'closed';
+  /* ISO UTC; the posting stops accepting applications after this. */
+  closes_at?: string | null;
+}
 
 export const DEPTS: Record<string, string> = {
   leadership: 'Leadership',
   admissions: 'Admissions + Finance',
   faculty: 'Faculty',
   marketing: 'Marketing',
+  operations: 'Operations',
+  'student-services': 'Student Services',
 };
 
 export const EMAIL = 'info@infocusfilmschool.com';

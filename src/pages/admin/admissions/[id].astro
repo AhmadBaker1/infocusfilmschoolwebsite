@@ -1,0 +1,133 @@
+---
+// One Apply Now submission: details, status, private notes and delete.
+import Admin from '../../../layouts/Admin.astro';
+import { ADMISSION_BADGE, ADMISSION_STATUSES, fullName, statusLabel, type AdmissionRow } from '../../../lib/server/applications';
+import { count, db, one } from '../../../lib/server/db';
+import { fmtDateTime, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const a = await one<AdmissionRow>(d1.prepare('SELECT * FROM admissions_applications WHERE id = ?').bind(Astro.params.id));
+if (!a) return new Response(null, { status: 404 });
+
+const newCount = await count(d1, "SELECT COUNT(*) AS n FROM admissions_applications WHERE status = 'new'");
+const name = fullName(a) || 'Unnamed applicant';
+const action = `/api/admin/admissions/${a.id}`;
+const listHref = `/admin/admissions?program=${encodeURIComponent(a.program)}`;
+const mailto = `mailto:${a.email}?subject=${encodeURIComponent(`Your application to InFocus Film School: ${a.program_name}`)}`;
+const phone = [a.phone_country.split(' ').pop(), a.phone].filter(Boolean).join(' ');
+const tel = `tel:${phone.replace(/[^\d+]/g, '')}`;
+const notes = a.notes.trim();
+---
+
+<Admin
+  title={name}
+  section="admissions"
+  crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Admissions', href: listHref }, { label: name }]}
+  counts={{ admissions: newCount }}
+>
+  <div slot="actions">
+    {a.email && <a class="a-btn a-btn--primary" href={mailto}>Email applicant</a>}
+    <a class="a-btn" href={listHref}>Back to list</a>
+  </div>
+
+  <div class="a-grid a-grid--side">
+    <div>
+      <section class="a-card">
+        <div class="a-card__head">
+          <h2 class="a-h2" style="margin:0">{a.program_name}</h2>
+          <span class:list={['a-badge', ADMISSION_BADGE[a.status]]}>{statusLabel(a.status)}</span>
+        </div>
+        <div class="a-grid a-grid--2">
+          <div>
+            <h3 class="a-h3">Contact</h3>
+            <dl class="a-kv">
+              <dt>Name</dt>
+              <dd>{name}</dd>
+              <dt>Email</dt>
+              <dd>{a.email ? <a class="a-link" href={mailto}>{a.email}</a> : <span class="a-muted">Not given</span>}</dd>
+              <dt>Phone</dt>
+              <dd>{phone ? <a class="a-link" href={tel}>{phone}</a> : <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Location</h3>
+            <dl class="a-kv">
+              <dt>City</dt>
+              <dd>{a.city || <span class="a-muted">Not given</span>}</dd>
+              <dt>Country</dt>
+              <dd>{a.country || <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Program</h3>
+            <dl class="a-kv">
+              <dt>Program</dt>
+              <dd><a class="a-link" href={`/programs/${a.program}`} target="_blank" rel="noopener">{a.program_name}</a></dd>
+              <dt>Heard from</dt>
+              <dd>{a.heard_from || <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Submission</h3>
+            <dl class="a-kv">
+              <dt>Submitted</dt>
+              <dd><time datetime={a.created_at} title={a.created_at}>{fmtDateTime(a.created_at)} MT</time><span class="a-muted"> ({timeAgo(a.created_at)})</span></dd>
+              {a.updated_at !== a.created_at && (
+                <>
+                  <dt>Updated</dt>
+                  <dd>{fmtDateTime(a.updated_at)} MT</dd>
+                </>
+              )}
+              <dt>IP</dt>
+              <dd>{a.ip || <span class="a-muted">Unknown</span>}</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="a-card">
+        <h2 class="a-h2">Status</h2>
+        <form class="a-form" method="post" action={action}>
+          <input type="hidden" name="_action" value="status" />
+          <div class="a-field">
+            <label for="status">Stage</label>
+            <select class="a-select" id="status" name="status">
+              {ADMISSION_STATUSES.map((s) => (
+                <option value={s} selected={a.status === s}>{statusLabel(s)}</option>
+              ))}
+            </select>
+          </div>
+          <div class="a-form__actions" style="padding:0">
+            <button class="a-btn a-btn--primary" type="submit">Save status</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Private notes</h2>
+        <form class="a-form" method="post" action={action}>
+          <input type="hidden" name="_action" value="notes" />
+          <div class="a-field">
+            <label for="notes">Only staff see these</label>
+            <textarea class="a-textarea" id="notes" name="notes" maxlength="20000" placeholder="Call notes, documents requested, next steps...">{notes}</textarea>
+          </div>
+          <div class="a-form__actions" style="padding:0">
+            <button class="a-btn" type="submit">Save notes</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Danger</h2>
+        <form class="a-inline-form" method="post" action={action} data-confirm={`Permanently delete ${name}'s application? This cannot be undone.`}>
+          <input type="hidden" name="_action" value="delete" />
+          <button class="a-btn a-btn--danger" type="submit">Delete application</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</Admin>

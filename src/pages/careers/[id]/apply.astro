@@ -1,12 +1,15 @@
 ---
+// Application form for one posting. Only postings that are open (and not
+// past their closing date) accept applications; anything else is a 404.
 import ApplyPage from '../../../components/ApplyPage.astro';
-import { jobs, type Job } from '../../../lib/jobs';
+import { db } from '../../../lib/server/db';
+import { getOpenById } from '../../../lib/server/jobs';
 
-export function getStaticPaths() {
-  return jobs.map((job) => ({ params: { id: job.id }, props: { job } }));
-}
+export const prerender = false;
 
-const { job } = Astro.props as { job: Job };
+const job = await getOpenById(db(Astro.locals), Astro.params.id ?? '');
+if (!job) return new Response(null, { status: 404 });
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
 ---
 
 <ApplyPage job={job} />

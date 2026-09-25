@@ -1,0 +1,907 @@
+---
+// Rich text editor for postings and event descriptions. No markdown: a
+// toolbar (heading, bold, italic, lists, links), clean paste from Word and
+// Google Docs, and "Import from a document" which reads a PDF, Word file or
+// text file in the browser and turns its headings, bullets and paragraphs
+// into content. The HTML lands in a hidden field named `name`; the server
+// runs it through sanitizeHtml() before storing.
+import { editableHtml } from '../../lib/server/sanitize';
+
+interface Props {
+  name: string;
+  value?: string;
+  id?: string;
+  /* Shown in the empty editor. */
+  placeholder?: string;
+}
+
+const { name, value = '', id = `re-${name}`, placeholder = 'Start writing, paste from Word, or import a document.' } = Astro.props;
+const initial = editableHtml(value);
+
+const tools: { cmd: string; label: string; title: string; icon: string }[] = [
+  { cmd: 'heading', label: 'Heading', title: 'Section heading', icon: '<path d="M5 5v14M13 5v14M5 12h8M17 9.5l2.5-1.5V19"/>' },
+  { cmd: 'bold', label: 'Bold', title: 'Bold (Ctrl+B)', icon: '<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/>' },
+  { cmd: 'italic', label: 'Italic', title: 'Italic (Ctrl+I)', icon: '<path d="M10 5h8M6 19h8M14 5l-4 14"/>' },
+  { cmd: 'ul', label: 'Bullets', title: 'Bullet list', icon: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.3"/><circle cx="4.5" cy="12" r="1.3"/><circle cx="4.5" cy="18" r="1.3"/>' },
+  { cmd: 'ol', label: 'Numbers', title: 'Numbered list', icon: '<path d="M10 6h10M10 12h10M10 18h10M4 5.5l1.5-1v5M3.8 11h2.7l-2.7 3h2.7M3.8 16.5h2.4l-1.2 1.5 1.2 1.5H3.8"/>' },
+  { cmd: 'link', label: 'Link', title: 'Add a link', icon: '<path d="M10 14a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 0 0-5.7-5.7l-1.4 1.4M14 10a4 4 0 0 0-5.7 0l-2.8 2.8a4 4 0 0 0 5.7 5.7l1.4-1.4"/>' },
+  { cmd: 'clear', label: 'Clear', title: 'Clear formatting', icon: '<path d="M6 19h12M15 5l-6 9M9 5h10M12 5l-4.5 9"/>' },
+];
+---
+
+<div class="re" data-rich-editor id={id}>
+  <div class="re__bar" role="toolbar" aria-label="Formatting">
+    {tools.map((t) => (
+      <button class="re__tool" type="button" data-cmd={t.cmd} title={t.title} aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true" set:html={t.icon} />
+        <span>{t.label}</span>
+      </button>
+    ))}
+    <span class="re__spacer"></span>
+    <button class="re__tool re__tool--import" type="button" data-import title="Read a PDF, Word or text file and turn it into this posting">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>
+      <span>Import from a document</span>
+    </button>
+    <input type="file" accept=".pdf,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" hidden data-import-file />
+  </div>
+
+  <div class="re__area a-prose" contenteditable="true" spellcheck="true" data-editable data-placeholder={placeholder} set:html={initial}></div>
+  <textarea name={name} hidden data-output>{value}</textarea>
+
+  <div class="re__modal" hidden data-modal>
+    <div class="re__dialog" role="dialog" aria-modal="true" aria-labelledby={`${id}-mt`}>
+      <div class="re__dialog-head">
+        <h2 class="a-h2" id={`${id}-mt`} style="margin:0">Import from a document</h2>
+        <button class="a-btn a-btn--sm a-btn--ghost" type="button" data-modal-close>Close</button>
+      </div>
+      <p class="a-help" data-import-status style="margin:0 0 12px"></p>
+      <div class="re__preview a-prose" data-import-preview></div>
+      <p class="a-help" data-import-note style="margin:12px 0 0"></p>
+      <div class="a-form__actions" style="margin-top:16px">
+        <button class="a-btn a-btn--primary" type="button" data-import-replace disabled>Use this (replace what is there)</button>
+        <button class="a-btn" type="button" data-import-append disabled>Add to the end</button>
+        <span class="spacer"></span>
+        <button class="a-btn a-btn--ghost" type="button" data-modal-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .re {
+    border: 1px solid var(--a-line);
+    border-radius: 8px;
+    background: var(--a-surface);
+    overflow: hidden;
+  }
+
+  .re:focus-within {
+    border-color: var(--a-red);
+    box-shadow: 0 0 0 3px var(--a-red-soft);
+  }
+
+  .re__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    padding: 6px;
+    border-bottom: 1px solid var(--a-line);
+    background: var(--a-bg);
+  }
+
+  .re__spacer {
+    flex: 1;
+  }
+
+  .re__tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--a-ink-2);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .re__tool svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .re__tool:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--a-ink);
+  }
+
+  .re__tool[aria-pressed='true'] {
+    background: var(--a-ink);
+    color: #fff;
+  }
+
+  .re__tool--import {
+    border: 1px solid var(--a-line);
+    background: var(--a-surface);
+    color: var(--a-red);
+  }
+
+  .re__tool--import:hover {
+    border-color: var(--a-red);
+    background: var(--a-red-soft);
+    color: var(--a-red);
+  }
+
+  .re__area {
+    min-height: 380px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 18px 20px;
+    outline: none;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .re__area:empty::before {
+    content: attr(data-placeholder);
+    color: var(--a-ink-3);
+    pointer-events: none;
+  }
+
+  .re__area :global(h2) {
+    margin: 1.2em 0 0.4em;
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--a-ink);
+  }
+
+  .re__area :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .re__area :global(p) {
+    margin: 0 0 0.9em;
+  }
+
+  .re__area :global(ul),
+  .re__area :global(ol) {
+    margin: 0 0 0.9em;
+    padding-left: 24px;
+  }
+
+  .re__area :global(li) {
+    margin: 0.2em 0;
+  }
+
+  .re__area :global(a) {
+    color: var(--a-red);
+    text-decoration: underline;
+  }
+
+  .re__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .re__modal[hidden] {
+    display: none;
+  }
+
+  .re__dialog {
+    width: min(860px, 100%);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 24px;
+    border-radius: 12px;
+    background: var(--a-surface);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+  }
+
+  .re__dialog-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .re__preview {
+    flex: 1;
+    min-height: 120px;
+    max-height: 52vh;
+    overflow-y: auto;
+    padding: 16px 18px;
+    border: 1px solid var(--a-line);
+    border-radius: 8px;
+    background: var(--a-bg);
+  }
+
+  .re__preview :global(h2) {
+    margin: 1em 0 0.3em;
+    font-family: var(--font-head);
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .re__preview :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  @media (max-width: 700px) {
+    .re__tool span {
+      display: none;
+    }
+
+    .re__tool--import span {
+      display: inline;
+    }
+
+    .re__area {
+      min-height: 280px;
+    }
+  }
+</style>
+
+<script>
+  // ---------- HTML cleaning (client side; the server cleans again) ----------
+
+  const BULLET = /^\s*(?:[•·▪◦○●■□➢➤►▶✓✔•▪●\-–—*]|o)\s+(.+)$/;
+  const NUMBERED = /^\s*(?:\d{1,2}[.)]|[a-zA-Z][.)])\s+(.+)$/;
+
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  function safeHref(href: string): string {
+    const h = href.trim();
+    return /^(https?:\/\/|mailto:|\/(?!\/))/i.test(h) ? h : '';
+  }
+
+  /** Allowlist copy of arbitrary HTML into p/h2/ul/ol/li/strong/em/u/a/br. */
+  function cleanHtml(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const out = document.createElement('div');
+
+    const walk = (src: Node, dst: HTMLElement) => {
+      src.childNodes.forEach((n) => {
+        if (n.nodeType === Node.TEXT_NODE) {
+          const t = n.textContent ?? '';
+          if (t) dst.appendChild(document.createTextNode(t));
+          return;
+        }
+        if (n.nodeType !== Node.ELEMENT_NODE) return;
+        const el = n as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+        if (['script', 'style', 'img', 'svg', 'iframe', 'object', 'video', 'audio', 'head', 'meta', 'link', 'title'].includes(tag)) return;
+
+        let name: string | null = null;
+        if (tag === 'b' || tag === 'strong') name = el.style.fontWeight === 'normal' ? null : 'strong';
+        else if (tag === 'i' || tag === 'em') name = 'em';
+        else if (tag === 'u') name = 'u';
+        else if (tag === 'a') name = 'a';
+        else if (tag === 'br') name = 'br';
+        else if (tag === 'p' || tag === 'div' || tag === 'blockquote' || tag === 'section' || tag === 'article' || tag === 'td' || tag === 'th' || tag === 'tr' || tag === 'table' || tag === 'tbody')
+          name = tag === 'p' || tag === 'div' || tag === 'blockquote' ? 'p' : null;
+        else if (/^h[1-6]$/.test(tag)) name = 'h2';
+        else if (tag === 'ul' || tag === 'ol' || tag === 'li') name = tag;
+        else if (tag === 'span' || tag === 'font') {
+          const w = el.style.fontWeight;
+          if (w === 'bold' || (Number(w) || 0) >= 600) name = 'strong';
+          else if (el.style.fontStyle === 'italic') name = 'em';
+        }
+
+        // Block containers that hold other blocks get unwrapped.
+        if (name === 'p' && el.querySelector('p, div, ul, ol, h1, h2, h3, h4, h5, h6, li, table')) name = null;
+
+        if (!name) {
+          walk(el, dst);
+          return;
+        }
+        if (name === 'br') {
+          dst.appendChild(document.createElement('br'));
+          return;
+        }
+        const made = document.createElement(name);
+        if (name === 'a') {
+          const href = safeHref(el.getAttribute('href') ?? '');
+          if (!href) {
+            walk(el, dst);
+            return;
+          }
+          made.setAttribute('href', href);
+          made.setAttribute('rel', 'noopener');
+        }
+        dst.appendChild(made);
+        walk(el, made);
+      });
+    };
+    walk(doc.body, out);
+
+    // Fix nesting a contenteditable or Word can produce.
+    out.querySelectorAll('li > p, p > p, h2 > p, p > h2').forEach((el) => unwrap(el));
+    out.querySelectorAll('ul > ul, ul > ol, ol > ul, ol > ol').forEach((el) => {
+      const prev = el.previousElementSibling;
+      if (prev && prev.tagName === 'LI') prev.appendChild(el);
+      else unwrap(el);
+    });
+    // Stray inline/text directly in the root becomes a paragraph.
+    wrapLoose(out);
+    // Headings that are only bold text inside a paragraph become real headings.
+    out.querySelectorAll('p').forEach((p) => {
+      const kids = [...p.childNodes].filter((n) => !(n.nodeType === Node.TEXT_NODE && !(n.textContent ?? '').trim()));
+      if (kids.length === 1 && (kids[0] as HTMLElement).tagName === 'STRONG' && (p.textContent ?? '').trim().length <= 120) {
+        const h = document.createElement('h2');
+        h.textContent = (p.textContent ?? '').trim();
+        p.replaceWith(h);
+      }
+    });
+    listifyTextBullets(out);
+    // Drop empties and collapse whitespace-only text.
+    out.querySelectorAll('p, li, h2, strong, em, u, a').forEach((el) => {
+      if (!(el.textContent ?? '').trim() && !el.querySelector('br')) el.remove();
+    });
+    out.querySelectorAll('ul, ol').forEach((el) => {
+      if (!el.children.length) el.remove();
+    });
+    out.querySelectorAll('h2').forEach((h) => (h.textContent = (h.textContent ?? '').replace(/\s+/g, ' ').trim()));
+    return out.innerHTML.replace(/ /g, ' ');
+  }
+
+  function unwrap(el: Element) {
+    const parent = el.parentNode;
+    if (!parent) return;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+  }
+
+  function wrapLoose(root: HTMLElement) {
+    let p: HTMLElement | null = null;
+    [...root.childNodes].forEach((n) => {
+      const isBlock = n.nodeType === Node.ELEMENT_NODE && /^(P|H2|UL|OL)$/.test((n as HTMLElement).tagName);
+      if (isBlock) {
+        p = null;
+        return;
+      }
+      if (n.nodeType === Node.ELEMENT_NODE && (n as HTMLElement).tagName === 'BR' && !p) {
+        n.remove();
+        return;
+      }
+      if (n.nodeType === Node.TEXT_NODE && !(n.textContent ?? '').trim() && !p) {
+        n.remove();
+        return;
+      }
+      if (!p) {
+        p = document.createElement('p');
+        root.insertBefore(p, n);
+      }
+      p.appendChild(n);
+    });
+  }
+
+  /** Paragraphs that start with "•", "-" or "1." become real lists. */
+  function listifyTextBullets(root: HTMLElement) {
+    const ps = [...root.querySelectorAll('p')];
+    let list: HTMLElement | null = null;
+    let listType = '';
+    ps.forEach((p) => {
+      const text = (p.textContent ?? '').replace(/ /g, ' ');
+      const b = BULLET.exec(text);
+      const n = b ? null : NUMBERED.exec(text);
+      const m = b ?? n;
+      const type = b ? 'ul' : 'ol';
+      if (!m) {
+        list = null;
+        return;
+      }
+      const prevBlock = p.previousElementSibling;
+      if (!list || listType !== type || prevBlock !== list) {
+        list = document.createElement(type);
+        listType = type;
+        p.before(list);
+      }
+      const li = document.createElement('li');
+      // Keep inline formatting: strip the marker from the first text node.
+      li.innerHTML = p.innerHTML;
+      stripLeadingMarker(li, m[1]);
+      list.appendChild(li);
+      p.remove();
+    });
+  }
+
+  function stripLeadingMarker(el: HTMLElement, rest: string) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let removed = false;
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      const t = node.textContent ?? '';
+      if (!t.trim()) {
+        node.textContent = '';
+        continue;
+      }
+      const idx = t.indexOf(rest.slice(0, 12));
+      node.textContent = idx >= 0 ? t.slice(idx) : t.replace(/^\s*(?:[•·▪◦○●■□➢➤►▶✓✔\-–—*]|o|\d{1,2}[.)]|[a-zA-Z][.)])\s+/, '');
+      removed = true;
+      break;
+    }
+    if (!removed) el.textContent = rest;
+  }
+
+  /** Plain text -> HTML: blank-line paragraphs, bullets, numbers, short headings. */
+  function textToHtml(text: string): string {
+    const lines = text.replace(/\r\n/g, '\n').replace(/\t/g, ' ').split('\n');
+    const out: string[] = [];
+    let para: string[] = [];
+    let list: 'ul' | 'ol' | null = null;
+    const inline = (s: string) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    const flushPara = () => {
+      if (para.length) out.push(`<p>${inline(para.join(' '))}</p>`);
+      para = [];
+    };
+    const flushList = () => {
+      if (list) out.push(`</${list}>`);
+      list = null;
+    };
+    const isHeading = (line: string, next: string) => {
+      const t = line.trim();
+      if (t.length > 80 || t.length < 3) return false;
+      if (/^#{1,6}\s+/.test(t)) return true;
+      if (/[.,;]$/.test(t)) return false;
+      if (t === t.toUpperCase() && /[A-Z]{3,}/.test(t)) return true;
+      if (/:$/.test(t)) return true;
+      return !!next && (BULLET.test(next) || NUMBERED.test(next)) && !BULLET.test(t) && !NUMBERED.test(t);
+    };
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const next = lines.slice(i + 1).find((l) => l.trim()) ?? '';
+      if (!line.trim()) {
+        flushPara();
+        flushList();
+        continue;
+      }
+      const b = BULLET.exec(line);
+      const n = b ? null : NUMBERED.exec(line);
+      const m = b ?? n;
+      if (m) {
+        flushPara();
+        const kind = b ? 'ul' : 'ol';
+        if (list !== kind) {
+          flushList();
+          list = kind;
+          out.push(`<${kind}>`);
+        }
+        out.push(`<li>${inline(m[1].trim())}</li>`);
+      } else if (isHeading(line, next) && para.length === 0) {
+        flushList();
+        out.push(`<h2>${esc(line.trim().replace(/^#{1,6}\s+/, '').replace(/:$/, ''))}</h2>`);
+      } else {
+        flushList();
+        para.push(line.trim());
+      }
+    }
+    flushPara();
+    flushList();
+    return out.join('');
+  }
+
+  // ---------- Document import ----------
+
+  interface Line {
+    text: string;
+    x: number;
+    y: number;
+    size: number;
+    bold: boolean;
+    page: number;
+    /* True when the PDF marks this as the start of a block or line break
+       (Chrome/Skia emit an empty end-of-line item); wrapped lines are not. */
+    explicit: boolean;
+  }
+  type Block = { type: 'h2' | 'p'; text: string } | { type: 'li'; list: 'ul' | 'ol'; text: string; x: number };
+
+  async function pdfToHtml(buf: ArrayBuffer): Promise<{ html: string; chars: number }> {
+    const pdfjs = await import('pdfjs-dist');
+    const workerUrl = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
+    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+    const doc = await pdfjs.getDocument({ data: buf }).promise;
+    const lines: Line[] = [];
+    let chars = 0;
+
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const tc = await page.getTextContent();
+      const items = (tc.items as any[]).filter((it) => typeof it.str === 'string');
+      const isBold = (fontName: string) => {
+        try {
+          const f = page.commonObjs.has(fontName) ? page.commonObjs.get(fontName) : null;
+          return /bold|black|heavy|semibold|demibold/i.test(f?.name ?? '');
+        } catch {
+          return false;
+        }
+      };
+      // Empty end-of-line items mark explicit line starts; note which real
+      // items they precede before sorting loses the order.
+      const explicitItems = new Set<any>();
+      let pendingMark = false;
+      items.forEach((it) => {
+        if (it.str === '' && it.hasEOL) {
+          pendingMark = true;
+          return;
+        }
+        if (pendingMark && it.str.trim()) {
+          explicitItems.add(it);
+          pendingMark = false;
+        }
+      });
+      // Sort top-to-bottom, left-to-right, then group into lines by y.
+      items.sort((a, b) => b.transform[5] - a.transform[5] || a.transform[4] - b.transform[4]);
+      let cur: { parts: any[]; y: number; size: number } | null = null;
+      const flush = () => {
+        if (!cur) return;
+        cur.parts.sort((a, b) => a.transform[4] - b.transform[4]);
+        let text = '';
+        let lastEnd = -1;
+        let bold = false;
+        cur.parts.forEach((it) => {
+          const x = it.transform[4];
+          if (lastEnd >= 0 && x - lastEnd > cur!.size * 0.18 && text && !text.endsWith(' ') && !it.str.startsWith(' ')) text += ' ';
+          text += it.str;
+          lastEnd = x + (it.width ?? 0);
+          if (it.str.trim() && isBold(it.fontName)) bold = true;
+        });
+        text = text.replace(/\s+/g, ' ').trim();
+        if (text) {
+          const first = cur.parts.find((it) => it.str.trim()) ?? cur.parts[0];
+          lines.push({ text, x: first.transform[4], y: cur.y, size: cur.size, bold, page: p, explicit: explicitItems.has(first) });
+          chars += text.length;
+        }
+        cur = null;
+      };
+      items.forEach((it) => {
+        if (!it.str) return;
+        const y = it.transform[5];
+        const size = Math.abs(it.height || Math.hypot(it.transform[0], it.transform[1])) || 10;
+        if (!cur || Math.abs(cur.y - y) > Math.max(size, cur.size) * 0.45) {
+          flush();
+          cur = { parts: [it], y, size };
+        } else {
+          cur.parts.push(it);
+          cur.size = Math.max(cur.size, size);
+        }
+      });
+      flush();
+    }
+    return { html: linesToHtml(lines), chars };
+  }
+
+  function linesToHtml(all: Line[]): string {
+    // Drop running headers/footers and page numbers.
+    const pages = new Set(all.map((l) => l.page)).size;
+    const seen = new Map<string, Set<number>>();
+    all.forEach((l) => {
+      const k = l.text.toLowerCase().replace(/\d+/g, '#');
+      if (!seen.has(k)) seen.set(k, new Set());
+      seen.get(k)!.add(l.page);
+    });
+    const lines = all.filter((l) => {
+      if (/^(page\s+)?\d+(\s+of\s+\d+)?$/i.test(l.text)) return false;
+      const k = l.text.toLowerCase().replace(/\d+/g, '#');
+      return !(pages > 1 && (seen.get(k)?.size ?? 0) >= 2 && l.text.length < 90);
+    });
+    if (!lines.length) return '';
+
+    // Body font size = most common size, weighted by characters.
+    const weight = new Map<number, number>();
+    lines.forEach((l) => {
+      const s = Math.round(l.size * 2) / 2;
+      weight.set(s, (weight.get(s) ?? 0) + l.text.length);
+    });
+    const body = [...weight.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const gaps: number[] = [];
+    for (let i = 1; i < lines.length; i++) if (lines[i].page === lines[i - 1].page) gaps.push(Math.abs(lines[i - 1].y - lines[i].y));
+    gaps.sort((a, b) => a - b);
+    const medGap = gaps[Math.floor(gaps.length / 2)] || body * 1.3;
+    // Left margin = most common x; indented lines under a heading are bullets
+    // even when the bullet glyph itself is not text (Chrome, Google Docs).
+    const xWeight = new Map<number, number>();
+    lines.forEach((l) => {
+      const x = Math.round(l.x);
+      xWeight.set(x, (xWeight.get(x) ?? 0) + l.text.length);
+    });
+    const margin = [...xWeight.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const hasMarkers = lines.some((l) => l.explicit);
+
+    const blocks: Block[] = [];
+    for (let i = 0; i < lines.length; i++) {
+      const l = lines[i];
+      const next = lines[i + 1];
+      const prev = blocks[blocks.length - 1];
+      const prevLine = lines[i - 1];
+      const b = BULLET.exec(l.text);
+      const n = b ? null : NUMBERED.exec(l.text);
+      const m = b ?? n;
+      const nextIsBullet = !!next && (BULLET.test(next.text) || NUMBERED.test(next.text));
+      const big = l.size >= body * 1.12;
+      const shortNoStop = l.text.length <= 90 && !/[.,;]$/.test(l.text);
+      const heading = !m && ((big && l.text.length <= 120) || (l.bold && shortNoStop) || (/:$/.test(l.text) && l.text.length <= 80 && nextIsBullet));
+      const gap = prevLine && prevLine.page === l.page ? Math.abs(prevLine.y - l.y) : Infinity;
+      const close = gap <= medGap * 1.5;
+      const indented = l.x >= margin + 8;
+      const nextIndented = !!next && next.page === l.page && next.x >= margin + 8;
+
+      // Is this line a wrapped continuation of the previous block?
+      const wrap = hasMarkers
+        ? !l.explicit && !!prev && prevLine?.page === l.page
+        : !!prev && close && !heading && !m && (prev.type === 'p' || (prev.type === 'li' && (l.x > prev.x + 2 || /^[a-z]/.test(l.text))));
+
+      if (wrap && prev) {
+        prev.text = prev.text.endsWith('-') && /^[a-z]/.test(l.text) ? prev.text.slice(0, -1) + l.text : `${prev.text} ${l.text}`;
+      } else if (m) {
+        blocks.push({ type: 'li', list: b ? 'ul' : 'ol', text: m[1].trim(), x: l.x });
+      } else if (heading) {
+        blocks.push({ type: 'h2', text: l.text.replace(/:$/, '') });
+      } else if (indented && prev && (prev.type === 'li' || prev.type === 'h2' || nextIndented)) {
+        blocks.push({ type: 'li', list: prev.type === 'li' ? prev.list : 'ul', text: l.text, x: l.x });
+      } else {
+        blocks.push({ type: 'p', text: l.text });
+      }
+    }
+
+    const out: string[] = [];
+    let list: 'ul' | 'ol' | null = null;
+    blocks.forEach((bl) => {
+      if (bl.type === 'li') {
+        if (list !== bl.list) {
+          if (list) out.push(`</${list}>`);
+          list = bl.list;
+          out.push(`<${list}>`);
+        }
+        out.push(`<li>${esc(bl.text)}</li>`);
+        return;
+      }
+      if (list) {
+        out.push(`</${list}>`);
+        list = null;
+      }
+      out.push(`<${bl.type}>${esc(bl.text)}</${bl.type}>`);
+    });
+    if (list) out.push(`</${list}>`);
+    return out.join('');
+  }
+
+  async function docxToHtml(buf: ArrayBuffer): Promise<string> {
+    const mammoth = (await import('mammoth')) as any;
+    const r = await (mammoth.default ?? mammoth).convertToHtml({ arrayBuffer: buf });
+    return cleanHtml(r.value as string);
+  }
+
+  async function fileToHtml(file: File): Promise<{ html: string; note: string }> {
+    const name = file.name.toLowerCase();
+    if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+      const { html, chars } = await pdfToHtml(await file.arrayBuffer());
+      if (chars < 40) throw new Error('This PDF has no readable text (it is probably a scanned image). Paste the text instead, or export the original document as PDF again.');
+      return { html: cleanHtml(html), note: 'Read from the PDF layout: larger or bold lines became headings, "•" and "-" lines became bullets. Check the result and fix anything that looks off before saving.' };
+    }
+    if (name.endsWith('.docx') || file.type.includes('wordprocessingml')) {
+      return { html: await docxToHtml(await file.arrayBuffer()), note: 'Read from the Word document. Headings, lists and bold text carry over.' };
+    }
+    if (name.endsWith('.doc')) throw new Error('Old .doc files are not supported. In Word, use Save As and choose .docx, then import that.');
+    const text = await file.text();
+    return { html: cleanHtml(textToHtml(text)), note: 'Read as plain text: blank lines separate paragraphs, lines starting with - or • became bullets.' };
+  }
+
+  function summarize(html: string): string {
+    const d = new DOMParser().parseFromString(html, 'text/html');
+    const c = (sel: string) => d.querySelectorAll(sel).length;
+    const parts = [`${c('h2')} heading${c('h2') === 1 ? '' : 's'}`, `${c('li')} bullet${c('li') === 1 ? '' : 's'}`, `${c('p')} paragraph${c('p') === 1 ? '' : 's'}`];
+    return parts.join(', ');
+  }
+
+  // ---------- Editor wiring ----------
+
+  document.querySelectorAll<HTMLElement>('[data-rich-editor]').forEach((root) => {
+    const area = root.querySelector<HTMLElement>('[data-editable]')!;
+    const output = root.querySelector<HTMLTextAreaElement>('[data-output]')!;
+    const form = root.closest('form') ?? document.querySelector<HTMLFormElement>(`form#${root.closest('[form]')?.getAttribute('form') ?? ''}`);
+    const modal = root.querySelector<HTMLElement>('[data-modal]')!;
+    const fileInput = root.querySelector<HTMLInputElement>('[data-import-file]')!;
+
+    try {
+      document.execCommand('defaultParagraphSeparator', false, 'p');
+    } catch {}
+
+    const sync = () => {
+      output.value = cleanHtml(area.innerHTML);
+    };
+    area.addEventListener('input', sync);
+    sync();
+    // Whatever form owns this field, clean before it leaves.
+    const owner = form ?? output.form;
+    owner?.addEventListener('submit', sync, true);
+
+    const inSelection = () => {
+      const sel = window.getSelection();
+      return !!sel && sel.rangeCount > 0 && area.contains(sel.getRangeAt(0).commonAncestorContainer);
+    };
+    const exec = (cmd: string, value?: string) => {
+      area.focus();
+      document.execCommand(cmd, false, value);
+      sync();
+      updateStates();
+    };
+    const blockTag = () => {
+      const sel = window.getSelection();
+      let n: Node | null = sel && sel.rangeCount ? sel.getRangeAt(0).startContainer : null;
+      while (n && n !== area) {
+        if (n.nodeType === Node.ELEMENT_NODE && /^(H2|P|LI|DIV)$/.test((n as HTMLElement).tagName)) return (n as HTMLElement).tagName;
+        n = n.parentNode;
+      }
+      return '';
+    };
+
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-cmd]')];
+    const updateStates = () => {
+      const on = inSelection();
+      const tag = on ? blockTag() : '';
+      buttons.forEach((b) => {
+        let active = false;
+        if (on) {
+          try {
+            if (b.dataset.cmd === 'bold') active = document.queryCommandState('bold');
+            else if (b.dataset.cmd === 'italic') active = document.queryCommandState('italic');
+            else if (b.dataset.cmd === 'ul') active = document.queryCommandState('insertUnorderedList');
+            else if (b.dataset.cmd === 'ol') active = document.queryCommandState('insertOrderedList');
+            else if (b.dataset.cmd === 'heading') active = tag === 'H2';
+          } catch {}
+        }
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    };
+    document.addEventListener('selectionchange', updateStates);
+
+    buttons.forEach((b) => {
+      b.addEventListener('mousedown', (e) => e.preventDefault()); // keep the selection
+      b.addEventListener('click', () => {
+        const cmd = b.dataset.cmd;
+        if (cmd === 'bold') exec('bold');
+        else if (cmd === 'italic') exec('italic');
+        else if (cmd === 'ul') exec('insertUnorderedList');
+        else if (cmd === 'ol') exec('insertOrderedList');
+        else if (cmd === 'heading') exec('formatBlock', blockTag() === 'H2' ? 'p' : 'h2');
+        else if (cmd === 'clear') {
+          exec('removeFormat');
+          exec('unlink');
+          if (blockTag() === 'H2') exec('formatBlock', 'p');
+        } else if (cmd === 'link') {
+          const sel = window.getSelection();
+          const existing = (() => {
+            let n: Node | null = sel && sel.rangeCount ? sel.getRangeAt(0).startContainer : null;
+            while (n && n !== area) {
+              if ((n as HTMLElement).tagName === 'A') return (n as HTMLAnchorElement).getAttribute('href') ?? '';
+              n = n.parentNode;
+            }
+            return '';
+          })();
+          const url = prompt('Link address (https://... or an email like mailto:info@infocusfilmschool.com)', existing || 'https://');
+          if (url === null) return;
+          const safe = safeHref(url);
+          if (!safe) {
+            exec('unlink');
+            return;
+          }
+          if (sel && sel.isCollapsed && !existing) {
+            const text = prompt('Text to show for the link', safe);
+            if (text === null) return;
+            exec('insertHTML', `<a href="${safe.replace(/"/g, '&quot;')}" rel="noopener">${esc(text || safe)}</a>`);
+          } else {
+            exec('createLink', safe);
+          }
+        }
+      });
+    });
+
+    // Enter after a heading starts a normal paragraph.
+    area.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' && blockTag() === 'H2') {
+        const sel = window.getSelection();
+        let n: Node | null = sel && sel.rangeCount ? sel.getRangeAt(0).startContainer : null;
+        while (n && n !== area && (n as HTMLElement).tagName !== 'H2') n = n.parentNode;
+        if (n && n !== area && !(n.textContent ?? '').trim()) document.execCommand('formatBlock', false, 'p');
+      }
+    });
+
+    // Paste: clean rich text, or structure plain text.
+    area.addEventListener('paste', (e) => {
+      const dt = e.clipboardData;
+      if (!dt) return;
+      e.preventDefault();
+      const html = dt.getData('text/html');
+      const text = dt.getData('text/plain');
+      const clean = html ? cleanHtml(html) : cleanHtml(textToHtml(text));
+      document.execCommand('insertHTML', false, clean);
+      sync();
+    });
+
+    // Import from a document.
+    const status = modal.querySelector<HTMLElement>('[data-import-status]')!;
+    const preview = modal.querySelector<HTMLElement>('[data-import-preview]')!;
+    const note = modal.querySelector<HTMLElement>('[data-import-note]')!;
+    const replaceBtn = modal.querySelector<HTMLButtonElement>('[data-import-replace]')!;
+    const appendBtn = modal.querySelector<HTMLButtonElement>('[data-import-append]')!;
+    let pending = '';
+
+    const openModal = () => {
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      pending = '';
+      preview.innerHTML = '';
+      replaceBtn.disabled = appendBtn.disabled = true;
+      fileInput.value = '';
+    };
+    modal.querySelectorAll('[data-modal-close]').forEach((b) => b.addEventListener('click', closeModal));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    root.querySelector('[data-import]')!.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      openModal();
+      status.textContent = `Reading ${file.name}...`;
+      note.textContent = '';
+      preview.innerHTML = '';
+      replaceBtn.disabled = appendBtn.disabled = true;
+      if (file.size > 25 * 1024 * 1024) {
+        status.textContent = 'That file is over 25 MB. Export a smaller PDF or paste the text.';
+        return;
+      }
+      try {
+        const r = await fileToHtml(file);
+        if (!r.html.trim()) throw new Error('Nothing readable was found in that file.');
+        pending = r.html;
+        preview.innerHTML = pending;
+        status.textContent = `Found ${summarize(pending)} in ${file.name}.`;
+        note.textContent = r.note;
+        replaceBtn.disabled = appendBtn.disabled = false;
+        replaceBtn.textContent = (area.textContent ?? '').trim() ? 'Use this (replace what is there)' : 'Use this';
+      } catch (err) {
+        status.textContent = err instanceof Error ? err.message : 'Could not read that file.';
+      }
+    });
+    replaceBtn.addEventListener('click', () => {
+      area.innerHTML = pending;
+      sync();
+      closeModal();
+      area.focus();
+    });
+    appendBtn.addEventListener('click', () => {
+      area.insertAdjacentHTML('beforeend', pending);
+      sync();
+      closeModal();
+      area.focus();
+    });
+  });
+</script>

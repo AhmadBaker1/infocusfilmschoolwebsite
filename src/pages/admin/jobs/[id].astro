@@ -1,0 +1,24 @@
+---
+// Edit one job posting.
+import Admin from '../../../layouts/Admin.astro';
+import JobForm from '../../../components/admin/JobForm.astro';
+import { db } from '../../../lib/server/db';
+import { applicantCount, getById } from '../../../lib/server/jobs';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const job = await getById(d1, Astro.params.id ?? '');
+if (!job) return new Response(null, { status: 404 });
+const applicants = await applicantCount(d1, job.id);
+---
+
+<Admin title={job.title} section="jobs" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Job postings', href: '/admin/jobs' }, { label: job.title }]}>
+  <div slot="actions">
+    {job.status === 'open' && (
+      <a class="a-btn" href={`/careers/${job.id}`} target="_blank" rel="noopener">View on site</a>
+    )}
+    <a class="a-btn a-btn--primary" href="/admin/jobs/new">+ New job posting</a>
+  </div>
+  <JobForm job={job} applicants={applicants} />
+</Admin>

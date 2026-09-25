@@ -4,9 +4,16 @@ import Nav from '../../components/Nav.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
 import Footer from '../../components/Footer.astro';
-import { jobs, DEPTS, EMAIL } from '../../lib/jobs';
+import { DEPTS, EMAIL } from '../../lib/jobs';
+import { db } from '../../lib/server/db';
+import { listOpen } from '../../lib/server/jobs';
 
+// Rendered on Cloudflare from D1 (postings are managed at /admin/jobs).
+export const prerender = false;
+
+const jobs = await listOpen(db(Astro.locals));
 const depts = Object.entries(DEPTS).filter(([k]) => jobs.some((j) => j.dept === k));
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
 ---
 
 <Base

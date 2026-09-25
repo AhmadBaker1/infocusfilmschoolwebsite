@@ -1,0 +1,236 @@
+---
+// Event editor shared by /admin/events/new and /admin/events/[id]. The main
+// form holds the copy and schedule; the sidebar controls (status, featured,
+// image, buttons) sit outside it and attach with form="event-form", so the
+// "Remove image" form can live beside the file picker without nesting.
+import { MODES, MODE_LABELS, STATUSES, imageUrl, type Event } from '../../lib/server/events';
+import { mdToHtml } from '../../lib/server/markdown';
+import { toLocalInput } from '../../lib/format';
+import RichEditor from './RichEditor.astro';
+
+interface Props {
+  event: Event | null;
+}
+
+const { event: ev } = Astro.props;
+const isNew = !ev;
+const action = ev ? `/api/admin/events/${ev.id}` : '/api/admin/events';
+const image = ev ? imageUrl(ev) : null;
+const STATUS_LABELS = { draft: 'Draft (staff only)', published: 'Published (on the site)', archived: 'Archived (hidden, kept)' };
+---
+
+<div class="a-grid a-grid--side">
+  <form id="event-form" method="post" action={action} enctype="multipart/form-data" data-event-form data-new={isNew ? '1' : undefined}>
+    <section class="a-card">
+      <h2 class="a-h2">Details</h2>
+      <div class="a-form">
+        <div class="a-field">
+          <label for="title">Title <span class="req">*</span></label>
+          <input class="a-input" id="title" name="title" value={ev?.title ?? ''} required maxlength="160" autocomplete="off" data-title />
+        </div>
+        <div class="a-field">
+          <label for="slug">Web address</label>
+          <div class="slug">
+            <span class="slug__prefix">/events/</span>
+            <input class="a-input" id="slug" name="slug" value={ev?.slug ?? ''} maxlength="80" autocomplete="off" pattern="[a-z0-9\-]*" placeholder="from-the-title" data-slug />
+          </div>
+          <p class="a-help">Lower-case letters, numbers and dashes. {isNew ? 'Filled in from the title until you edit it.' : 'Changing this breaks links people already have.'}</p>
+        </div>
+        <div class="a-field">
+          <label for="summary">Summary</label>
+          <textarea class="a-textarea" id="summary" name="summary" maxlength="300" rows="3" style="min-height:0" data-summary>{ev?.summary ?? ''}</textarea>
+          <p class="a-help">Shown on event cards and in search results. <span data-summary-count>{ev?.summary.length ?? 0}</span>/300.</p>
+        </div>
+        <div class="a-field">
+          <span class="a-field__label">Description</span>
+          <RichEditor name="html" value={ev ? ev.body_html || mdToHtml(ev.body_md) : ''} placeholder="Describe the event, paste from Word, or import a PDF or Word file." />
+          <p class="a-help">Use Heading for sections (Schedule, Who should come, How to register). Bold, bullets and links are in the toolbar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="a-card">
+      <h2 class="a-h2">When + where</h2>
+      <div class="a-form">
+        <div class="a-row">
+          <div class="a-field">
+            <label for="starts_at">Starts <span class="req">*</span></label>
+            <input class="a-input" id="starts_at" type="datetime-local" name="starts_at" value={ev ? toLocalInput(ev.starts_at) : ''} required data-starts />
+            <p class="a-help">Mountain Time (Calgary)</p>
+          </div>
+          <div class="a-field">
+            <label for="ends_at">Ends</label>
+            <input class="a-input" id="ends_at" type="datetime-local" name="ends_at" value={ev?.ends_at ? toLocalInput(ev.ends_at) : ''} data-ends />
+            <p class="a-help">Mountain Time (Calgary). Optional.</p>
+          </div>
+        </div>
+        <div class="a-row">
+          <div class="a-field">
+            <label for="location">Location</label>
+            <input class="a-input" id="location" name="location" value={ev?.location ?? ''} maxlength="200" placeholder="InFocus Film School, 1st floor" />
+          </div>
+          <div class="a-field">
+            <label for="mode">Format</label>
+            <select class="a-select" id="mode" name="mode">
+              {MODES.map((m) => (
+                <option value={m} selected={(ev?.mode ?? 'in-person') === m}>{MODE_LABELS[m]}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div class="a-field">
+          <label for="register_url">Registration link</label>
+          <input class="a-input" id="register_url" type="url" name="register_url" value={ev?.register_url ?? ''} maxlength="500" placeholder="https://" />
+          <p class="a-help">Eventbrite, a Google Form, a ticket page. Leave empty for a "Details" button instead of "Register".</p>
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <aside>
+    <section class="a-card">
+      <h2 class="a-h2">Publish</h2>
+      <div class="a-form">
+        <div class="a-field">
+          <label for="status">Status</label>
+          <select class="a-select" id="status" name="status" form="event-form">
+            {STATUSES.map((s) => (
+              <option value={s} selected={(ev?.status ?? 'draft') === s}>{STATUS_LABELS[s]}</option>
+            ))}
+          </select>
+        </div>
+        <label class="a-check">
+          <input type="checkbox" name="featured" value="1" form="event-form" checked={!!ev?.featured} />
+          <span>
+            Featured
+            <small>Pinned as the big card at the top of /events.</small>
+          </span>
+        </label>
+        <div class="a-form__actions" style="padding-top:0">
+          <button class="a-btn a-btn--primary" type="submit" form="event-form" name="_action" value={isNew ? 'create' : 'update'}>Save</button>
+          {(!ev || ev.status !== 'published') && (
+            <button class="a-btn a-btn--dark" type="submit" form="event-form" name="_action" value={isNew ? 'create_publish' : 'publish'}>Save + publish</button>
+          )}
+        </div>
+        {ev?.status === 'published' && (
+          <p class="a-help" style="margin:0">
+            Live at <a class="a-link" href={`/events/${ev.slug}`} target="_blank" rel="noopener">/events/{ev.slug}</a>
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="a-card">
+      <h2 class="a-h2">Image</h2>
+      {image && ev && (
+        <div class="current">
+          <img src={image} alt={ev.image_alt ?? ''} width="600" height="400" />
+          <form method="post" action={action} data-confirm="Remove this image from the event?">
+            <input type="hidden" name="_action" value="remove_image" />
+            <button class="a-btn a-btn--sm a-btn--danger" type="submit">Remove image</button>
+          </form>
+        </div>
+      )}
+      <div class="a-form">
+        <div class="a-field">
+          <label for="image">{image ? 'Replace image' : 'Upload image'}</label>
+          <input class="a-input" id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" form="event-form" />
+          <p class="a-help">JPG, PNG or WebP up to 5 MB. Landscape (3:2) works best.</p>
+        </div>
+        <div class="a-field">
+          <label for="image_alt">Image description</label>
+          <input class="a-input" id="image_alt" name="image_alt" value={ev?.image_alt ?? ''} maxlength="200" form="event-form" placeholder="What is in the picture, for screen readers" />
+        </div>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<style>
+  .slug {
+    display: flex;
+    align-items: center;
+  }
+
+  .slug__prefix {
+    padding: 11px 10px 11px 12px;
+    border: 1px solid var(--a-line);
+    border-right: 0;
+    border-radius: 8px 0 0 8px;
+    background: var(--a-bg);
+    font-size: 14px;
+    color: var(--a-ink-3);
+    white-space: nowrap;
+  }
+
+  .slug .a-input {
+    border-radius: 0 8px 8px 0;
+  }
+
+
+  .a-help code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    font-size: 12px;
+  }
+
+  .current {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+    margin-bottom: 18px;
+  }
+
+  .current img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--a-line);
+  }
+
+  input[type='file'].a-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-event-form]');
+  if (form) {
+    const title = form.querySelector<HTMLInputElement>('[data-title]')!;
+    const slug = form.querySelector<HTMLInputElement>('[data-slug]')!;
+    const summary = form.querySelector<HTMLTextAreaElement>('[data-summary]')!;
+    const count = form.querySelector<HTMLElement>('[data-summary-count]')!;
+    const starts = form.querySelector<HTMLInputElement>('[data-starts]')!;
+    const ends = form.querySelector<HTMLInputElement>('[data-ends]')!;
+
+    // Slug follows the title on new events until someone edits it by hand.
+    const slugify = (s: string) =>
+      s
+        .normalize('NFKD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80);
+    let auto = form.dataset.new === '1' && !slug.value;
+    title.addEventListener('input', () => {
+      if (auto) slug.value = slugify(title.value);
+    });
+    slug.addEventListener('input', () => {
+      auto = false;
+    });
+
+    summary.addEventListener('input', () => (count.textContent = String(summary.value.length)));
+
+    // Catch a backwards range before the round trip.
+    const checkRange = () => {
+      ends.setCustomValidity(ends.value && starts.value && ends.value <= starts.value ? 'The event must end after it starts.' : '');
+    };
+    starts.addEventListener('input', checkRange);
+    ends.addEventListener('input', checkRange);
+  }
+</script>

@@ -1,11 +1,14 @@
 ---
 // Student application: choose a program, then enter details.
 //
-// BACKEND: POSTs multipart/form-data to PUBLIC_ADMISSIONS_ENDPOINT with:
-//   program (slug), program_name, first_name, last_name, email,
-//   phone_country (e.g. "CA +1"), phone, city, country, heard_from.
-// All fields are required. With no endpoint set, submitting shows a notice
-// and sends nothing. Link here with ?program=<slug> to preselect a program.
+// BACKEND: POSTs multipart/form-data to /api/apply/admissions (see
+// src/pages/api/apply/admissions.ts; PUBLIC_ADMISSIONS_ENDPOINT overrides it)
+// with: program (slug), program_name, first_name, last_name, email,
+//   phone_country (e.g. "CA +1"), phone, city, country, heard_from,
+//   website (honeypot, must stay empty).
+// All fields are required and re-validated on the server, which takes the
+// program name from the program data, not the form. Link here with
+// ?program=<slug> to preselect a program.
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -23,7 +26,7 @@ const groups = [
 const pinned = PINNED.map((iso) => COUNTRIES.find((c) => c.iso === iso)!);
 const rest = COUNTRIES.filter((c) => !PINNED.includes(c.iso));
 const heard = ['Google search', 'Instagram', 'Facebook', 'TikTok', 'YouTube', 'LinkedIn', 'Friend or family', 'InFocus alumni', 'Education agent', 'School or career fair', 'Other'];
-const ENDPOINT = import.meta.env.PUBLIC_ADMISSIONS_ENDPOINT ?? '';
+const ENDPOINT = import.meta.env.PUBLIC_ADMISSIONS_ENDPOINT || '/api/apply/admissions';
 ---
 
 <Base
@@ -55,6 +58,10 @@ const ENDPOINT = import.meta.env.PUBLIC_ADMISSIONS_ENDPOINT ?? '';
       <div class="wrap" data-view="form">
         <form class="form" data-form data-endpoint={ENDPOINT} method="post" action={ENDPOINT || undefined} enctype="multipart/form-data" novalidate>
           <input type="hidden" name="program_name" data-program-name />
+          <!-- Honeypot: off-screen, not display:none, so bots still fill it. -->
+          <div class="hp" aria-hidden="true">
+            <label>Website <input name="website" type="text" autocomplete="off" tabindex="-1" /></label>
+          </div>
 
           <!-- ===== Step 1 ===== -->
           <section class="step" aria-labelledby="s1">
@@ -308,6 +315,15 @@ const ENDPOINT = import.meta.env.PUBLIC_ADMISSIONS_ENDPOINT ?? '';
   .form {
     display: grid;
     gap: clamp(44px, 5vw, 72px);
+  }
+
+  .hp {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   .step__head {

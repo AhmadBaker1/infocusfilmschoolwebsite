@@ -1,0 +1,12 @@
+---
+// New event. Saving opens the edit page for it.
+import Admin from '../../../layouts/Admin.astro';
+import EventForm from '../../../components/admin/EventForm.astro';
+
+export const prerender = false;
+---
+
+<Admin title="New event" section="events" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Events', href: '/admin/events' }, { label: 'New' }]}>
+  <a slot="actions" class="a-btn a-btn--ghost" href="/admin/events">Cancel</a>
+  <EventForm event={null} />
+</Admin>

@@ -1,0 +1,148 @@
+---
+// Job postings (HR): open / draft / closed tabs, search, quick actions.
+import Admin from '../../../layouts/Admin.astro';
+import { DEPTS } from '../../../lib/jobs';
+import { db } from '../../../lib/server/db';
+import { countByStatus, isAccepting, isStatus, listAdmin, type JobStatus } from '../../../lib/server/jobs';
+import { fmtDate, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const tabParam = Astro.url.searchParams.get('tab') ?? 'open';
+const tab: JobStatus = isStatus(tabParam) ? tabParam : 'open';
+const q = (Astro.url.searchParams.get('q') ?? '').trim().slice(0, 80);
+
+const [counts, rows] = await Promise.all([countByStatus(d1), listAdmin(d1, { tab, q })]);
+
+const tabs: { key: JobStatus; label: string }[] = [
+  { key: 'open', label: 'Open' },
+  { key: 'draft', label: 'Drafts' },
+  { key: 'closed', label: 'Closed' },
+];
+const href = (t: JobStatus) => `/admin/jobs?tab=${t}${q ? `&q=${encodeURIComponent(q)}` : ''}`;
+const back = href(tab);
+const empty: Record<JobStatus, string> = {
+  open: 'Nothing is open right now. Open a draft or create a new posting.',
+  draft: 'No drafts. New postings start here until you open them.',
+  closed: 'No closed postings yet. Closing keeps a posting and its applications on file.',
+};
+---
+
+<Admin title="Job postings" section="jobs" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Job postings' }]}>
+  <div slot="actions">
+    <a class="a-btn" href="/careers" target="_blank" rel="noopener">View careers page</a>
+    <a class="a-btn a-btn--primary" href="/admin/jobs/new">+ New job posting</a>
+  </div>
+
+  <ul class="a-tabs">
+    {tabs.map((t) => (
+      <li>
+        <a href={href(t.key)} aria-current={t.key === tab ? 'page' : undefined}>
+          {t.label} <span class="count">{counts[t.key]}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <form class="a-toolbar" method="get" action="/admin/jobs">
+    <input type="hidden" name="tab" value={tab} />
+    <input class="a-input" type="search" name="q" value={q} placeholder="Search title, slug or location" aria-label="Search postings" />
+    <button class="a-btn" type="submit">Search</button>
+    {q && <a class="a-btn a-btn--ghost" href={`/admin/jobs?tab=${tab}`}>Clear</a>}
+    <span class="spacer"></span>
+    <span class="a-muted" style="font-size:13px">{rows.length} posting{rows.length === 1 ? '' : 's'}{q ? ` matching "${q}"` : ''}</span>
+  </form>
+
+  <section class="a-card a-card--flush">
+    {rows.length === 0 ? (
+      <div class="a-empty" style="margin:20px">
+        <strong>{q ? 'No matches' : 'Nothing here'}</strong>
+        {q ? 'Try a different search.' : empty[tab]}
+      </div>
+    ) : (
+      <div class="a-table-wrap">
+        <table class="a-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Team</th>
+              <th>Location</th>
+              <th>Pay</th>
+              <th class="num">Applicants</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((j) => {
+              const live = isAccepting(j);
+              const expired = j.status === 'open' && !live;
+              const badge = j.status === 'open' ? (live ? 'a-badge--ok' : 'a-badge--warn') : j.status === 'draft' ? 'a-badge--blue' : 'a-badge--muted';
+              const action = `/api/admin/jobs/${j.id}`;
+              return (
+                <tr>
+                  <td class="primary">
+                    <a href={`/admin/jobs/${j.id}`}>{j.title}</a>
+                    <span class="sub">/careers/{j.id}</span>
+                  </td>
+                  <td>{DEPTS[j.dept] ?? j.dept}</td>
+                  <td>{j.location || <span class="a-muted">-</span>}</td>
+                  <td>{j.pay || <span class="a-muted">-</span>}</td>
+                  <td class="num">
+                    {j.applicants > 0 ? <a class="a-link" href={`/admin/applicants?job=${j.id}`}>{j.applicants}</a> : <span class="a-muted">0</span>}
+                  </td>
+                  <td>
+                    <span class:list={['a-badge', badge]} title={j.closes_at ? `Closes ${fmtDate(j.closes_at)}` : undefined}>{expired ? 'expired' : j.status}</span>
+                    {j.closes_at && live && <span class="sub">closes {fmtDate(j.closes_at)}</span>}
+                  </td>
+                  <td class="nowrap" title={j.updated_at}>{timeAgo(j.updated_at)}</td>
+                  <td class="actions">
+                    <a class="a-btn a-btn--sm" href={`/admin/jobs/${j.id}`}>Edit</a>
+                    {j.status === 'open' ? (
+                      <form class="a-inline-form" method="post" action={action} data-confirm={`Close ${j.title}? It comes off the careers page and stops accepting applications.`}>
+                        <input type="hidden" name="_action" value="close" />
+                        <input type="hidden" name="_back" value={back} />
+                        <button class="a-btn a-btn--sm" type="submit">Close</button>
+                      </form>
+                    ) : (
+                      <form class="a-inline-form" method="post" action={action}>
+                        <input type="hidden" name="_action" value="open" />
+                        <input type="hidden" name="_back" value={back} />
+                        <button class="a-btn a-btn--sm" type="submit">{j.status === 'closed' ? 'Reopen' : 'Open'}</button>
+                      </form>
+                    )}
+                    <form class="a-inline-form" method="post" action={action}>
+                      <input type="hidden" name="_action" value="duplicate" />
+                      <button class="a-btn a-btn--sm a-btn--ghost" type="submit">Duplicate</button>
+                    </form>
+                    <form
+                      class="a-inline-form"
+                      method="post"
+                      action={action}
+                      data-confirm={
+                        j.applicants > 0
+                          ? `${j.title} has ${j.applicants} application${j.applicants === 1 ? '' : 's'}, so it cannot be deleted. Close it instead. Try anyway?`
+                          : `Permanently delete ${j.title}? This cannot be undone.`
+                      }
+                    >
+                      <input type="hidden" name="_action" value="delete" />
+                      <input type="hidden" name="_back" value={back} />
+                      <button class="a-btn a-btn--sm a-btn--ghost a-btn--danger" type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+
+  <p class="a-help" style="margin-top:14px">
+    Open postings show on <a class="a-link" href="/careers" target="_blank" rel="noopener">/careers</a> within a minute. Closed postings keep their page with a
+    "no longer accepting applications" notice so shared links still work; drafts are hidden. Deleting is only allowed when a posting has no applications.
+  </p>
+</Admin>

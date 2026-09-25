@@ -3,12 +3,14 @@
 // the right. Used by /careers/<id>/apply (a role) and /careers/apply
 // (general application).
 //
-// BACKEND: the form POSTs multipart/form-data to PUBLIC_CAREERS_ENDPOINT with:
-//   role, first_name, last_name, email, phone_country (e.g. "CA +1"), phone, city, province,
+// BACKEND: the form POSTs multipart/form-data to /api/apply/job (see
+// src/pages/api/apply/job.ts; PUBLIC_CAREERS_ENDPOINT overrides it) with:
+//   job_id (posting id, empty for a general application), role, first_name,
+//   last_name, email, phone_country (e.g. "CA +1"), phone, city, province,
 //   country, work_eligible ("yes"|"no"), resume (file), cover_letter_file
 //   (file, optional), cover_letter (text), portfolio_url, linkedin_url,
-//   start_date, heard_from, consent ("yes").
-// With no endpoint set, submitting shows a notice and sends nothing.
+//   start_date, heard_from, consent ("yes"), website (honeypot, must stay empty).
+// The server re-validates everything; `role` is taken from the posting.
 import Base from '../layouts/Base.astro';
 import { DEPTS, EMAIL, GENERAL, summarize, type Job } from '../lib/jobs';
 import { COUNTRIES, PINNED } from '../lib/countries';
@@ -22,7 +24,7 @@ const { job } = Astro.props;
 const role = job?.title ?? GENERAL;
 const summary = job ? summarize(job) : null;
 const back = job ? `/careers/${job.id}` : '/careers';
-const ENDPOINT = import.meta.env.PUBLIC_CAREERS_ENDPOINT ?? '';
+const ENDPOINT = import.meta.env.PUBLIC_CAREERS_ENDPOINT || '/api/apply/job';
 
 const provinces = [
   'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador',
@@ -123,6 +125,11 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
 
           <form class="form" data-form data-endpoint={ENDPOINT} method="post" action={ENDPOINT || undefined} enctype="multipart/form-data" novalidate>
             <input type="hidden" name="role" value={role} />
+            <input type="hidden" name="job_id" value={job?.id ?? ''} />
+            <!-- Honeypot: off-screen, not display:none, so bots still fill it. -->
+            <div class="hp" aria-hidden="true">
+              <label>Website <input name="website" type="text" autocomplete="off" tabindex="-1" /></label>
+            </div>
 
             <!-- 01 -->
             <fieldset class="sec" data-step="0">
@@ -199,7 +206,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
                     <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" /></svg>
                   </span>
                   <span class="drop__title">Resume / CV <span class="req">*</span></span>
-                  <span class="drop__text" data-file-name>Drag a file here or <u>browse</u><br />PDF, DOC or DOCX, max 10 MB</span>
+                  <span class="drop__text" data-file-name>Drag a file here or <u>browse</u><br />PDF, DOC or DOCX, max 8 MB</span>
                 </label>
               </div>
 
@@ -647,6 +654,15 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
     display: grid;
     gap: clamp(32px, 4vw, 48px);
     margin-top: clamp(28px, 3.4vw, 44px);
+  }
+
+  .hp {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   .sec {
@@ -1188,7 +1204,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
     const bar = document.querySelector<HTMLElement>('[data-progress]');
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
-    const MAX = 10 * 1024 * 1024;
+    const MAX = 8 * 1024 * 1024;
     const okFile = (f?: File) => !!f && f.size <= MAX && /\.(pdf|docx?)$/i.test(f.name);
 
     // A section is complete when every required control in it is valid.
@@ -1263,7 +1279,7 @@ const steps = ['Personal details', 'Location', 'Eligibility', 'Documents', 'A bi
       const consent = form.querySelector<HTMLInputElement>('input[name="consent"]')!;
       mark(consent.closest('.consent') as HTMLElement, !consent.checked);
       if (first) {
-        say('Please complete the highlighted fields. Files must be PDF, DOC or DOCX under 10 MB.', true);
+        say('Please complete the highlighted fields. Files must be PDF, DOC or DOCX under 8 MB.', true);
         (first as HTMLElement).scrollIntoView({ block: 'center', behavior: 'smooth' });
         return false;
       }

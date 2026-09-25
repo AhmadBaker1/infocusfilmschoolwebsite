@@ -1,0 +1,729 @@
+---
+// One public event. Only published events resolve; everything else is a 404
+// so unpublishing takes the page down immediately.
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Cta from '../../components/Cta.astro';
+import Footer from '../../components/Footer.astro';
+import { db } from '../../lib/server/db';
+import { MODE_LABELS, dateBlock, getBySlug, imageUrl, listPublicUpcoming, whenParts } from '../../lib/server/events';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const ev = await getBySlug(d1, Astro.params.slug!, { publishedOnly: true });
+if (!ev) return new Response(null, { status: 404 });
+Astro.response.headers.set('Cache-Control', 'public, max-age=60');
+
+const more = (await listPublicUpcoming(d1)).filter((e) => e.id !== ev.id).slice(0, 3);
+const image = imageUrl(ev);
+const when = whenParts(ev);
+const block = dateBlock(ev.starts_at);
+const url = new URL(`/events/${ev.slug}`, Astro.site).toString();
+const description = ev.summary || `${ev.title} at InFocus Film School, ${when.date}, ${when.time}.`;
+const ended = new Date(ev.ends_at ?? ev.starts_at).getTime() < Date.now();
+// mdToHtml writes headings as a bold-only paragraph; give them a real heading here.
+const bodyHtml = ev.body_html.replace(/<p><strong>([^<]{1,160})<\/strong><\/p>/g, '<h2>$1</h2>');
+
+const ATTENDANCE = {
+  'in-person': 'https://schema.org/OfflineEventAttendanceMode',
+  online: 'https://schema.org/OnlineEventAttendanceMode',
+  hybrid: 'https://schema.org/MixedEventAttendanceMode',
+};
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: ev.title,
+  description,
+  url,
+  startDate: ev.starts_at,
+  endDate: ev.ends_at ?? undefined,
+  eventAttendanceMode: ATTENDANCE[ev.mode],
+  eventStatus: 'https://schema.org/EventScheduled',
+  image: image ? new URL(image, Astro.site).toString() : undefined,
+  location:
+    ev.mode === 'online'
+      ? { '@type': 'VirtualLocation', url: ev.register_url ?? url }
+      : { '@type': 'Place', name: ev.location || 'InFocus Film School', address: { '@type': 'PostalAddress', addressLocality: 'Calgary', addressRegion: 'AB', addressCountry: 'CA' } },
+  organizer: { '@type': 'Organization', name: 'InFocus Film School', url: Astro.site?.toString() },
+  offers: ev.register_url ? { '@type': 'Offer', url: ev.register_url, availability: 'https://schema.org/InStock' } : undefined,
+};
+const ldJson = JSON.stringify(ld).replace(/</g, '\\u003c');
+---
+
+<Base title={`${ev.title} — Events at InFocus Film School`} description={description} image={image ?? undefined} type="article">
+  <Nav />
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class:list={['top', { 'top--img': !!image }]}>
+      {image && <img class="top__bg" src={image} alt="" aria-hidden="true" loading="eager" decoding="async" />}
+      <span class="top__grain" aria-hidden="true"></span>
+      <span class="top__corner top__corner--tl" aria-hidden="true"></span>
+      <span class="top__corner top__corner--tr" aria-hidden="true"></span>
+      <span class="top__corner top__corner--bl" aria-hidden="true"></span>
+      <span class="top__corner top__corner--br" aria-hidden="true"></span>
+
+      <div class="wrap top__inner">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/events">Events</a></li>
+            <li aria-current="page">{ev.title}</li>
+          </ol>
+        </nav>
+        <p class="eyebrow"><span aria-hidden="true"></span>{ended ? 'Past event' : 'Event'}</p>
+        <h1 class="top__title">{ev.title}</h1>
+        <div class="top__when">
+          <span class="date" aria-hidden="true">
+            <span class="date__m">{block.month}</span>
+            <span class="date__d">{block.day}</span>
+          </span>
+          <p>
+            <span class="top__date">{when.date}</span>
+            <span class="top__time">{when.time}</span>
+          </p>
+        </div>
+        <p class="top__meta">
+          {ev.location && <span>{ev.location}</span>}
+          <span class:list={['mode', `mode--${ev.mode}`]}>{MODE_LABELS[ev.mode]}</span>
+        </p>
+        <div class="top__actions">
+          {ev.register_url && !ended && (
+            <a class="btn btn--red" href={ev.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+          )}
+          {!ended && (
+            <a class="cal" href={`/events/${ev.slug}.ics`} download>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5" /></svg>
+              Add to calendar
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Body ===== -->
+    <section class="body">
+      <div class="wrap body__grid">
+        <article class="prose">
+          {bodyHtml ? <Fragment set:html={bodyHtml} /> : <p>{ev.summary || 'Details to come.'}</p>}
+        </article>
+
+        <aside class="facts">
+          <p class="facts__label">At a glance</p>
+          <dl>
+            <div><dt>Date</dt><dd>{when.date}</dd></div>
+            <div><dt>Time</dt><dd>{when.time}</dd></div>
+            {ev.location && <div><dt>Location</dt><dd>{ev.location}</dd></div>}
+            <div><dt>Format</dt><dd>{MODE_LABELS[ev.mode]}</dd></div>
+          </dl>
+          {ev.register_url && !ended && (
+            <a class="btn btn--dark btn--block" href={ev.register_url} target="_blank" rel="noopener">Register <span aria-hidden="true">↗</span></a>
+          )}
+          {!ended && <a class="facts__cal" href={`/events/${ev.slug}.ics`} download>Add to calendar (.ics)</a>}
+          {ended && <p class="facts__note">This event has already taken place.</p>}
+          <a class="facts__all" href="/events">All events <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== More events ===== -->
+    {more.length > 0 && (
+      <section class="more">
+        <div class="wrap">
+          <div class="more__head">
+            <h2 class="more__title">More events</h2>
+            <a class="more__all" href="/events">All events <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="more__list">
+            {more.map((o) => (
+              <li>
+                <a href={`/events/${o.slug}`}>
+                  <span class="date date--sm" aria-hidden="true">
+                    <span class="date__m">{dateBlock(o.starts_at).month}</span>
+                    <span class="date__d">{dateBlock(o.starts_at).day}</span>
+                  </span>
+                  <span class="more__body">
+                    <span class="more__when">{whenParts(o).date} · {whenParts(o).time}</span>
+                    <span class="more__name">{o.title}</span>
+                    <span class="more__meta">{[o.location, MODE_LABELS[o.mode]].filter(Boolean).join(' · ')}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Cta />
+  <Footer />
+
+  <script is:inline type="application/ld+json" set:html={ldJson} />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--red {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .btn--red:hover {
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .btn--dark {
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .btn--dark:hover {
+    background: var(--red);
+  }
+
+  .btn--block {
+    justify-content: center;
+  }
+
+  .date {
+    display: inline-flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    padding: 11px 0 12px;
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .date__m {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--red);
+  }
+
+  .date__d {
+    margin-top: 3px;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .date--sm {
+    width: 56px;
+    padding: 8px 0 9px;
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .date--sm .date__d {
+    font-size: 22px;
+  }
+
+  .mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .mode::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+  }
+
+  .mode--online::before {
+    background: #5b8fc7;
+  }
+
+  .mode--hybrid::before {
+    background: linear-gradient(90deg, var(--red) 50%, #5b8fc7 50%);
+  }
+
+  /* ===== Hero ===== */
+
+  .top {
+    --inset: clamp(14px, 1.8vw, 30px);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(360px, 40vw, 620px);
+    padding: clamp(72px, 8vw, 130px) var(--gutter) clamp(44px, 5vw, 80px);
+    background:
+      radial-gradient(50% 80% at 90% 20%, rgba(189, 47, 47, 0.3), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.45), transparent 70%),
+      var(--black);
+    color: var(--white);
+  }
+
+  .top__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
+  }
+
+  /* Darken the photo toward the copy so the title stays readable. */
+  .top--img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.2) 100%),
+      linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent 60%);
+  }
+
+  .top__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .top__corner {
+    position: absolute;
+    z-index: 1;
+    width: clamp(18px, 1.8vw, 30px);
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+  }
+
+  .top__corner--tl { top: var(--inset); left: var(--inset); border-top-width: 2px; border-left-width: 2px; }
+  .top__corner--tr { top: var(--inset); right: var(--inset); border-top-width: 2px; border-right-width: 2px; }
+  .top__corner--bl { bottom: var(--inset); left: var(--inset); border-bottom-width: 2px; border-left-width: 2px; }
+  .top__corner--br { bottom: var(--inset); right: var(--inset); border-bottom-width: 2px; border-right-width: 2px; }
+
+  .top__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(20px, 2.4vw, 36px);
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 8px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .crumbs li[aria-current] {
+    max-width: 40ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 16px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: 44px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .top__title {
+    margin: 0;
+    max-width: 18ch;
+    font-size: clamp(36px, 5.4vw, 88px);
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+  }
+
+  .top__when {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: clamp(24px, 3vw, 40px);
+  }
+
+  .top__when p {
+    display: grid;
+    gap: 3px;
+    margin: 0;
+    font-family: var(--font-head);
+    text-transform: uppercase;
+  }
+
+  .top__date {
+    font-size: clamp(17px, 1.5vw, 24px);
+    font-weight: 600;
+  }
+
+  .top__time {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .top__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin: 18px 0 0;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .top__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: clamp(24px, 3vw, 40px);
+  }
+
+  .cal {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .cal svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .cal:hover {
+    border-color: var(--white);
+  }
+
+  /* ===== Body ===== */
+
+  .body {
+    padding: clamp(48px, 6vw, 100px) var(--gutter);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .body__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    gap: clamp(28px, 5vw, 88px);
+    align-items: start;
+  }
+
+  .prose {
+    max-width: 70ch;
+    overflow-wrap: anywhere;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: clamp(15px, 1.05vw, 17px);
+    line-height: 1.75;
+    color: #3f3f3f;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .prose :global(strong) {
+    color: var(--charcoal);
+  }
+
+  .prose :global(a) {
+    color: var(--red);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.3em;
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--red);
+  }
+
+  .prose :global(h2) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2em 0 0.8em;
+    padding-top: 1.4em;
+    border-top: 1px solid rgba(51, 51, 51, 0.12);
+    font-size: clamp(17px, 1.3vw, 20px);
+    letter-spacing: 0.06em;
+  }
+
+  .prose :global(h2)::before {
+    content: '';
+    flex: none;
+    width: 22px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .facts {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+    display: grid;
+    gap: 16px;
+    padding: 26px;
+    border-radius: 16px;
+    background: #f4f4f2;
+  }
+
+  .facts__label {
+    margin: 0;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .facts dl {
+    margin: 0;
+  }
+
+  .facts dl > div {
+    display: grid;
+    gap: 2px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .facts dt {
+    font-size: 12px;
+    color: #8a8a8a;
+  }
+
+  .facts dd {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .facts__cal,
+  .facts__all {
+    font-size: 13px;
+    color: #6d6d6d;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.5);
+  }
+
+  .facts__cal:hover,
+  .facts__all:hover {
+    color: var(--red);
+  }
+
+  .facts__note {
+    margin: 0;
+    font-size: 13px;
+    color: #8a8a8a;
+    text-align: center;
+  }
+
+  /* ===== More ===== */
+
+  .more {
+    padding: clamp(48px, 6vw, 96px) var(--gutter);
+    background: #f4f4f2;
+    color: var(--charcoal);
+  }
+
+  .more__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(22px, 2.6vw, 36px);
+  }
+
+  .more__title {
+    margin: 0;
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1;
+  }
+
+  .more__all {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .more__all:hover {
+    color: var(--red);
+  }
+
+  .more__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .more__list a {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    height: 100%;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--white);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+
+  .more__list a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 40px -28px rgba(0, 0, 0, 0.4);
+  }
+
+  .more__body {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .more__when {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .more__name {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.12;
+    text-transform: uppercase;
+  }
+
+  .more__meta {
+    font-size: 13px;
+    color: #6d6d6d;
+  }
+
+  @media (max-width: 960px) {
+    .body__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .facts {
+      position: static;
+    }
+
+    .more__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

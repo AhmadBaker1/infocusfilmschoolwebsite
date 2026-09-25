@@ -1,0 +1,174 @@
+---
+// One job application: every field, document downloads, status, private
+// notes and delete.
+import Admin from '../../../layouts/Admin.astro';
+import { APPLICANT_BADGE, APPLICANT_STATUSES, fullName, statusLabel, type JobApplicationRow } from '../../../lib/server/applications';
+import { count, db, one } from '../../../lib/server/db';
+import { fmtDate, fmtDateTime, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const a = await one<JobApplicationRow>(d1.prepare('SELECT * FROM job_applications WHERE id = ?').bind(Astro.params.id));
+if (!a) return new Response(null, { status: 404 });
+
+const newCount = await count(d1, "SELECT COUNT(*) AS n FROM job_applications WHERE status = 'new'");
+const name = fullName(a) || 'Unnamed applicant';
+const action = `/api/admin/applicants/${a.id}`;
+const listHref = a.job_id ? `/admin/applicants?job=${encodeURIComponent(a.job_id)}` : '/admin/applicants?tab=pool';
+const mailto = `mailto:${a.email}?subject=${encodeURIComponent(`Your application to InFocus Film School: ${a.role}`)}`;
+const phone = [a.phone_country.split(' ').pop(), a.phone].filter(Boolean).join(' ');
+const tel = `tel:${phone.replace(/[^\d+]/g, '')}`;
+const notes = a.notes.trim();
+---
+
+<Admin
+  title={name}
+  section="applicants"
+  crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Applicants', href: listHref }, { label: name }]}
+  counts={{ applicants: newCount }}
+>
+  <div slot="actions">
+    {a.email && <a class="a-btn a-btn--primary" href={mailto}>Email applicant</a>}
+    <a class="a-btn" href={listHref}>Back to list</a>
+  </div>
+
+  <div class="a-grid a-grid--side">
+    <div>
+      <section class="a-card">
+        <div class="a-card__head">
+          <h2 class="a-h2" style="margin:0">{a.role}</h2>
+          <span class:list={['a-badge', APPLICANT_BADGE[a.status]]}>{statusLabel(a.status)}</span>
+        </div>
+        <div class="a-grid a-grid--2">
+          <div>
+            <h3 class="a-h3">Contact</h3>
+            <dl class="a-kv">
+              <dt>Name</dt>
+              <dd>{name}</dd>
+              <dt>Email</dt>
+              <dd>{a.email ? <a class="a-link" href={mailto}>{a.email}</a> : <span class="a-muted">Not given</span>}</dd>
+              <dt>Phone</dt>
+              <dd>{phone ? <a class="a-link" href={tel}>{phone}</a> : <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Location</h3>
+            <dl class="a-kv">
+              <dt>City</dt>
+              <dd>{a.city || <span class="a-muted">Not given</span>}</dd>
+              <dt>Province</dt>
+              <dd>{a.province || <span class="a-muted">Not given</span>}</dd>
+              <dt>Country</dt>
+              <dd>{a.country || <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Eligibility + availability</h3>
+            <dl class="a-kv">
+              <dt>Work in Canada</dt>
+              <dd>{a.work_eligible === 'yes' ? 'Eligible' : a.work_eligible === 'no' ? 'Needs sponsorship or a permit' : <span class="a-muted">Not given</span>}</dd>
+              <dt>Start date</dt>
+              <dd>{a.start_date ? fmtDate(`${a.start_date}T12:00:00Z`) : <span class="a-muted">Not given</span>}</dd>
+              <dt>Heard from</dt>
+              <dd>{a.heard_from || <span class="a-muted">Not given</span>}</dd>
+            </dl>
+          </div>
+          <div>
+            <h3 class="a-h3">Links</h3>
+            <dl class="a-kv">
+              <dt>Portfolio</dt>
+              <dd>{a.portfolio_url ? <a class="a-link" href={a.portfolio_url} target="_blank" rel="noopener noreferrer">{a.portfolio_url}</a> : <span class="a-muted">None</span>}</dd>
+              <dt>LinkedIn</dt>
+              <dd>{a.linkedin_url ? <a class="a-link" href={a.linkedin_url} target="_blank" rel="noopener noreferrer">{a.linkedin_url}</a> : <span class="a-muted">None</span>}</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Documents</h2>
+        <div class="a-form__actions" style="padding:0 0 16px">
+          {a.resume_key ? (
+            <a class="a-btn a-btn--dark" href={`/admin/files/${a.resume_key}`}>Download résumé</a>
+          ) : (
+            <span class="a-muted">No résumé on file.</span>
+          )}
+          {a.cover_letter_key && <a class="a-btn" href={`/admin/files/${a.cover_letter_key}`}>Download cover letter</a>}
+        </div>
+        <p class="a-help" style="margin:0 0 16px">
+          {a.resume_name && <span>Résumé: {a.resume_name}. </span>}
+          {a.cover_letter_name && <span>Cover letter: {a.cover_letter_name}.</span>}
+          {!a.cover_letter_key && !a.cover_letter && <span>No cover letter was sent.</span>}
+        </p>
+        {a.cover_letter && (
+          <>
+            <h3 class="a-h3">Why this role</h3>
+            <div class="a-prose" style="white-space:pre-wrap;padding:14px 16px;border-radius:8px;background:rgba(0,0,0,.03)">{a.cover_letter}</div>
+          </>
+        )}
+      </section>
+    </div>
+
+    <div>
+      <section class="a-card">
+        <h2 class="a-h2">Status</h2>
+        <form class="a-form" method="post" action={action}>
+          <input type="hidden" name="_action" value="status" />
+          <div class="a-field">
+            <label for="status">Stage</label>
+            <select class="a-select" id="status" name="status">
+              {APPLICANT_STATUSES.map((s) => (
+                <option value={s} selected={a.status === s}>{statusLabel(s)}</option>
+              ))}
+            </select>
+          </div>
+          <div class="a-form__actions" style="padding:0">
+            <button class="a-btn a-btn--primary" type="submit">Save status</button>
+          </div>
+        </form>
+        <dl class="a-kv" style="margin-top:18px">
+          <dt>Submitted</dt>
+          <dd><time datetime={a.created_at} title={a.created_at}>{fmtDateTime(a.created_at)} MT</time><span class="a-muted"> ({timeAgo(a.created_at)})</span></dd>
+          {a.updated_at !== a.created_at && (
+            <>
+              <dt>Updated</dt>
+              <dd>{fmtDateTime(a.updated_at)} MT</dd>
+            </>
+          )}
+          <dt>IP</dt>
+          <dd>{a.ip || <span class="a-muted">Unknown</span>}</dd>
+          {a.job_id && (
+            <>
+              <dt>Posting</dt>
+              <dd><a class="a-link" href={`/admin/jobs/${a.job_id}`}>{a.job_id}</a></dd>
+            </>
+          )}
+        </dl>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Private notes</h2>
+        <form class="a-form" method="post" action={action}>
+          <input type="hidden" name="_action" value="notes" />
+          <div class="a-field">
+            <label for="notes">Only staff see these</label>
+            <textarea class="a-textarea" id="notes" name="notes" maxlength="20000" placeholder="Interview impressions, references, next steps...">{notes}</textarea>
+          </div>
+          <div class="a-form__actions" style="padding:0">
+            <button class="a-btn" type="submit">Save notes</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Danger</h2>
+        <form class="a-inline-form" method="post" action={action} data-confirm={`Permanently delete ${name}'s application and their uploaded documents? This cannot be undone.`}>
+          <input type="hidden" name="_action" value="delete" />
+          <button class="a-btn a-btn--danger" type="submit">Delete application</button>
+        </form>
+        <p class="a-help">Removes the record and the files in storage.</p>
+      </section>
+    </div>
+  </div>
+</Admin>

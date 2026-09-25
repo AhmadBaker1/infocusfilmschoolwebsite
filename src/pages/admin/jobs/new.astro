@@ -1,0 +1,11 @@
+---
+// New job posting.
+import Admin from '../../../layouts/Admin.astro';
+import JobForm from '../../../components/admin/JobForm.astro';
+
+export const prerender = false;
+---
+
+<Admin title="New job posting" section="jobs" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Job postings', href: '/admin/jobs' }, { label: 'New' }]}>
+  <JobForm />
+</Admin>

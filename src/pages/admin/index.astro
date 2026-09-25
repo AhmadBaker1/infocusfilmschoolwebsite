@@ -1,7 +1,7 @@
 ---
 // Staff dashboard: what needs attention, per role, plus recent activity.
 import Admin from '../../layouts/Admin.astro';
-import { can } from '../../lib/server/auth';
+import { canSection } from '../../lib/server/auth';
 import { all, count, db } from '../../lib/server/db';
 import { TZ, timeAgo } from '../../lib/format';
 
@@ -11,10 +11,10 @@ const user = Astro.locals.user!;
 const d1 = db(Astro.locals);
 const nowIso = new Date().toISOString();
 
-const marketing = can(user, 'marketing');
-const hr = can(user, 'hr');
-const admissions = can(user, 'admissions');
-const admin = can(user, 'admin');
+const marketing = canSection(user, 'events');
+const hr = canSection(user, 'jobs');
+const admissions = canSection(user, 'admissions');
+const admin = canSection(user, 'users');
 
 const [upcoming, drafts, openJobs, newApplicants, newTalent, newAdmissions, staff] = await Promise.all([
   marketing ? count(d1, "SELECT COUNT(*) AS n FROM events WHERE status = 'published' AND starts_at >= ?", nowIso) : 0,

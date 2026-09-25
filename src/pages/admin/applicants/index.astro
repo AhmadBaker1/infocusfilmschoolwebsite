@@ -1,0 +1,145 @@
+---
+// Applicants (HR): role applications and the talent pool, with filters, an
+// inline status change per row and a CSV export of the current view.
+import Admin from '../../../layouts/Admin.astro';
+import {
+  APPLICANT_BADGE,
+  APPLICANT_STATUSES,
+  applicantFilters,
+  applicantQuery,
+  applicantWhere,
+  fullName,
+  statusLabel,
+  type JobApplicationRow,
+} from '../../../lib/server/applications';
+import { all, count, db } from '../../../lib/server/db';
+import { fmtDateTime, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const f = applicantFilters(Astro.url.searchParams);
+const where = applicantWhere(f);
+
+const [rows, roleCount, poolCount, newCount, jobs] = await Promise.all([
+  all<JobApplicationRow>(d1.prepare(`SELECT * FROM job_applications WHERE ${where.sql} ORDER BY created_at DESC LIMIT 500`).bind(...where.binds)),
+  count(d1, 'SELECT COUNT(*) AS n FROM job_applications WHERE job_id IS NOT NULL'),
+  count(d1, 'SELECT COUNT(*) AS n FROM job_applications WHERE job_id IS NULL'),
+  count(d1, "SELECT COUNT(*) AS n FROM job_applications WHERE status = 'new'"),
+  all<{ id: string; title: string; status: string }>(d1.prepare('SELECT id, title, status FROM jobs ORDER BY title COLLATE NOCASE')),
+]);
+
+const here = Astro.url.pathname + Astro.url.search;
+const tabHref = (tab: 'roles' | 'pool') => `/admin/applicants${applicantQuery({ ...f, tab, job: '' })}`;
+const exportHref = `/api/admin/applicants/export.csv${applicantQuery(f)}`;
+const jobTitle = f.job ? jobs.find((j) => j.id === f.job)?.title : '';
+const filtered = !!(f.status || f.job || f.q);
+---
+
+<Admin title="Applicants" section="applicants" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Applicants' }]} counts={{ applicants: newCount }}>
+  <div slot="actions">
+    <a class="a-btn" href={exportHref}>Export CSV</a>
+    <a class="a-btn a-btn--ghost" href="/admin/jobs">Job postings</a>
+  </div>
+
+  <ul class="a-tabs">
+    <li>
+      <a href={tabHref('roles')} aria-current={f.tab === 'roles' ? 'page' : undefined}>
+        Role applications <span class="count">{roleCount}</span>
+      </a>
+    </li>
+    <li>
+      <a href={tabHref('pool')} aria-current={f.tab === 'pool' ? 'page' : undefined}>
+        Talent pool <span class="count">{poolCount}</span>
+      </a>
+    </li>
+  </ul>
+
+  <form class="a-toolbar" method="get" action="/admin/applicants">
+    {f.tab === 'pool' && <input type="hidden" name="tab" value="pool" />}
+    <select class="a-select" name="status" aria-label="Status">
+      <option value="">All statuses</option>
+      {APPLICANT_STATUSES.map((s) => (
+        <option value={s} selected={f.status === s}>{statusLabel(s)}</option>
+      ))}
+    </select>
+    {f.tab === 'roles' && (
+      <select class="a-select" name="job" aria-label="Job posting">
+        <option value="">All postings</option>
+        {jobs.map((j) => (
+          <option value={j.id} selected={f.job === j.id}>{j.title}{j.status !== 'open' ? ` (${j.status})` : ''}</option>
+        ))}
+      </select>
+    )}
+    <input class="a-input" type="search" name="q" value={f.q} placeholder="Search name or email" aria-label="Search" />
+    <button class="a-btn" type="submit">Filter</button>
+    {filtered && <a class="a-btn a-btn--ghost" href={tabHref(f.tab)}>Clear</a>}
+  </form>
+
+  <section class="a-card a-card--flush">
+    <div class="a-card__head">
+      <h2 class="a-h2" style="margin:0">
+        {rows.length} {f.tab === 'pool' ? 'talent pool' : 'role'} application{rows.length === 1 ? '' : 's'}
+        {jobTitle && <span class="a-muted"> for {jobTitle}</span>}
+      </h2>
+      <span class="a-help" style="margin:0">Newest first. Change a status right here or open an applicant for the full record.</span>
+    </div>
+    {rows.length === 0 ? (
+      <div class="a-empty" style="margin:20px">
+        <strong>No applications{filtered ? ' match' : ' yet'}</strong>
+        {filtered ? 'Try clearing the filters.' : f.tab === 'pool' ? 'General applications from /careers/apply land here.' : 'Applications to open postings land here.'}
+      </div>
+    ) : (
+      <div class="a-table-wrap">
+        <table class="a-table">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              {f.tab === 'roles' && <th>Role</th>}
+              <th>Location</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Résumé</th>
+              <th>Set status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr>
+                <td class="primary">
+                  <a href={`/admin/applicants/${r.id}`}>{fullName(r) || 'Unnamed'}</a>
+                  <span class="sub">{r.email}</span>
+                </td>
+                {f.tab === 'roles' && <td>{r.role}</td>}
+                <td>{[r.city, r.country].filter(Boolean).join(', ') || <span class="a-muted">Not given</span>}</td>
+                <td class="nowrap"><time datetime={r.created_at} title={`${fmtDateTime(r.created_at)} MT`}>{timeAgo(r.created_at)}</time></td>
+                <td><span class:list={['a-badge', APPLICANT_BADGE[r.status]]}>{statusLabel(r.status)}</span></td>
+                <td class="nowrap">
+                  {r.resume_key ? <a class="a-link" href={`/admin/files/${r.resume_key}`}>Download</a> : <span class="a-muted">None</span>}
+                </td>
+                <td class="nowrap">
+                  <form method="post" action={`/api/admin/applicants/${r.id}`} data-autosubmit>
+                    <input type="hidden" name="_action" value="status" />
+                    <input type="hidden" name="back" value={here} />
+                    <select class="a-select" name="status" aria-label={`Status for ${fullName(r)}`} style="padding:6px 30px 6px 10px;font-size:13px;min-width:0">
+                      {APPLICANT_STATUSES.map((s) => (
+                        <option value={s} selected={r.status === s}>{statusLabel(s)}</option>
+                      ))}
+                    </select>
+                    <noscript><button class="a-btn a-btn--sm" type="submit">Save</button></noscript>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </section>
+</Admin>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('form[data-autosubmit] select').forEach((s) => {
+    s.addEventListener('change', () => s.form?.requestSubmit());
+  });
+</script>

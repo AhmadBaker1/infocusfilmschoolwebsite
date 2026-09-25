@@ -1,0 +1,254 @@
+---
+// Job posting editor, shared by /admin/jobs/new and /admin/jobs/[id].
+// Plain form POST to /api/admin/jobs (create) or /api/admin/jobs/:id
+// (update); the buttons pick the action. The posting body is a rich text
+// editor (see RichEditor.astro) that submits HTML in the `html` field.
+import { DEPTS } from '../../lib/jobs';
+import { fmtDateTime, toLocalInput } from '../../lib/format';
+import { mdToHtml } from '../../lib/server/markdown';
+import { isAccepting, type JobRow } from '../../lib/server/jobs';
+import RichEditor from './RichEditor.astro';
+
+interface Props {
+  job?: JobRow;
+  /* Applications received (edit only). */
+  applicants?: number;
+}
+
+const { job, applicants = 0 } = Astro.props;
+const editing = !!job;
+const action = job ? `/api/admin/jobs/${job.id}` : '/api/admin/jobs';
+// Older rows written as markdown are rendered once for editing.
+const bodyHtml = job ? job.html || mdToHtml(job.body_md) : '';
+const status = job?.status ?? 'draft';
+const closesDate = job?.closes_at ? toLocalInput(job.closes_at).slice(0, 10) : '';
+const live = job ? isAccepting(job) : false;
+const expired = job?.status === 'open' && !live;
+const badge = status === 'open' ? (live ? 'a-badge--ok' : 'a-badge--warn') : status === 'draft' ? 'a-badge--blue' : 'a-badge--muted';
+const site = Astro.site?.origin ?? Astro.url.origin;
+---
+
+<div class="a-grid a-grid--side">
+  <form class="a-card a-form" method="post" action={action} id="job-form" data-job-form data-mode={editing ? 'edit' : 'create'}>
+    <input type="hidden" name="_action" value={editing ? 'update' : 'create'} />
+
+    <div class="a-field">
+      <label for="title">Job title <span class="req">*</span></label>
+      <input class="a-input" id="title" name="title" value={job?.title ?? ''} required maxlength="120" autocomplete="off" data-title />
+    </div>
+
+    <div class="a-field">
+      <label for="id">Public URL</label>
+      {editing ? (
+        <div>
+          <input class="a-input" id="id" value={`${site}/careers/${job!.id}`} readonly style="color:var(--a-ink-2);background:var(--a-bg)" />
+          <p class="a-help">The URL is fixed once a posting exists (it is shared and indexed). Duplicate the posting to get a new one.</p>
+        </div>
+      ) : (
+        <div>
+          <div style="display:flex;align-items:center;gap:0">
+            <span class="a-muted" style="padding:11px 0 11px 12px;border:1px solid var(--a-line);border-right:0;border-radius:8px 0 0 8px;background:var(--a-bg);font-size:14px;white-space:nowrap">/careers/</span>
+            <input class="a-input" id="id" name="id" maxlength="80" pattern="[a-z0-9\-]*" autocomplete="off" placeholder="from-the-title" style="border-radius:0 8px 8px 0" data-slug />
+          </div>
+          <p class="a-help">Lower-case letters, numbers and dashes. Fills in from the title; change it before saving if you want a different link.</p>
+        </div>
+      )}
+    </div>
+
+    <div class="a-row">
+      <div class="a-field">
+        <label for="dept">Team <span class="req">*</span></label>
+        <select class="a-select" id="dept" name="dept" required>
+          {Object.entries(DEPTS).map(([k, label]) => (
+            <option value={k} selected={job?.dept === k}>{label}</option>
+          ))}
+        </select>
+      </div>
+      <div class="a-field">
+        <label for="location">Location</label>
+        <input class="a-input" id="location" name="location" value={job?.location ?? ''} maxlength="120" placeholder="Vancouver · Onsite" />
+      </div>
+    </div>
+
+    <div class="a-row">
+      <div class="a-field">
+        <label for="type">Type</label>
+        <input class="a-input" id="type" name="type" value={job?.type ?? ''} maxlength="120" placeholder="Full-time, permanent" />
+      </div>
+      <div class="a-field">
+        <label for="pay">Pay</label>
+        <input class="a-input" id="pay" name="pay" value={job?.pay ?? ''} maxlength="120" placeholder="$60,000 / year" />
+      </div>
+    </div>
+
+    <div class="a-field">
+      <span class="a-field__label">Posting</span>
+      <RichEditor name="html" value={bodyHtml} placeholder="Write the posting here, paste it from Word, or use Import from a document to read a PDF or Word file." />
+      <p class="a-help">
+        Use <strong>Heading</strong> for section titles (About the role, Key responsibilities, What we are looking for). The first paragraph under
+        "About the role" and the bullets under "What we are looking for" also show on the application page.
+      </p>
+    </div>
+
+    <div class="a-row a-row--3">
+      <div class="a-field">
+        <label for="status">Status</label>
+        <select class="a-select" id="status" name="status">
+          <option value="draft" selected={status === 'draft'}>Draft (hidden)</option>
+          <option value="open" selected={status === 'open'}>Open (on the careers page)</option>
+          <option value="closed" selected={status === 'closed'}>Closed (page stays up, no applications)</option>
+        </select>
+      </div>
+      <div class="a-field">
+        <label for="closes_at">Closing date (MT)</label>
+        <input class="a-input" id="closes_at" type="date" name="closes_at" value={closesDate} />
+        <p class="a-help" style="margin:0">Optional. Comes off the careers page after this day.</p>
+      </div>
+      <div class="a-field">
+        <label for="sort">Sort</label>
+        <input class="a-input" id="sort" type="number" name="sort" value={job?.sort ?? 0} min="-9999" max="9999" step="1" />
+        <p class="a-help" style="margin:0">Lower numbers list first.</p>
+      </div>
+    </div>
+
+    <div class="a-form__actions">
+      <button class="a-btn a-btn--primary" type="submit">{editing ? 'Save changes' : 'Save'}</button>
+      {(!editing || status !== 'open') && (
+        <button class="a-btn a-btn--dark" type="submit" name="_then" value="open">Save + open</button>
+      )}
+      <span class="spacer"></span>
+      <a class="a-btn a-btn--ghost" href="/admin/jobs">Cancel</a>
+    </div>
+  </form>
+
+  <aside>
+    <section class="a-card">
+      <div class="a-card__head">
+        <h2 class="a-h2" style="margin:0">{editing ? 'Publishing' : 'Before you save'}</h2>
+        {editing && <span class:list={['a-badge', badge]}>{expired ? 'expired' : status}</span>}
+      </div>
+      {editing ? (
+        <>
+          <dl class="a-kv">
+            <dt>Public page</dt>
+            <dd>
+              {live ? (
+                <a class="a-link" href={`/careers/${job!.id}`} target="_blank" rel="noopener">/careers/{job!.id}</a>
+              ) : status === 'closed' || expired ? (
+                <span>
+                  <a class="a-link" href={`/careers/${job!.id}`} target="_blank" rel="noopener">/careers/{job!.id}</a>
+                  <span class="a-muted"> (shows a "no longer accepting applications" notice)</span>
+                </span>
+              ) : (
+                <span class="a-muted">Hidden until opened</span>
+              )}
+            </dd>
+            <dt>Applicants</dt>
+            <dd>
+              {applicants > 0 ? (
+                <a class="a-link" href={`/admin/applicants?job=${job!.id}`}>{applicants} application{applicants === 1 ? '' : 's'}</a>
+              ) : (
+                <span class="a-muted">None yet</span>
+              )}
+            </dd>
+            {job!.closes_at && (
+              <>
+                <dt>Closes</dt>
+                <dd>{fmtDateTime(job!.closes_at)}{expired && <span class="a-muted"> (passed)</span>}</dd>
+              </>
+            )}
+            <dt>Created</dt>
+            <dd>{fmtDateTime(job!.created_at)}</dd>
+            <dt>Updated</dt>
+            <dd>{fmtDateTime(job!.updated_at)}</dd>
+          </dl>
+
+          <div class="a-form__actions" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--a-line-2)">
+            {live && (
+              <a class="a-btn a-btn--sm" href={`/careers/${job!.id}`} target="_blank" rel="noopener">View on site</a>
+            )}
+            <form class="a-inline-form" method="post" action={action}>
+              <input type="hidden" name="_action" value="duplicate" />
+              <button class="a-btn a-btn--sm" type="submit">Duplicate</button>
+            </form>
+            {status === 'open' ? (
+              <form class="a-inline-form" method="post" action={action} data-confirm={`Close ${job!.title}? It comes off the careers page and stops accepting applications. Its page stays up with a notice.`}>
+                <input type="hidden" name="_action" value="close" />
+                <button class="a-btn a-btn--sm a-btn--danger" type="submit">Close</button>
+              </form>
+            ) : (
+              <form class="a-inline-form" method="post" action={action}>
+                <input type="hidden" name="_action" value="open" />
+                <button class="a-btn a-btn--sm" type="submit">{status === 'closed' ? 'Reopen' : 'Open now'}</button>
+              </form>
+            )}
+            <form
+              class="a-inline-form"
+              method="post"
+              action={action}
+              data-confirm={
+                applicants > 0
+                  ? `${job!.title} has ${applicants} application${applicants === 1 ? '' : 's'}. Deleting is not allowed while applications exist; close it instead. Continue anyway?`
+                  : `Permanently delete ${job!.title}? This cannot be undone.`
+              }
+            >
+              <input type="hidden" name="_action" value="delete" />
+              <button class="a-btn a-btn--sm a-btn--ghost a-btn--danger" type="submit">Delete</button>
+            </form>
+          </div>
+          <p class="a-help">Unsaved edits in the form are not included by these buttons. Save first.</p>
+        </>
+      ) : (
+        <p class="a-help" style="margin:0">
+          Save keeps it as whatever status you pick (drafts are hidden from the public). Save + open puts it on the careers page
+          right away at /careers/&lt;slug&gt;.
+        </p>
+      )}
+    </section>
+
+    <section class="a-card">
+      <h2 class="a-h2">Writing tips</h2>
+      <p class="a-help" style="margin:0 0 8px">Postings read best with these sections, in this order:</p>
+      <ol class="a-help" style="margin:0;padding-left:18px">
+        <li>About InFocus</li>
+        <li>About the role (first paragraph is the summary on the application page)</li>
+        <li>Key responsibilities</li>
+        <li>What we are looking for (bullets show on the application page)</li>
+        <li>What we offer, How to apply</li>
+      </ol>
+    </section>
+  </aside>
+</div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-job-form]');
+  if (form) {
+    // Slug from the title, until the slug is edited by hand (create only).
+    const title = form.querySelector<HTMLInputElement>('[data-title]');
+    const slug = form.querySelector<HTMLInputElement>('[data-slug]');
+    const slugify = (s: string) =>
+      s
+        .normalize('NFKD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80);
+    if (title && slug) {
+      let touched = slug.value !== '';
+      slug.addEventListener('input', () => (touched = slug.value !== ''));
+      title.addEventListener('input', () => {
+        if (!touched) slug.value = slugify(title.value);
+      });
+      slug.addEventListener('blur', () => (slug.value = slugify(slug.value)));
+    }
+
+    // Ctrl/Cmd+S saves.
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+  }
+</script>

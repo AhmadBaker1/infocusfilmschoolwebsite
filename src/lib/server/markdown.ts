@@ -87,5 +87,9 @@ export function htmlToMd(html: string): string {
   s = s.replace(/<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, '[$2]($1)');
   s = s.replace(/<[^>]+>/g, '');
   s = decode(s);
-  return s.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  s = s.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+  // Keep list items adjacent: a blank line between "- " lines would split the
+  // list into one <ul> per item when it comes back through mdToHtml.
+  s = s.replace(/^(- .*)\n\n+(?=- )/gm, '$1\n');
+  return s.trim();
 }

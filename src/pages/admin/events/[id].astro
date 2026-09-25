@@ -1,0 +1,52 @@
+---
+// Edit one event. Duplicate and delete live in the header; everything else
+// is the shared form.
+import Admin from '../../../layouts/Admin.astro';
+import EventForm from '../../../components/admin/EventForm.astro';
+import { db } from '../../../lib/server/db';
+import { getById, whenLabel } from '../../../lib/server/events';
+import { fmtDateTime } from '../../../lib/format';
+
+export const prerender = false;
+
+const ev = await getById(db(Astro.locals), Astro.params.id!);
+if (!ev) return new Response(null, { status: 404 });
+
+const action = `/api/admin/events/${ev.id}`;
+const statusBadge = { draft: 'a-badge--warn', published: 'a-badge--ok', archived: 'a-badge--muted' };
+---
+
+<Admin title={ev.title} section="events" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Events', href: '/admin/events' }, { label: ev.title }]}>
+  <div slot="actions">
+    {ev.status === 'published' && (
+      <a class="a-btn" href={`/events/${ev.slug}`} target="_blank" rel="noopener">View on site</a>
+    )}
+    <form class="a-inline-form" method="post" action={action}>
+      <input type="hidden" name="_action" value="duplicate" />
+      <button class="a-btn" type="submit">Duplicate</button>
+    </form>
+    <form class="a-inline-form" method="post" action={action} data-confirm={`Delete "${ev.title}"? This cannot be undone.`}>
+      <input type="hidden" name="_action" value="delete" />
+      <button class="a-btn a-btn--danger" type="submit">Delete</button>
+    </form>
+  </div>
+
+  <p class="meta">
+    <span class:list={['a-badge', statusBadge[ev.status]]}>{ev.status}</span>
+    <span>{whenLabel(ev)}</span>
+    <span class="a-muted">Updated {fmtDateTime(ev.updated_at)}</span>
+  </p>
+
+  <EventForm event={ev} />
+</Admin>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin: 0 0 18px;
+    font-size: 14px;
+  }
+</style>

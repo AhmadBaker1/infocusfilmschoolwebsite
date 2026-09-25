@@ -20,10 +20,22 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 export const ROLE_HELP: Record<Role, string> = {
   admin: 'Everything, plus staff accounts.',
-  marketing: 'Events on the public site.',
+  marketing: 'Events and blog on the public site, plus Apply Now submissions.',
   hr: 'Job postings, applicants and the talent pool.',
   admissions: 'Apply Now submissions by program.',
 };
+
+/** Which roles open each staff section. Admins open everything. */
+export const SECTIONS = {
+  events: ['marketing'],
+  blog: ['marketing'],
+  jobs: ['hr'],
+  applicants: ['hr'],
+  files: ['hr'],
+  admissions: ['admissions', 'marketing'],
+  users: ['admin'],
+} as const satisfies Record<string, readonly Role[]>;
+export type Section = keyof typeof SECTIONS;
 
 export interface SessionUser {
   id: string;
@@ -126,6 +138,9 @@ export const parseRoles = (s: string | null | undefined): Role[] => {
 /** Admins can do everything. */
 export const can = (user: SessionUser | null | undefined, role: Role): boolean =>
   !!user && (user.roles.includes('admin') || user.roles.includes(role));
+
+export const canSection = (user: SessionUser | null | undefined, section: Section): boolean =>
+  !!user && (user.roles.includes('admin') || SECTIONS[section].some((r) => user.roles.includes(r)));
 
 // ---- Sessions ----
 
