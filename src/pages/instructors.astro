@@ -10,13 +10,21 @@ import Footer from '../components/Footer.astro';
 import data from '../data/instructors.json';
 import { getPrograms } from '../lib/programs';
 
-type Person = (typeof data.instructors)[number] & { former?: boolean };
-const people = new Map<string, Person>(data.instructors.map((p) => [p.slug, p as Person]));
-const programs = getPrograms().filter((p) => (data.programs as Record<string, string[]>)[p.slug]);
-const roster = (slug: string) => ((data.programs as Record<string, string[]>)[slug] ?? []).map((s) => people.get(s)!).filter(Boolean);
-const roleFor = (p: Person, slug: string) => (p.roles as Record<string, string>)[slug] ?? '';
-const rolesOf = (p: Person) => Object.entries(p.roles as Record<string, string>);
-const allPeople = data.instructors as Person[];
+interface Person {
+  slug: string;
+  name: string;
+  image: string | null;
+  roles: Record<string, string>;
+  bio: string[];
+  former?: boolean;
+}
+const allPeople = data.instructors as unknown as Person[];
+const rosters = data.programs as Record<string, string[]>;
+const people = new Map<string, Person>(allPeople.map((p) => [p.slug, p]));
+const programs = getPrograms().filter((p) => rosters[p.slug]);
+const roster = (slug: string) => (rosters[slug] ?? []).map((s) => people.get(s)!).filter(Boolean);
+const roleFor = (p: Person, slug: string) => p.roles[slug] ?? '';
+const rolesOf = (p: Person) => Object.entries(p.roles);
 const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2);
 const total = data.instructors.length;
 ---

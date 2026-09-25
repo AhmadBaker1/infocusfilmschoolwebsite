@@ -1,0 +1,886 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import ParentOrg from '../components/ParentOrg.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+import data from '../data/leadership.json';
+
+// Leadership team. Bios and photos live in src/data/leadership.json; the
+// first entry is the President and gets the opening feature.
+interface Leader {
+  slug: string;
+  name: string;
+  credentials?: string;
+  role: string;
+  image: string;
+  focus: string;
+  quote?: string;
+  bio: string[];
+}
+
+const leaders = data.leaders as Leader[];
+const [president, ...team] = leaders;
+const slate = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<Base
+  title="Leadership — InFocus Film School"
+  description="Meet the leadership team behind InFocus Film School: Dr. Monika Chhabra Gupta, Dmetri Berko, DJ Gupta, Faye Foshaug and Raisa Afrida."
+  image={president.image}
+>
+  <Nav />
+
+  <main>
+    <!-- ===== Opening ===== -->
+    <header class="open" aria-labelledby="open-title">
+      <span class="open__grain" aria-hidden="true"></span>
+      <div class="open__inner">
+        <div class="open__copy">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About Us</a></li>
+              <li aria-current="page">Leadership</li>
+            </ol>
+          </nav>
+          <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Leadership</p>
+          <h1 id="open-title" class="open__title">The people<br />behind <em>InFocus</em></h1>
+          <p class="open__lede">
+            Educators, builders and operators who see the potential in people, then build the
+            pathway to it. This is the team that runs the school.
+          </p>
+        </div>
+
+        <!-- Cast list: a strip of frames, each one jumps to that person. -->
+        <nav class="strip" aria-label="Leadership team">
+          <span class="strip__holes strip__holes--top" aria-hidden="true"></span>
+          <ol class="strip__list">
+            {leaders.map((l, i) => (
+              <li>
+                <a class="strip__frame" href={`#${l.slug}`}>
+                  <img src={l.image} alt="" width="1000" height="1250" style={`object-position:${l.focus}`} loading="eager" decoding="async" />
+                  <span class="strip__num" aria-hidden="true">{slate(i)}</span>
+                  <span class="strip__cap">
+                    <span class="strip__name">{l.name}</span>
+                    <span class="strip__role">{l.role}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+          <span class="strip__holes strip__holes--bottom" aria-hidden="true"></span>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===== President ===== -->
+    <section class="pres" id={president.slug} aria-labelledby={`${president.slug}-name`} data-reveal>
+      <div class="pres__inner">
+        <figure class="pres__figure">
+          <span class="corner corner--tl" aria-hidden="true"></span>
+          <span class="corner corner--tr" aria-hidden="true"></span>
+          <span class="corner corner--bl" aria-hidden="true"></span>
+          <span class="corner corner--br" aria-hidden="true"></span>
+          <img src={president.image} alt={president.name} width="1000" height="1250" style={`object-position:${president.focus}`} loading="eager" decoding="async" />
+          <figcaption class="pres__slate" aria-hidden="true">
+            <span class="slate__num">{slate(0)}</span>
+            <span class="slate__label">{president.role}</span>
+          </figcaption>
+        </figure>
+
+        <div class="pres__copy">
+          <p class="eyebrow"><span aria-hidden="true"></span>{president.role}</p>
+          <h2 id={`${president.slug}-name`} class="pres__name">{president.name}</h2>
+          <div class="pres__bio">
+            {president.bio.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </div>
+
+      {president.quote && (
+        <figure class="pull">
+          <span class="pull__mark" aria-hidden="true">“</span>
+          <blockquote><p>{president.quote}</p></blockquote>
+          <figcaption>
+            <span class="pull__name">{president.name}</span>
+            <span class="pull__role">{president.role}</span>
+          </figcaption>
+        </figure>
+      )}
+    </section>
+
+    <!-- ===== Team ===== -->
+    <section class="team" aria-labelledby="team-title">
+      <div class="team__head">
+        <p class="eyebrow"><span aria-hidden="true"></span>Executive team</p>
+        <h2 id="team-title" class="team__title">Running the school, day to day.</h2>
+      </div>
+
+      <ol class="team__list">
+        {team.map((l, i) => (
+          <li class="member" id={l.slug} data-reveal>
+            <figure class="member__figure">
+              <span class="corner corner--tl" aria-hidden="true"></span>
+              <span class="corner corner--tr" aria-hidden="true"></span>
+              <span class="corner corner--bl" aria-hidden="true"></span>
+              <span class="corner corner--br" aria-hidden="true"></span>
+              <img src={l.image} alt={l.name} width="1000" height="1250" style={`object-position:${l.focus}`} loading="lazy" decoding="async" />
+              <figcaption class="member__slate" aria-hidden="true">
+                <span class="slate__num">{slate(i + 1)}</span>
+              </figcaption>
+            </figure>
+
+            <div class="member__copy">
+              <p class="member__role">{l.role}</p>
+              <h3 class="member__name">
+                {l.name}
+                {l.credentials && <span class="member__creds">{l.credentials}</span>}
+              </h3>
+              <div class="member__bio">
+                {l.bio.map((p) => <p>{p}</p>)}
+              </div>
+              {l.quote && (
+                <blockquote class="member__quote">
+                  <p>{l.quote}</p>
+                </blockquote>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ===== Values ===== -->
+    <section class="creed" aria-labelledby="creed-title">
+      <div class="creed__inner">
+        <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>What we hold to</p>
+        <h2 id="creed-title" class="creed__title">See the potential in people.<br /><span>Then build the pathway to it.</span></h2>
+        <ul class="creed__list">
+          <li>
+            <strong>Hands-on, from day one.</strong>
+            Students learn on working sets and in working studios, taught by people who do the job.
+          </li>
+          <li>
+            <strong>Standards without excuses.</strong>
+            Every program is measured against what the industry actually hires for.
+          </li>
+          <li>
+            <strong>The whole person.</strong>
+            Newcomers, parents and career-changers are given a real pathway, not just a seat.
+          </li>
+        </ul>
+        <div class="creed__actions">
+          <a class="creed__btn" href="/about">About InFocus <span aria-hidden="true">→</span></a>
+          <a class="creed__link" href="/instructors">Meet our instructors <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <ParentOrg />
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 clamp(14px, 1.6vw, 22px);
+    font-family: var(--font-head);
+    font-size: clamp(11px, 0.8vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: clamp(24px, 2.6vw, 44px);
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* Viewfinder corners shared by every portrait frame. */
+  .corner {
+    position: absolute;
+    z-index: 2;
+    width: 22px;
+    aspect-ratio: 1;
+    border: 0 solid var(--white);
+    opacity: 0.9;
+  }
+
+  .corner--tl { top: 14px; left: 14px; border-top-width: 2px; border-left-width: 2px; }
+  .corner--tr { top: 14px; right: 14px; border-top-width: 2px; border-right-width: 2px; }
+  .corner--bl { bottom: 14px; left: 14px; border-bottom-width: 2px; border-left-width: 2px; }
+  .corner--br { bottom: 14px; right: 14px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  .slate__num {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+
+  /* ---- Opening ---- */
+
+  .open {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: calc(var(--nav-h) + clamp(40px, 5vw, 80px)) var(--gutter) clamp(56px, 6vw, 96px);
+    background:
+      radial-gradient(55% 80% at 100% 0%, rgba(189, 47, 47, 0.32), transparent 65%),
+      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.55), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .open__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 1.2s steps(6) infinite;
+  }
+
+  @keyframes grain {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-4%, 3%); }
+    40% { transform: translate(3%, -5%); }
+    60% { transform: translate(-6%, -2%); }
+    80% { transform: translate(5%, 6%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .open__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin: 0 0 clamp(24px, 3vw, 44px);
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 10px;
+    opacity: 0.5;
+  }
+
+  .crumbs a:hover {
+    color: var(--white);
+  }
+
+  .crumbs [aria-current] {
+    color: var(--white);
+  }
+
+  .eyebrow--light {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .open__title {
+    margin: 0;
+    max-width: 12ch;
+    font-size: clamp(44px, 6.4vw, 108px);
+    line-height: 0.94;
+    letter-spacing: -0.01em;
+  }
+
+  .open__title em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .open__lede {
+    margin: clamp(18px, 2vw, 28px) 0 0;
+    max-width: 52ch;
+    font-size: clamp(16px, 1.15vw, 19px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  /* ---- Cast strip ---- */
+
+  .strip {
+    position: relative;
+    margin-top: clamp(40px, 5vw, 72px);
+    padding: 18px 0;
+    background: #141414;
+    border-radius: 6px;
+  }
+
+  .strip__holes {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0 3px, transparent 3.5px);
+    background-size: 26px 10px;
+    background-repeat: repeat-x;
+    background-position: 13px 0;
+  }
+
+  .strip__holes--top { top: 4px; }
+  .strip__holes--bottom { bottom: 4px; }
+
+  .strip__list {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 14px 16px 12px;
+    list-style: none;
+  }
+
+  .strip__frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #000;
+    color: var(--white);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .strip__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.05);
+    transition: filter 0.4s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .strip__frame:hover,
+  .strip__frame:focus-visible {
+    transform: translateY(-4px);
+  }
+
+  .strip__frame:hover img,
+  .strip__frame:focus-visible img {
+    filter: none;
+    transform: scale(1.04);
+  }
+
+  .strip__frame:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 3px;
+  }
+
+  .strip__num {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 3px 7px;
+    background: var(--red);
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+
+  .strip__cap {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 34px 12px 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88), transparent);
+  }
+
+  .strip__name {
+    font-family: var(--font-head);
+    font-size: clamp(13px, 1.05vw, 17px);
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .strip__role {
+    font-size: 11px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ---- President ---- */
+
+  .pres {
+    padding: clamp(64px, 8vw, 128px) var(--gutter) clamp(72px, 8vw, 128px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .pres__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 88px);
+    align-items: start;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .pres__figure,
+  .member__figure {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--charcoal);
+    box-shadow: 0 40px 70px -40px rgba(0, 0, 0, 0.5);
+  }
+
+  .pres__figure {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+  }
+
+  .pres__figure img,
+  .member__figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pres__slate,
+  .member__slate {
+    position: absolute;
+    z-index: 2;
+    right: 14px;
+    bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+    color: var(--white);
+  }
+
+  .slate__label {
+    font-family: var(--font-head);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .pres__name {
+    margin: 0;
+    font-size: clamp(36px, 4.4vw, 72px);
+    line-height: 0.98;
+  }
+
+  .pres__bio {
+    margin-top: clamp(22px, 2.6vw, 36px);
+  }
+
+  .pres__bio p,
+  .member__bio p {
+    margin: 0 0 1.1em;
+    max-width: 62ch;
+    font-size: clamp(15px, 1.1vw, 18px);
+    line-height: 1.78;
+    color: rgba(51, 51, 51, 0.88);
+  }
+
+  .pres__bio p:first-child {
+    font-size: clamp(17px, 1.3vw, 22px);
+    line-height: 1.6;
+    color: var(--charcoal);
+  }
+
+  /* Pull quote spanning the full column width. */
+  .pull {
+    position: relative;
+    max-width: 1320px;
+    margin: clamp(48px, 6vw, 96px) auto 0;
+    padding: clamp(32px, 4vw, 64px) clamp(22px, 4vw, 72px);
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .pull__mark {
+    position: absolute;
+    top: -0.1em;
+    left: clamp(6px, 1.5vw, 24px);
+    font-family: var(--font-accent);
+    font-size: clamp(90px, 11vw, 180px);
+    line-height: 1;
+    color: var(--red);
+    opacity: 0.22;
+  }
+
+  .pull blockquote {
+    margin: 0;
+  }
+
+  .pull p {
+    margin: 0;
+    max-width: 30ch;
+    font-family: var(--font-quote);
+    font-weight: 500;
+    font-size: clamp(24px, 2.6vw, 44px);
+    line-height: 1.28;
+    letter-spacing: -0.015em;
+    text-wrap: pretty;
+  }
+
+  .pull figcaption,
+  .member__quote footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: clamp(18px, 2vw, 28px);
+  }
+
+  .pull figcaption::before {
+    content: '';
+    width: 36px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .pull__name {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .pull__role {
+    font-size: 13px;
+    color: rgba(51, 51, 51, 0.65);
+  }
+
+  /* ---- Team ---- */
+
+  .team {
+    padding: clamp(64px, 8vw, 128px) var(--gutter);
+    background: #f4f4f4;
+    color: var(--charcoal);
+  }
+
+  .team__head {
+    max-width: 1320px;
+    margin: 0 auto clamp(40px, 5vw, 80px);
+  }
+
+  .team__title {
+    margin: 0;
+    max-width: 16ch;
+    font-size: clamp(32px, 3.8vw, 62px);
+    line-height: 1;
+  }
+
+  .team__list {
+    display: grid;
+    gap: clamp(56px, 7vw, 120px);
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .member {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: clamp(28px, 4.5vw, 80px);
+    align-items: center;
+  }
+
+  /* Alternate the portrait side so the page zig-zags down. */
+  .member:nth-child(even) .member__figure {
+    order: 2;
+  }
+
+  .member__figure {
+    max-width: 460px;
+    box-shadow: 0 30px 60px -36px rgba(0, 0, 0, 0.45);
+  }
+
+  .member:nth-child(even) .member__figure {
+    justify-self: end;
+  }
+
+  .member__role {
+    margin: 0 0 12px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .member__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+    margin: 0 0 clamp(18px, 2vw, 28px);
+    font-size: clamp(30px, 3.4vw, 54px);
+    line-height: 1;
+  }
+
+  .member__creds {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(51, 51, 51, 0.6);
+  }
+
+  .member__quote {
+    margin: clamp(10px, 1.4vw, 20px) 0 0;
+    padding-left: clamp(16px, 2vw, 28px);
+    border-left: 3px solid var(--red);
+  }
+
+  .member__quote p {
+    margin: 0;
+    max-width: 32ch;
+    font-family: var(--font-quote);
+    font-weight: 500;
+    font-size: clamp(18px, 1.6vw, 26px);
+    line-height: 1.38;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+
+  /* Scroll reveal. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- Creed ---- */
+
+  .creed {
+    padding: clamp(64px, 8vw, 132px) var(--gutter);
+    background:
+      radial-gradient(55% 80% at 0% 0%, rgba(189, 47, 47, 0.3), transparent 65%),
+      radial-gradient(50% 80% at 100% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+  }
+
+  .creed__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .creed__title {
+    margin: 0;
+    max-width: 18ch;
+    font-size: clamp(34px, 4.4vw, 76px);
+    line-height: 0.98;
+  }
+
+  .creed__title span {
+    color: var(--red);
+  }
+
+  .creed__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 2.6vw, 40px);
+    margin: clamp(36px, 4vw, 64px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .creed__list li {
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    font-size: clamp(14px, 1.05vw, 17px);
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .creed__list strong {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-head);
+    font-size: clamp(17px, 1.3vw, 22px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .creed__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: clamp(32px, 3.6vw, 56px);
+  }
+
+  .creed__btn {
+    display: inline-flex;
+    gap: 10px;
+    padding: 15px 26px;
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--charcoal);
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .creed__btn:hover {
+    background: var(--red);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .creed__link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+  }
+
+  .creed__link:hover {
+    color: var(--white);
+  }
+
+  /* ---- Responsive ---- */
+
+  @media (max-width: 960px) {
+    .pres__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pres__figure {
+      position: relative;
+      top: auto;
+      max-width: 520px;
+    }
+
+    .member {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .member:nth-child(even) .member__figure {
+      order: 0;
+      justify-self: start;
+    }
+
+    .member__figure {
+      max-width: 400px;
+    }
+
+    .creed__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .strip__list {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 14px 12px 12px;
+      scrollbar-width: none;
+    }
+
+    .strip__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .strip__list li {
+      flex: 0 0 62%;
+      scroll-snap-align: start;
+    }
+
+    .strip__name {
+      font-size: 15px;
+    }
+
+    .pres__figure,
+    .member__figure {
+      max-width: none;
+      border-radius: 12px;
+    }
+
+    .pull {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .pull__mark {
+      left: -4px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .open__grain {
+      animation: none;
+    }
+
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Reveal each section as it scrolls into view. Anything already on screen
+  // (or targeted by a deep link) shows immediately.
+  const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach((el) => el.classList.add('is-in'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
+    );
+    items.forEach((el) => io.observe(el));
+  }
+</script>

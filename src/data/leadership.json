@@ -1,0 +1,63 @@
+{
+  "leaders": [
+    {
+      "slug": "monika-gupta",
+      "name": "Dr. Monika Chhabra Gupta",
+      "role": "President & CEO",
+      "image": "/images/leadership/monika-gupta.jpg",
+      "focus": "50% 30%",
+      "quote": "Education doesn't just fill a résumé. It fills a life with purpose, direction, and the courage to lead.",
+      "bio": [
+        "Dr. Monika Chhabra Gupta is an entrepreneur, educator and philanthropist, and the leader of three institutions: InFocus Film School, MCG Career College and CGA Medical Imaging.",
+        "A commitment to seeing the whole person runs through everything she builds. At InFocus, she brings a builder's eye to the creative industries, turning raw talent into working careers on Vancouver's film sets, in its animation studios and on its design teams. Through MCG Career College, she has created a place where newcomers, parents and career-changers rewrite the math of their lives, pairing real Canadian wages with real human outcomes. Through CGA Medical Imaging, with facilities in Calgary, Cold Lake and High River, she delivers accredited diagnostic care close to home and champions women's health through public education on breast cancer awareness and mammography.",
+        "A tireless advocate for women's empowerment, Dr. Gupta works for humanity and leads by a simple conviction: whatever you give comes back to you as karma. From a newcomer's journey to the head of three thriving institutions, she has made one belief her life's work: see the potential in people, then build the pathway to it."
+      ]
+    },
+    {
+      "slug": "dmetri-berko",
+      "name": "Dmetri Berko",
+      "credentials": "RPR, CPHR, SHRM-SCP, CMP, PMP",
+      "role": "Vice President & Dean",
+      "image": "/images/leadership/dmetri-berko.jpg",
+      "focus": "45% 25%",
+      "quote": "If a student walks out of InFocus without the confidence to excel on day one, we haven't done our job.",
+      "bio": [
+        "Dmetri Berko brings a rare combination of operational leadership and student-centred vision to InFocus. As Vice President & Dean, he oversees the day-to-day academic and administrative operations of the school and its sister campuses, ensuring every program meets the highest standards of quality and industry relevance.",
+        "Known for his direct, high-energy approach and genuine care for students and staff alike, Dmetri has been instrumental in building the systems and culture that let InFocus deliver consistently exceptional outcomes. He works closely with program heads, regulatory bodies and industry partners to keep the school at the leading edge of film and entertainment arts education in Canada."
+      ]
+    },
+    {
+      "slug": "dj-gupta",
+      "name": "DJ Gupta",
+      "role": "Business Analyst, Department of Efficiency",
+      "image": "/images/leadership/dj-gupta.jpg",
+      "focus": "50% 30%",
+      "bio": [
+        "DJ is the operational architect behind the transformation of InFocus and the wider MCG family of schools. Where others see process, DJ sees possibility, systematically redesigning how the school works from the inside out, eliminating friction and replacing it with precision.",
+        "His work integrating technology and AI into daily operations has redefined what efficiency looks like at a film school: faster pathways for students, leaner workflows for staff, and a data-informed culture that lets every team member do their best work. DJ doesn't just improve systems; he transforms how an institution thinks about its own capacity to serve, and in doing so quietly changes the experience of every student who walks through the doors of InFocus."
+      ]
+    },
+    {
+      "slug": "faye-foshaug",
+      "name": "Faye Foshaug",
+      "role": "Director, Regulatory Compliance",
+      "image": "/images/leadership/faye-foshaug.jpg",
+      "focus": "50% 30%",
+      "bio": [
+        "After 20 years leading a national customer service team in private industry, Faye retrained as a Registered Dental Assistant (Orthodontics) before moving into post-secondary education as a Project Coordinator bringing new programs to market. She holds the Adult Educator Series (MRU), the Applied Project Management Certificate (SAIT) and a Six Sigma Yellow Belt.",
+        "At InFocus, Faye works closely with governmental and accrediting bodies, including British Columbia's Private Training Institutions Regulatory Unit, to uphold regulatory excellence and support the school's continued growth."
+      ]
+    },
+    {
+      "slug": "raisa-afrida",
+      "name": "Raisa Afrida",
+      "role": "Director, Revenue & Strategic Partnerships",
+      "image": "/images/leadership/raisa-afrida.jpg",
+      "focus": "50% 25%",
+      "bio": [
+        "Raisa has been instrumental in building and scaling the admissions and marketing divisions across InFocus and the MCG family of schools, drawing on extensive leadership experience in public and private post-secondary institutions. A passionate advocate for adult learners and newcomers, she is known for forging partnerships between educational institutions, employers and community organizations to drive workforce development and social mobility.",
+        "She holds a Bachelor's from the University of Lethbridge and an MBA from the University of Calgary, and is currently pursuing her DBA at the University of Michigan. She also hosts the Legacy Podcast, championing community leaders and changemakers, and has earned multiple awards for community leadership and social impact."
+      ]
+    }
+  ]
+}
