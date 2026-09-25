@@ -1,0 +1,15 @@
+---
+// Shown (via middleware rewrite) when a signed-in user opens a section their
+// roles do not include.
+import Admin from '../../layouts/Admin.astro';
+
+export const prerender = false;
+---
+
+<Admin title="No access to this section" crumbs={[{ label: 'Dashboard', href: '/admin' }]}>
+  <div class="a-empty">
+    <strong>Not part of your role</strong>
+    Your account does not include this section. A super admin can add it under Staff accounts.
+    <p style="margin:16px 0 0"><a class="a-btn" href="/admin">Back to dashboard</a></p>
+  </div>
+</Admin>

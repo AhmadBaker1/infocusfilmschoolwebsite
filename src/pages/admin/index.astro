@@ -1,0 +1,133 @@
+---
+// Staff dashboard: what needs attention, per role, plus recent activity.
+import Admin from '../../layouts/Admin.astro';
+import { can } from '../../lib/server/auth';
+import { all, count, db } from '../../lib/server/db';
+import { TZ, timeAgo } from '../../lib/format';
+
+export const prerender = false;
+
+const user = Astro.locals.user!;
+const d1 = db(Astro.locals);
+const nowIso = new Date().toISOString();
+
+const marketing = can(user, 'marketing');
+const hr = can(user, 'hr');
+const admissions = can(user, 'admissions');
+const admin = can(user, 'admin');
+
+const [upcoming, drafts, openJobs, newApplicants, newTalent, newAdmissions, staff] = await Promise.all([
+  marketing ? count(d1, "SELECT COUNT(*) AS n FROM events WHERE status = 'published' AND starts_at >= ?", nowIso) : 0,
+  marketing ? count(d1, "SELECT COUNT(*) AS n FROM events WHERE status = 'draft'") : 0,
+  hr ? count(d1, "SELECT COUNT(*) AS n FROM jobs WHERE status = 'open'") : 0,
+  hr ? count(d1, "SELECT COUNT(*) AS n FROM job_applications WHERE status = 'new' AND job_id IS NOT NULL") : 0,
+  hr ? count(d1, "SELECT COUNT(*) AS n FROM job_applications WHERE status = 'new' AND job_id IS NULL") : 0,
+  admissions ? count(d1, "SELECT COUNT(*) AS n FROM admissions_applications WHERE status = 'new'") : 0,
+  admin ? count(d1, "SELECT COUNT(*) AS n FROM users WHERE status != 'disabled'") : 0,
+]);
+
+interface Audit {
+  ts: string;
+  user_name: string | null;
+  action: string;
+  entity: string;
+  entity_id: string | null;
+  meta: string | null;
+}
+const activity = admin
+  ? await all<Audit>(d1.prepare('SELECT ts, user_name, action, entity, entity_id, meta FROM audit_log ORDER BY id DESC LIMIT 12'))
+  : await all<Audit>(d1.prepare('SELECT ts, user_name, action, entity, entity_id, meta FROM audit_log WHERE user_id = ? ORDER BY id DESC LIMIT 8').bind(user.id));
+
+const describe = (a: Audit) => {
+  let title = '';
+  try {
+    title = (JSON.parse(a.meta ?? '{}') as { title?: string }).title ?? '';
+  } catch {}
+  const verb = a.action.split('.')[1]?.replace(/_/g, ' ') ?? a.action;
+  return `${a.user_name ?? 'Someone'} · ${a.entity} ${verb}${title ? `: ${title}` : ''}`;
+};
+
+const first = user.name.split(' ')[0];
+const hour = Number(new Intl.DateTimeFormat('en-CA', { timeZone: TZ, hour: 'numeric', hour12: false }).format(new Date())) % 24;
+const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+---
+
+<Admin title={`${greeting}, ${first}`} section="dashboard" counts={{ applicants: newApplicants + newTalent, admissions: newAdmissions }}>
+  <div slot="actions">
+    {marketing && <a class="a-btn a-btn--primary" href="/admin/events/new">+ New event</a>}
+    {hr && <a class="a-btn" href="/admin/jobs/new">+ New job posting</a>}
+    {admin && <a class="a-btn" href="/admin/users#invite">Invite staff</a>}
+  </div>
+
+  <div class="a-grid a-grid--4" style="margin-bottom:24px">
+    {marketing && (
+      <a class="a-stat" href="/admin/events">
+        <span class="a-stat__n">{upcoming}</span>
+        <span class="a-stat__label">Upcoming published events</span>
+        {drafts > 0 && <span class="a-stat__hint">{drafts} draft{drafts === 1 ? '' : 's'} waiting</span>}
+      </a>
+    )}
+    {hr && (
+      <a class="a-stat" href="/admin/applicants?status=new">
+        <span class="a-stat__n">{newApplicants}</span>
+        <span class="a-stat__label">New role applications</span>
+        {newTalent > 0 && <span class="a-stat__hint">+{newTalent} new in the talent pool</span>}
+      </a>
+    )}
+    {hr && (
+      <a class="a-stat" href="/admin/jobs">
+        <span class="a-stat__n">{openJobs}</span>
+        <span class="a-stat__label">Open job postings</span>
+      </a>
+    )}
+    {admissions && (
+      <a class="a-stat" href="/admin/admissions?status=new">
+        <span class="a-stat__n">{newAdmissions}</span>
+        <span class="a-stat__label">New program applications</span>
+      </a>
+    )}
+    {admin && (
+      <a class="a-stat" href="/admin/users">
+        <span class="a-stat__n">{staff}</span>
+        <span class="a-stat__label">Staff accounts</span>
+      </a>
+    )}
+  </div>
+
+  <div class="a-grid a-grid--side">
+    <section class="a-card">
+      <div class="a-card__head">
+        <h2 class="a-h2">{admin ? 'Recent activity' : 'Your recent activity'}</h2>
+      </div>
+      {activity.length === 0 ? (
+        <div class="a-empty"><strong>Nothing yet</strong>Changes made in the staff area show up here.</div>
+      ) : (
+        <ul class="a-activity">
+          {activity.map((a) => (
+            <li>
+              <time datetime={a.ts} title={a.ts}>{timeAgo(a.ts)}</time>
+              <span>{describe(a)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+
+    <aside class="a-card">
+      <h2 class="a-h2">Your access</h2>
+      <dl class="a-kv">
+        <dt>Signed in as</dt>
+        <dd>{user.email}</dd>
+        <dt>Sections</dt>
+        <dd>
+          {[marketing && 'Events', hr && 'Job postings + applicants', admissions && 'Admissions', admin && 'Staff accounts'].filter(Boolean).join(', ')}
+        </dd>
+      </dl>
+      <p class="a-help" style="margin-top:14px">
+        Public pages: <a class="a-link" href="/events" target="_blank" rel="noopener">Events</a> ·
+        <a class="a-link" href="/careers" target="_blank" rel="noopener">Careers</a> ·
+        <a class="a-link" href="/apply" target="_blank" rel="noopener">Apply Now</a>
+      </p>
+    </aside>
+  </div>
+</Admin>

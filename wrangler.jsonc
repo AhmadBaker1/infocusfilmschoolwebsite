@@ -1,0 +1,36 @@
+// Cloudflare Workers config. Free plan: Workers + static assets, D1 (SQLite)
+// and R2 (files). See docs/BACKEND.md for setup and deploy steps.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "infocusfilmschool",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./dist/_worker.js/index.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "infocus",
+      // Replace with the id printed by `npx wrangler d1 create infocus`.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "infocus-files"
+    }
+  ],
+  "vars": {
+    "SITE_URL": "https://infocusfilmschool.com"
+  }
+  // Secrets (never in this file): `npx wrangler secret put SESSION_SECRET`.
+  // Locally, put SESSION_SECRET=... in .dev.vars (gitignored).
+}

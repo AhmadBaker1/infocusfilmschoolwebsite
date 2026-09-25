@@ -1,0 +1,138 @@
+---
+// Staff area frame: sidebar (sections filtered by role), page header with
+// breadcrumbs + actions slot, one-shot flash message, content, footer with
+// the site credit. Pages using this must set `export const prerender = false`.
+import '../styles/global.css';
+import '../styles/admin.css';
+import SiteCredit from '../components/SiteCredit.astro';
+import { ROLE_LABELS, can, type Role } from '../lib/server/auth';
+import { takeFlash } from '../lib/server/http';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  /* Which sidebar item is current. */
+  section?: 'dashboard' | 'events' | 'jobs' | 'applicants' | 'admissions' | 'users';
+  crumbs?: Crumb[];
+  /* Optional badge counts for the sidebar, e.g. { applicants: 3 }. */
+  counts?: Partial<Record<string, number>>;
+}
+
+const { title, section = 'dashboard', crumbs = [], counts = {} } = Astro.props;
+const user = Astro.locals.user!;
+const flash = takeFlash(Astro.cookies);
+
+const icons = {
+  dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  events: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  jobs: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 12h18"/>',
+  applicants: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2"/>',
+  admissions: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20M9 8h6"/>',
+  users: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/><path d="M19 4l1 1-3 3"/>',
+};
+
+const items: { key: keyof typeof icons; label: string; href: string; role?: Role }[] = [
+  { key: 'dashboard', label: 'Dashboard', href: '/admin' },
+  { key: 'events', label: 'Events', href: '/admin/events', role: 'marketing' },
+  { key: 'jobs', label: 'Job postings', href: '/admin/jobs', role: 'hr' },
+  { key: 'applicants', label: 'Applicants', href: '/admin/applicants', role: 'hr' },
+  { key: 'admissions', label: 'Admissions', href: '/admin/admissions', role: 'admissions' },
+  { key: 'users', label: 'Staff accounts', href: '/admin/users', role: 'admin' },
+];
+const visible = items.filter((i) => !i.role || can(user, i.role));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} · InFocus staff</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#262626" />
+  </head>
+  <body class="adm-body">
+    <div class="adm" data-adm>
+      <aside class="adm__side" aria-label="Staff navigation">
+        <a class="adm__brand" href="/admin">
+          <img src="/images/logo-on-dark.png" alt="InFocus Film School" width="1090" height="390" />
+          <span>Staff</span>
+        </a>
+        <ul class="adm__nav">
+          {visible.map((i) => (
+            <li>
+              <a href={i.href} aria-current={i.key === section ? 'page' : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true" set:html={icons[i.key]} />
+                {i.label}
+                {counts[i.key] ? <span class="count">{counts[i.key]}</span> : null}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="adm__me">
+          <span class="adm__me-name">{user.name}</span>
+          <div class="adm__me-roles">
+            {user.roles.map((r) => <span>{ROLE_LABELS[r]}</span>)}
+          </div>
+          <form method="post" action="/api/auth/logout">
+            <button class="a-btn a-btn--sm" type="submit" style="width:100%;border-color:rgba(255,255,255,.25);background:transparent;color:#fff">Sign out</button>
+          </form>
+        </div>
+      </aside>
+
+      <div class="adm__main">
+        <header class="adm__top">
+          <div>
+            <button class="a-btn a-btn--sm adm__menu-btn" type="button" data-adm-menu aria-label="Open navigation" style="margin-bottom:12px">Menu</button>
+            {crumbs.length > 0 && (
+              <ol class="adm__crumbs">
+                {crumbs.map((c) => (
+                  <li>{c.href ? <a href={c.href}>{c.label}</a> : c.label}</li>
+                ))}
+              </ol>
+            )}
+            <h1 class="adm__title">{title}</h1>
+          </div>
+          <div class="adm__actions">
+            <slot name="actions" />
+          </div>
+        </header>
+
+        {flash && (
+          <div class:list={['a-flash', `a-flash--${flash.kind}`]} role="status">
+            <span>{flash.text}</span>
+            {flash.link && <code>{flash.link}</code>}
+          </div>
+        )}
+
+        <main class="adm__content">
+          <slot />
+        </main>
+
+        <footer class="adm__foot">
+          <span>InFocus Film School staff area. Signed in as {user.email}.</span>
+          <SiteCredit inline />
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      const root = document.querySelector('[data-adm]');
+      document.querySelector('[data-adm-menu]')?.addEventListener('click', () => root?.classList.toggle('is-open'));
+      root?.addEventListener('click', (e) => {
+        if (root.classList.contains('is-open') && !(e.target as HTMLElement).closest('.adm__side, [data-adm-menu]')) root.classList.remove('is-open');
+      });
+      // Confirm destructive forms: <form data-confirm="Delete this event?">
+      document.querySelectorAll<HTMLFormElement>('form[data-confirm]').forEach((f) => {
+        f.addEventListener('submit', (e) => {
+          if (!confirm(f.dataset.confirm)) e.preventDefault();
+        });
+      });
+    </script>
+  </body>
+</html>

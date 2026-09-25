@@ -1,0 +1,238 @@
+---
+// Staff sign-in. Unlisted: nothing on the site links here and the page is
+// noindex. Accounts are created by a super admin (Staff accounts), never
+// self-registered.
+import Base from '../../layouts/Base.astro';
+import { safeNext } from '../../lib/server/http';
+
+export const prerender = false;
+
+const next = safeNext(Astro.url.searchParams.get('next'));
+if (Astro.locals.user) return Astro.redirect(next, 302);
+
+const error = Astro.url.searchParams.get('error');
+const setup = Astro.url.searchParams.get('setup');
+const messages: Record<string, string> = {
+  '1': 'That email and password did not match.',
+  locked: 'Too many attempts. Wait 15 minutes and try again.',
+  expired: 'Your session ended. Please sign in again.',
+  disabled: 'This account is disabled. Ask a super admin to re-enable it.',
+};
+---
+
+<Base title="Staff sign in — InFocus Film School" description="Staff sign in.">
+  <main class="auth">
+    <span class="auth__grain" aria-hidden="true"></span>
+    <span class="corner corner--tl" aria-hidden="true"></span>
+    <span class="corner corner--tr" aria-hidden="true"></span>
+    <span class="corner corner--bl" aria-hidden="true"></span>
+    <span class="corner corner--br" aria-hidden="true"></span>
+
+    <div class="card">
+      <a class="card__logo" href="/" aria-label="InFocus Film School">
+        <img src="/images/logo-on-dark.png" alt="" width="1090" height="390" />
+      </a>
+      <p class="card__eyebrow"><span aria-hidden="true"></span>Staff area</p>
+      <h1 class="card__title">Sign in</h1>
+
+      {setup === 'done' && <p class="note note--ok" role="status">Your password is set. Sign in below.</p>}
+      {error && messages[error] && <p class="note note--error" role="alert">{messages[error]}</p>}
+
+      <form class="form" method="post" action="/api/auth/login" novalidate>
+        <input type="hidden" name="next" value={next} />
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="username" required autofocus />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" name="password" autocomplete="current-password" required minlength="12" />
+        </label>
+        <button class="btn" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      </form>
+
+      <p class="card__foot">Forgot your password? Ask a super admin to send you a new setup link.</p>
+    </div>
+  </main>
+</Base>
+
+<style is:global>
+  .auth {
+    --inset: clamp(14px, 2vw, 28px);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 40px var(--gutter);
+    background:
+      radial-gradient(55% 70% at 100% 0%, rgba(189, 47, 47, 0.32), transparent 65%),
+      radial-gradient(50% 70% at 0% 100%, rgba(34, 68, 102, 0.55), transparent 70%),
+      var(--charcoal);
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  .auth__grain {
+    position: absolute;
+    inset: -50%;
+    z-index: -1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .auth .corner {
+    position: absolute;
+    width: 26px;
+    aspect-ratio: 1;
+    border: 0 solid rgba(255, 255, 255, 0.4);
+  }
+
+  .auth .corner--tl { top: var(--inset); left: var(--inset); border-top-width: 2px; border-left-width: 2px; }
+  .auth .corner--tr { top: var(--inset); right: var(--inset); border-top-width: 2px; border-right-width: 2px; }
+  .auth .corner--bl { bottom: var(--inset); left: var(--inset); border-bottom-width: 2px; border-left-width: 2px; }
+  .auth .corner--br { bottom: var(--inset); right: var(--inset); border-bottom-width: 2px; border-right-width: 2px; }
+
+  .auth .card {
+    width: min(440px, 100%);
+    padding: clamp(28px, 4vw, 44px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+  }
+
+  .auth .card__logo {
+    display: block;
+    width: 150px;
+    margin-bottom: 28px;
+  }
+
+  .auth .card__logo img {
+    width: 100%;
+    height: auto;
+  }
+
+  .auth .card__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .auth .card__eyebrow span {
+    width: 26px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .auth .card__title {
+    margin: 0 0 22px;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .auth .note {
+    margin: 0 0 18px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .auth .note--ok {
+    background: rgba(31, 122, 77, 0.25);
+    border: 1px solid rgba(31, 122, 77, 0.5);
+  }
+
+  .auth .note--error {
+    background: rgba(189, 47, 47, 0.22);
+    border: 1px solid rgba(189, 47, 47, 0.55);
+  }
+
+  .auth .form {
+    display: grid;
+    gap: 16px;
+  }
+
+  .auth .field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .auth .field span {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .auth .field input {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+    font: inherit;
+    font-size: 16px;
+  }
+
+  .auth .field input:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(189, 47, 47, 0.3);
+  }
+
+  .auth .btn {
+    display: inline-flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+    padding: 15px 22px;
+    border-radius: 10px;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, transform 0.3s ease;
+  }
+
+  .auth .btn:hover {
+    background: #9e2424;
+    transform: translateY(-1px);
+  }
+
+  .auth .card__foot {
+    margin: 22px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .auth .strength {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  .auth .strength span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--red);
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+</style>

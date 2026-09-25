@@ -1,0 +1,85 @@
+---
+// Staff accounts (super admin only): who has access, with what roles, and
+// an invite form. Invites produce a one-time setup link to share privately.
+import Admin from '../../../layouts/Admin.astro';
+import { ROLES, ROLE_HELP, ROLE_LABELS, parseRoles, type UserRow } from '../../../lib/server/auth';
+import { all, db } from '../../../lib/server/db';
+import { timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const users = await all<UserRow>(db(Astro.locals).prepare('SELECT * FROM users ORDER BY status = "disabled", name COLLATE NOCASE'));
+const me = Astro.locals.user!;
+const badge = (s: UserRow['status']) => (s === 'active' ? 'a-badge--ok' : s === 'invited' ? 'a-badge--warn' : 'a-badge--muted');
+---
+
+<Admin title="Staff accounts" section="users" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Staff accounts' }]}>
+  <a slot="actions" class="a-btn a-btn--primary" href="#invite">+ Invite someone</a>
+
+  <div class="a-grid a-grid--side">
+    <section class="a-card a-card--flush">
+      <div class="a-card__head">
+        <h2 class="a-h2" style="margin:0">{users.length} account{users.length === 1 ? '' : 's'}</h2>
+      </div>
+      <div class="a-table-wrap">
+        <table class="a-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roles</th>
+              <th>Status</th>
+              <th>Last sign in</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr>
+                <td class="primary">
+                  <a href={`/admin/users/${u.id}`}>{u.name}</a>
+                  <span class="sub">{u.email}{u.id === me.id ? ' · you' : ''}</span>
+                </td>
+                <td>{parseRoles(u.roles).map((r) => ROLE_LABELS[r]).join(', ') || <span class="a-muted">None</span>}</td>
+                <td><span class:list={['a-badge', badge(u.status)]}>{u.status}</span></td>
+                <td class="nowrap">{u.last_login_at ? timeAgo(u.last_login_at) : <span class="a-muted">Never</span>}</td>
+                <td class="actions"><a class="a-btn a-btn--sm" href={`/admin/users/${u.id}`}>Manage</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="a-card" id="invite">
+      <h2 class="a-h2">Invite someone</h2>
+      <p class="a-help" style="margin:0 0 16px">
+        Creates the account and gives you a setup link to send them. The link works once and expires in 72 hours.
+      </p>
+      <form class="a-form" method="post" action="/api/admin/users">
+        <div class="a-field">
+          <label for="inv-name">Full name <span class="req">*</span></label>
+          <input class="a-input" id="inv-name" name="name" required maxlength="80" autocomplete="off" />
+        </div>
+        <div class="a-field">
+          <label for="inv-email">Work email <span class="req">*</span></label>
+          <input class="a-input" id="inv-email" type="email" name="email" required maxlength="254" autocomplete="off" />
+        </div>
+        <div class="a-field">
+          <span class="a-field__label">Roles <span class="req" style="color:var(--a-red)">*</span></span>
+          {ROLES.map((r) => (
+            <label class="a-check">
+              <input type="checkbox" name="roles" value={r} />
+              <span>
+                {ROLE_LABELS[r]}
+                <small>{ROLE_HELP[r]}</small>
+              </span>
+            </label>
+          ))}
+        </div>
+        <div class="a-form__actions">
+          <button class="a-btn a-btn--primary" type="submit">Create + get setup link</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</Admin>

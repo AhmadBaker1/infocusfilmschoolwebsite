@@ -12,3 +12,8 @@ source-photos/
 # Local env (backend endpoints etc.)
 .env
 .env.*
+
+# Cloudflare: local secrets, local D1/R2 state, generated types
+.dev.vars
+.wrangler/
+worker-configuration.d.ts

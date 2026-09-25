@@ -1,9 +1,18 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
 import requireCredit from './integrations/require-credit.mjs';
 
 export default defineConfig({
   site: 'https://infocusfilmschool.com',
+  // Marketing pages stay static. Anything with `export const prerender =
+  // false` (admin, login, APIs, events, careers) renders on Cloudflare
+  // Workers with the D1 database and R2 bucket from wrangler.jsonc.
+  output: 'static',
+  adapter: cloudflare({
+    platformProxy: { enabled: true },
+    imageService: 'compile',
+  }),
   // Fails the build if any page is missing the site credit.
   integrations: [requireCredit()],
   // Old WordPress URLs that moved.

@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin
+Disallow: /login
+Disallow: /api/
+Sitemap: https://infocusfilmschool.com/sitemap-index.xml

@@ -1,0 +1,122 @@
+---
+// One staff account: edit name/roles, re-send a setup link (also how a
+// password is reset), disable/enable, sign out everywhere, delete.
+import Admin from '../../../layouts/Admin.astro';
+import { ROLES, ROLE_HELP, ROLE_LABELS, parseRoles, type UserRow } from '../../../lib/server/auth';
+import { count, db, one } from '../../../lib/server/db';
+import { fmtDateTime, timeAgo } from '../../../lib/format';
+
+export const prerender = false;
+
+const d1 = db(Astro.locals);
+const me = Astro.locals.user!;
+const u = await one<UserRow>(d1.prepare('SELECT * FROM users WHERE id = ?').bind(Astro.params.id));
+if (!u) return new Response(null, { status: 404 });
+
+const roles = parseRoles(u.roles);
+const sessions = await count(d1, 'SELECT COUNT(*) AS n FROM sessions WHERE user_id = ? AND expires_at > ?', u.id, new Date().toISOString());
+const self = u.id === me.id;
+const action = `/api/admin/users/${u.id}`;
+---
+
+<Admin title={u.name} section="users" crumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Staff accounts', href: '/admin/users' }, { label: u.name }]}>
+  <div slot="actions">
+    {u.status !== 'disabled' && (
+      <form class="a-inline-form" method="post" action={action}>
+        <input type="hidden" name="_action" value="reinvite" />
+        <button class="a-btn" type="submit">{u.status === 'invited' ? 'New setup link' : 'Reset password (setup link)'}</button>
+      </form>
+    )}
+  </div>
+
+  <div class="a-grid a-grid--side">
+    <div>
+      <section class="a-card">
+        <div class="a-card__head">
+          <h2 class="a-h2" style="margin:0">Details + roles</h2>
+          <span class:list={['a-badge', u.status === 'active' ? 'a-badge--ok' : u.status === 'invited' ? 'a-badge--warn' : 'a-badge--muted']}>{u.status}</span>
+        </div>
+        <form class="a-form" method="post" action={action}>
+          <input type="hidden" name="_action" value="update" />
+          <div class="a-row">
+            <div class="a-field">
+              <label for="name">Full name</label>
+              <input class="a-input" id="name" name="name" value={u.name} required maxlength="80" />
+            </div>
+            <div class="a-field">
+              <label for="email">Email</label>
+              <input class="a-input" id="email" type="email" name="email" value={u.email} required maxlength="254" />
+            </div>
+          </div>
+          <div class="a-field">
+            <span class="a-field__label">Roles</span>
+            {ROLES.map((r) => (
+              <label class="a-check">
+                <input type="checkbox" name="roles" value={r} checked={roles.includes(r)} disabled={self && r === 'admin'} />
+                <span>
+                  {ROLE_LABELS[r]}
+                  <small>{ROLE_HELP[r]}{self && r === 'admin' ? ' You cannot remove your own admin role.' : ''}</small>
+                </span>
+              </label>
+            ))}
+            {self && <input type="hidden" name="roles" value="admin" />}
+          </div>
+          <div class="a-form__actions">
+            <button class="a-btn a-btn--primary" type="submit">Save changes</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="a-card">
+        <h2 class="a-h2">Access</h2>
+        <div class="a-form__actions" style="padding:0">
+          {!self && u.status !== 'disabled' && (
+            <form class="a-inline-form" method="post" action={action} data-confirm={`Disable ${u.name}? They will be signed out immediately and cannot sign in until re-enabled.`}>
+              <input type="hidden" name="_action" value="disable" />
+              <button class="a-btn a-btn--danger" type="submit">Disable account</button>
+            </form>
+          )}
+          {u.status === 'disabled' && (
+            <form class="a-inline-form" method="post" action={action}>
+              <input type="hidden" name="_action" value="enable" />
+              <button class="a-btn" type="submit">Re-enable (sends new setup link)</button>
+            </form>
+          )}
+          {sessions > 0 && (
+            <form class="a-inline-form" method="post" action={action}>
+              <input type="hidden" name="_action" value="signout" />
+              <button class="a-btn" type="submit">Sign out everywhere ({sessions})</button>
+            </form>
+          )}
+          {!self && (
+            <form class="a-inline-form" method="post" action={action} data-confirm={`Permanently delete ${u.name}'s account? This cannot be undone.`}>
+              <input type="hidden" name="_action" value="delete" />
+              <button class="a-btn a-btn--ghost a-btn--danger" type="submit">Delete account</button>
+            </form>
+          )}
+        </div>
+        <p class="a-help">
+          Forgot password: use “Reset password (setup link)” above and send them the link. Nothing is emailed automatically.
+        </p>
+      </section>
+    </div>
+
+    <aside class="a-card">
+      <h2 class="a-h2">Account</h2>
+      <dl class="a-kv">
+        <dt>Created</dt>
+        <dd>{fmtDateTime(u.created_at)}</dd>
+        <dt>Last sign in</dt>
+        <dd>{u.last_login_at ? `${timeAgo(u.last_login_at)} (${fmtDateTime(u.last_login_at)})` : 'Never'}</dd>
+        <dt>Active sessions</dt>
+        <dd>{sessions}</dd>
+        {u.status === 'invited' && (
+          <>
+            <dt>Invite</dt>
+            <dd>{u.invite_expires_at && u.invite_expires_at > new Date().toISOString() ? `Valid until ${fmtDateTime(u.invite_expires_at)}` : 'Expired. Send a new setup link.'}</dd>
+          </>
+        )}
+      </dl>
+    </aside>
+  </div>
+</Admin>
