@@ -1,0 +1,568 @@
+{
+  "instructors": [
+    {
+      "slug": "david-michan",
+      "name": "David Michán",
+      "image": "/images/instructors/david-michan.jpg",
+      "roles": {
+        "film-production": "Lead Instructor"
+      },
+      "bio": [
+        "David Michán is an award-winning Mexican director with more than fifteen years of experience making films, commercials, music videos and advertising campaigns for cinema and television. He is also an accomplished visual effects artist with VFX and other post-production credits on a dozen films.",
+        "His short-film Mexican Dream won three international prizes in Brussels, Germany and Austin, TX and was an Official Selection for more than twenty-five international festivals. Another film, A True Story , won the Radioactivo 2003 film competition. It was judged by influential filmmakers such as Guillermo del Toro, Alejandro G. Inarritu, Alfonso Cuaron, Roger Avary, Alejandro Jodorowky, and more."
+      ]
+    },
+    {
+      "slug": "julia-ivanova",
+      "name": "Julia Ivanova",
+      "image": "/images/instructors/julia-ivanova.jpg",
+      "roles": {
+        "film-production": "Documentary",
+        "documentary-film": "Program Advisory Board"
+      },
+      "bio": [
+        "Julia Ivanova has received many accolades for her compelling films, including the award for Best Canadian Feature for Family Portrait in Black and White at Hot Docs 2011. Her films include From Russia, for Love (2000); Fatherhood Dreams (2007); and Limit Is the Sky (2016), which won the Colin Low Best Canadian Documentary Award at DOXA 2017. Her documentaries have screened at Sundance, IDFA, and the Chicago and LA film festivals, among many others; she is currently working on the feature Pipeline in Paradise, about two opposite human forces in Canada that are connected by the Trans Mountain Pipeline.",
+        "Born and raised in Moscow, Ivanova immigrated to Vancouver in the 1990s; since then, she’s established herself as a balanced and empathetic cinematic voice, digging into the dilemmas perpetuated by the search for a place, love, family and meaning by those who have two homes and two identities. With a focus on capturing the complexities of human nature, Ivanova brings her signature non-judgmental style to the telling of unique Canadian stories.",
+        "She has made a number of intimate films on the topics of love, adoption, cultural differences and family, partnering with CBC, Global TV, Knowledge Network, PBS and Discovery. Ivanova has been actively involved in the documentary filmmaking community by organizing professional development workshops for DOC BC, co-chairing DOC BC, being on the Board of Hot Docs Festival and mentoring emerging filmmakers through “Giving Voice” DOC program. Being a director/editor/cinematographer and an avid fan of international documentaries, she believes in the emotional power of visual storytelling and poetic cinema."
+      ]
+    },
+    {
+      "slug": "duane-adler",
+      "name": "Duane Adler",
+      "image": "/images/instructors/duane-adler.jpg",
+      "roles": {
+        "film-production": "Screenwriting",
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Duane Adler has been a working writer, director, and producer in film and television for over 25 years. As one of Hollywood’s top creators of edgy, music-driven dramas, his produced writing credits include Save the Last Dance and Step Up, and his directing titles include Make Your Move and Heartbeats, a Hollywood/Bollywood crossover film shot in India. He also wrote VH1’s original telefilm The Way She Moves, which was nominated for Outstanding Made for Television Movie at the 2002 ALMA (American Latino Media Arts) Awards.",
+        "Duane has been drawn throughout his career to create multi-ethnic and cultural crossover projects that speak to the human condition. He has written television for eOne, ABC, Fox, and NBC, and features for New Line, Universal, New Regency, Fox, and Focus Features, all among many independents and others.",
+        "Duane grew up all over the Carolinas until relocating to Maryland halfway through high school. He attended over 18 schools from first grade thru high school graduation, creating a diverse understanding of the world he continues to use today in his story-telling. He currently resides in Vancouver with his family."
+      ]
+    },
+    {
+      "slug": "carleen-kyle",
+      "name": "Carleen Kyle",
+      "image": "/images/instructors/carleen-kyle.jpg",
+      "roles": {
+        "film-production": "Screenwriting",
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Carleen Kyle has directed and written for a variety of media— features, television, shorts, documentary, corporate, and music video. She directed the Saskatchewan Showcase Best Drama Award winning and Gemini nominated (Canadian Screen Awards) TV pilot Scrounger. Her many shorts, including the multi-award winning Crazy-8’s short The Weather Girl, have screened at festivals internationally.",
+        "Her feature screenplay Interspecies Family Therapy won the WIFTV, Telelm, Creative BC and Superchannel sponsored competition From Our Dark Side. Another feature script Pearl’s Cut & Curl won a Praxis Centre for Screenwriting fellowship and was the Canadian selection and for the prestigious Hartley-Merrill International Screenwriting Award where it received honourable mention. Carleen turned the camera on herself in the documentary Heavy Heart Laughs , using stand-up comedy to handle adversity with humour. Carleen received a BFA from the University of Regina where she was honoured two years running for Best Student Film."
+      ]
+    },
+    {
+      "slug": "katie-weekley",
+      "name": "Katie Weekley",
+      "image": "/images/instructors/katie-weekley.jpg",
+      "roles": {
+        "film-production": "Producing",
+        "writing-for-film-tv": "Department Head"
+      },
+      "bio": [
+        "Katie Weekley is an award-winning producer who has worked on a range of feature films, TV series and short film productions throughout her professional career. Katie has produced feature films such as The Unseen (2016), as well as many more short film productions.",
+        "Besides producing, she has also worked in the camera department as a first and second assistant camera for a variety of films and TV series. On top of this, she was also a writer for many short film productions. Most recently, Katie has been working hard on a pilot for her exciting new podcast series."
+      ]
+    },
+    {
+      "slug": "jeremy-klassen",
+      "name": "Jeremy Klassen",
+      "image": "/images/instructors/jeremy-klassen.jpg",
+      "roles": {
+        "film-production": "Editing",
+        "documentary-film": "Instructor"
+      },
+      "bio": [
+        "Jeremy Klassen has accumulated a diverse and practical knowledge of many intricate aspects of filmmaking. With over fifteen years of experience working on film and video productions, he has worked on productions ranging from corporate videos and commercials to documentaries, music videos, television series and narrative films. He’s edited several televised films including Hunted By My Ex, Secret Crush, Fatal Mistakes, Psycho Wedding Crasher, and The Murderer Upstairs, to name a few."
+      ]
+    },
+    {
+      "slug": "dolores-drake",
+      "name": "Dolores Drake",
+      "image": "/images/instructors/dolores-drake.jpg",
+      "roles": {
+        "film-production": "Acting"
+      },
+      "bio": [
+        "Dolores Drake’s impressive 35 year career saw her working with world-renowned directors Joel Schumacher, Bill Forsythe, Anne Wheeler and Alan Rudolph. Most recent film credits include, The Professor, Always Be My Maybe (for Netflix) Cop and a Half , and Starstruck A Cinderalla Story (HBO).",
+        "For TV she has played Principal and Supporting Lead Roles in numerous TV Movies like Coyote Creek Christmas, Love Stuck Café, Love Once and Always, A Carousal Christmas and Love In Action . Series credits include: The Mighty Ducks and Turner and Hooch.",
+        "In Theatre she has worked for numerous companies across the country, Theatre North West, Arts Club, The Belfry, The Citadel, and Richmond Gateway. Dolores has also written, produced and performed in three of her own One Woman Plays: Randall’s Wake, From Away and The Distance Between Newfoundland and Toronto."
+      ]
+    },
+    {
+      "slug": "alvaro-furloni",
+      "name": "Alvaro Furloni",
+      "image": "/images/instructors/alvaro-furloni.jpg",
+      "roles": {
+        "film-production": "Audio"
+      },
+      "bio": [
+        "Alvaro Furloni is a Brazilian filmmaker and sound designer. Before moving to Vancouver, he wrote and directed one feature film ( Free Man , 2019) and six short films, including Frio (2006), the Brazilian nominee for the 26th Student Academy Awards; Someone is Happy Somewhere (2015), an official selection of the San Francisco International Film Festival; and The Man in the Box (2018), winner of three awards at the Anima Mundi Festival. Alvaro came to Canada to study sound design in 2020 and has been working as a location sound mixer, sound designer, and video editor since then."
+      ]
+    },
+    {
+      "slug": "gail-taylor",
+      "name": "Gail Taylor",
+      "image": "/images/instructors/gail-taylor.jpg",
+      "roles": {
+        "film-production": "Production Design"
+      },
+      "bio": [
+        "Gail Taylor is a Production Designer with 40+ years of experience in the film & television industry. She has had the opportunity to hone her craft globally working in England, Italy, Canada, and the US and now lives in Vancouver."
+      ]
+    },
+    {
+      "slug": "magic-eslami",
+      "name": "Magic Eslami",
+      "image": "/images/instructors/magic-eslami.jpg",
+      "roles": {
+        "3d-animation-intensive": "Department Head"
+      },
+      "bio": [
+        "Magic Eslami has more than 12 years of experience teaching at some of the top 10 schools in the world. Magic has maintained a high-quality educational experience throughout the years and is recognized as one of the industry’s top instructors. The students he has taught have gone on to work on award-winning films and acclaimed video games.",
+        "Magic has been involved in producing 3D short films and worked on The Addams Family 2 movie in recent years.",
+        "Magic has taught more than 1,500 students and has graduates in nearly every major studio in the world, such as; Pixar, Disney, EA, Dream Works, Digital Domain, Animal Logic, and more."
+      ]
+    },
+    {
+      "slug": "robert-yau",
+      "name": "Robert Yau",
+      "image": "/images/instructors/robert-yau.jpg",
+      "roles": {
+        "3d-animation-intensive": "3D Animation"
+      },
+      "bio": [
+        "Robert Yau began his career over 12+ years ago, animating for children’s TV shows, but it wasn’t until later in his journey that he discovered his true passion for animation within the world of game development. Over the years, he has worked on a diverse range of high-profile titles, including Call of Duty, Mortal Kombat, Dead Rising, and family-friendly franchises like FIFA, The Sims, as well as properties under Disney and Marvel. With experience across a variety of mediums—TV/Film, trailers, cinematics, and gameplay—Robert has honed his ability to adapt to different project needs. He believes that a positive attitude and an open mind are key to successfully fitting into any creative team."
+      ]
+    },
+    {
+      "slug": "xiangjun-zeng",
+      "name": "Xiangjun Zeng",
+      "image": "/images/instructors/xiangjun-zeng.jpg",
+      "roles": {
+        "3d-animation-intensive": "3D Modelling"
+      },
+      "bio": [
+        "Xiangjun Zeng began developing his love for 3D modeling and animation in 2012 when he graduated from Vancouver Film School’s 3D program. He has worked with a variety of studios as a 3D Modeler such as Wildbrain, Stellar Creative Lab and Mainframe Studios, as well as at Atomic Cartoons as a Rigger and CG Generalist and at DHX Media as a 2D Builder and CG Generalist. Throughout his professional career, he has worked on well-known titles like Rocky and Bullwinkle (2014) , Molly of Denaly (2019) , and Carmen Sandiego (2019-2021) ."
+      ]
+    },
+    {
+      "slug": "sandy-sze",
+      "name": "Sandy Sze",
+      "image": "/images/instructors/sandy-sze.jpg",
+      "roles": {
+        "3d-animation-intensive": "3D Animation"
+      },
+      "bio": [
+        "Sandy Sze is an accomplished animator with over 18 years of experience in the animation industry. Throughout her career, she has worked across a wide range of projects, including TV, movies, and games. Notable works include John Carter (2012, directed by Andrew Stanton), Godzilla (2014), the cinematics for Dead Space remake (2023), and Dragon Age: The Vailguard (2024). In her most recent role, Sandy has served as the Lead Animator for The Sims 4 . She specializes in character acting and has a deep passion for teaching, finding it incredibly rewarding to inspire and guide the next generation of animators."
+      ]
+    },
+    {
+      "slug": "mario-alberto-melgoza-ruiz",
+      "name": "Mario Alberto Melgoza Ruiz",
+      "image": "/images/instructors/mario-alberto-melgoza-ruiz.jpg",
+      "roles": {
+        "3d-animation-intensive": "3D Rigging"
+      },
+      "bio": [
+        "Mario Alberto Melgoza Ruiz began his 3D career in Mexico and has been working in the CG industry for over 10 years as an accomplished Rigger, Rigging Supervisor, Character and Technical Artist. As a 3D artist specializing in movement, he always looks forward to bringing the best solutions to the characters he works on. Throughout his career, he has worked with studios such as ExodoDW, Demente Estudio in Mexico and ICON Creative Studio and Sony Pictures Imageworks in Vancouver, BC."
+      ]
+    },
+    {
+      "slug": "juan-cisneros",
+      "name": "Juan Cisneros",
+      "image": "/images/instructors/juan-cisneros.jpg",
+      "roles": {
+        "3d-animation-intensive": "Lighting"
+      },
+      "bio": [
+        "Juan Cisneros , a Mexico City native, has spent the last 15 years immersed in Vancouver’s dynamic landscape, both personally and professionally. Specializing in lighting for computer animation, his technical prowess has brought visual magic to digital projects. Beyond pixels, Juan is a passionate table tennis player, finding balance in the fast-paced game amid his intricate work in the world of animation."
+      ]
+    },
+    {
+      "slug": "nabil-chequeiq",
+      "name": "Nabil Chequeiq",
+      "image": "/images/instructors/nabil-chequeiq.jpg",
+      "roles": {
+        "3d-animation-intensive": "3D Modelling"
+      },
+      "bio": [
+        "Nabil Chequeiq is a Lead Character Artist with extensive experience in the video game industry and VFX, having a solid background in feature film and TV production. He is a recognized contributor to 3D World Magazine, ZBrush Central’s most popular artists, and 3D Total. With a strong passion for creating compelling characters, Nabil combines his diverse expertise to deliver exceptional work in both game and cinematic art."
+      ]
+    },
+    {
+      "slug": "julia-kwan",
+      "name": "Julia Kwan",
+      "image": "/images/instructors/julia-kwan.jpg",
+      "roles": {
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Julia Kwan, a writer and director living in Vancouver, was a director resident at the Canadian Film Centre. Ms. Kwan’s feature film debut, Eve & the Fire Horse , had its international premiere at The Sundance Film Festival, where it won the Special Jury Prize for Dramatic World Cinema and screened at over 30 film festivals.",
+        "Since then, Ms. Kwan has written and directed numerous short and feature length films in different genres (drama, documentary, animation, branded films) over the years, including the NFB’s Everything Will Be, her award winning debut feature documentary and The Zoo , an animated film. She is an adjunct professor at the University of B.C. and is currently pursuing her Masters in Creative Writing."
+      ]
+    },
+    {
+      "slug": "jackie-blackmore",
+      "name": "Jackie Blackmore",
+      "image": "/images/instructors/jackie-blackmore.jpg",
+      "roles": {
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Jackie Blackmore is a professional Film & TV Actor, Director, Sketch Comedian, Improviser, Award-winning Playwright & Comedy Writer with over 30 years of experience.",
+        "Jackie has a BFA in Media Arts from Emily Carr University. As an Instructor, Jackie has taught at InFocus Film School, Instant Theatre, Carousel Theatre, and Arts Umbrella. As a writer, Jackie has written sketches, plays & short films, was a comedy TV writer for Off Centre Television, and is currently developing two feature film screenplays. She’s written & performed in many sketch comedy groups including Strapless Comedy, The Skinny, Grimaldi’s Asylum, Blackout Broadcast, Off Centre Television, Terribly Inappropriate, One Night Stand, Radio Edit, Tight Corset Theatre, & The Legend of Bonefish . Jackie is extremely passionate about comedy & storytelling and she loves to inspire new writers to use comedy to entertain & incite change!"
+      ]
+    },
+    {
+      "slug": "roslyn-muir",
+      "name": "Roslyn Muir",
+      "image": "/images/instructors/roslyn-muir.jpg",
+      "roles": {
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Roslyn Muir is an award-winning screenwriter who writes YA stories, family drama and thrillers. She was a writer on the Global/CBS one-hour drama, Ransom , created by Frank Spotnitz ( Man in the High Castle ). Roslyn wrote movies that have aired on TV around the world: Washed Away, Stranger in the House, and Reluctant Witness to name a few.",
+        "Roslyn also wrote and produced the dramatic feature film, The Birdwatcher, directed by Siobhan Devine. Her co-written, half-hour YA comedy, The Tutors, is in development with the CBC. Roslyn has a MFA from UBC’s Creative Writing Program."
+      ]
+    },
+    {
+      "slug": "eduardo-basile",
+      "name": "Eduardo Basile",
+      "image": "/images/instructors/eduardo-basile.jpg",
+      "roles": {
+        "writing-for-film-tv": "Screenwriting"
+      },
+      "bio": [
+        "Eduardo Basile is a dedicated writer, director, and producer with over 15 years of experience in the entertainment industry, specializing in dynamic storytelling and immersive worlds. As Head Writer at IMU Studios, Eduardo led the narrative development for the game Thunder – Throne Wars , crafting everything from quest lines to song lyrics. They have also been a game and screenwriting instructor for the past five years, directing over 200 hours of motion capture sessions with students.",
+        "A culturally diverse filmmaker, Eduardo has written award-winning short films and worked in production on major series for Netflix, TNT, FX, and other studios in Brazil. Known for collaborative problem-solving and inventive mentorship, Eduardo combines traditional storytelling with state-of-the-art tools to deliver emotionally impactful experiences across media."
+      ]
+    },
+    {
+      "slug": "john-ritchie",
+      "name": "John Ritchie",
+      "image": null,
+      "roles": {
+        "documentary-film": "Program Advisory Board"
+      },
+      "bio": [
+        "With over thirty years of experience, John Ritchie has overseen the creation of more than 500 hours of documentary and scripted films, television series and one-offs through his company Force Four Entertainment, which was acquired by Entertainment One in 2014. John is now heading his own independent company. John began his career writing and directing documentaries, including numerous biographies for CBC, as well as natural history, science and social issue documentaries for broadcasters such as CTV, Discovery U.S, Knowledge and W Network. He produced the multiple award-winning feature length documentary 65 Red Roses (CBC/OWN), which won awards at the Banff World Media Festival and Vancouver Film Festival and was selected to the Oprah Winfrey Documentary Club.",
+        "Highlights of John’s career in the scripted realm include executive producing two seasons of the sitcom series Seed, (CITY/ The CW). He has also executive produced numerous television movies, including Playing for Keeps (CTV/ Lifetime) and was a co-producer of the Peabody Award-winning mini-series Human Cargo (CBC). He has also won numerous Gemini, Leo and Canadian Screen Awards for his work.",
+        "John has a Bachelor of Education from the University of British Columbia and a Diploma of Media from Capilano University and is Board Chair of FactualWEST, an annual Vancouver conference for factual television and documentary filmmakers. He is also Chair of the BCIT Broadcast Media Program Advisory Committee."
+      ]
+    },
+    {
+      "slug": "nimisha-mukerji",
+      "name": "Nimisha Mukerji",
+      "image": null,
+      "roles": {
+        "documentary-film": "Program Advisory Board"
+      },
+      "bio": [
+        "An award-winning producer, director and writer, Nimisha Mukerji’s work has premiered in competition at Tribeca and Toronto International Film Festival, and her debut feature 65_REDROSES was selected by Oprah Winfrey for her Documentary Club on OWN. The film went on to be acquired by Netflix and Hulu and was awarded Best Canadian Program at Banff World Media Festival.",
+        "Subsequent features include producing JACINTA (in competition at Tribeca 2020), directing and producing TEMPEST STORM (released theatrically by Mongrel Media), and directing and producing BLOOD RELATIVE, which received 3 CSA nomination (Canada’s version of the Emmy’s) and was her second nomination for directing.",
+        "Mukerji was selected for TIFF Pitch This! as well as the Hot Docs Forum (twice), winning Best Canadian Pitch with TEMPEST STORM. She launched a successful Kickstarter for the film, raising over $45K. Most recently she produced the 65_RedRoses Anniversary Gala in partnership with the Directors Guild of Canada and raised over $30K for transplant research. To date 65_REDROSES has helped raise over 3 million dollars for Cystic Fibrosis research.",
+        "Mukerji has written and produced work for HBO, PBS, CBC, Knowledge, Super Channel, ARTE and SWR. She’s been recognized with a DGC nomination for directing on Disney’s Gabby Duran & The Unsittables and won four Leo Awards, most recently winning for her episodic work as director on the teen sci-fi series MECH-X4 for Disney XD.",
+        "Mukerji is an alumni of TIFF’s Talent Lab, the CTV National Fellowship Program, WIDC’s Story & Leadership Lab, DGC Ontario’s Director Lab, the NSI’s Totally Television Program and Women In Views Director’s Program. She has been recognized with awards for artistic achievement by Women In Film & Television Vancouver and the University of British Columbia. She is represented by The Kaplan Stahler Agency and Meridian Artists and splits her time between Vancouver and Los Angeles. www.shotglassproductions.com"
+      ]
+    },
+    {
+      "slug": "lynn-booth",
+      "name": "Lynn Booth",
+      "image": null,
+      "roles": {
+        "documentary-film": "Program Advisory Board"
+      },
+      "bio": [
+        "Lynn Booth is the founder & CEO of Make Believe Media. As a company we have had many phases, focusing on pop culture and social issues documentary films, then we produced several seasons of popular true crime series and then we launched into natural history programmes. Lynn’s extensive credit list includes VICE Documentary’s ‘The Devil You Know’, Very Bad Men, True Pulp Murder, Portraits from the Frontier, Paris Stories, No Fun City, The Secret Life of Owls, For the Love of Elephants and many more.",
+        "Lynn’s first digital media platform project was the cutting edge Indigenous Music Project, RPM.FM, launched under the creative leadership of Jarrett Martineau (rpm.fm)which continues to this day under 100% Indigenous leadership and control, a winner of United Nations Festival Awards. Now, Lynn is taking a new direction and focusing on VR/AR Content Creation for digital and social platforms and creating documentary content for new frontiers."
+      ]
+    },
+    {
+      "slug": "david-vaisbord",
+      "name": "David Vaisbord",
+      "image": null,
+      "roles": {
+        "documentary-film": "Instructor"
+      },
+      "bio": [
+        "David Vaisbord completed his Bachelors of Arts at the UBC before going to Emily Carr to complete his Masters of Arts in Applied Arts, Art, Filmmaking, and Multimedia.",
+        "Some of David Vaisbord’s films and documentaries include Drawing Out the Demons, Juicy Danger Meets Burning Man, Mischa, Britannia Beach, and Dark Pines: An Investigation into the Death of Tom Thomson. I n 2008 Vaisbord embedded himself in a low-income community and created the hyperlocal doc project The Little Mountain Project, iterating several short advocacy films, a website and blogsite, gallery installations, a successful crowdfunding campaign and an MA thesis.",
+        "From 2014 – 2019 through his participation on executive boards for both national and local chapters, Vaisbord lent his leadership skills to the growth of the Documentary Organization of Canada (DOC) and Hot Docs International Documentary Film Festival. Throughout, Vaisbord was continuously inspired by the passion, wit and imagination of documentary filmmakers and is looking forward to a lively exchange of ideas with the students at the InFocus Film School."
+      ]
+    },
+    {
+      "slug": "brishkay-ahmed",
+      "name": "Brishkay Ahmed",
+      "image": null,
+      "roles": {
+        "documentary-film": "Instructor"
+      },
+      "bio": [
+        "Brishkay Ahmed is an Afghan-Canadian filmmaker drawn to social issues and activism. She studied film at New York University and the Iranian Young Cinema Society. She holds a degree in Communication from Simon Fraser University. She is a part of both the Directors Guild of Canada and the Writer’s Guild of Canada.",
+        "As a documentary filmmaker, her film cover investigative topics. Brishkay’s films include the award-winning features Unveiled: The Kohistan Video Scandal and In The Rumbling Belly of Motherland. Her 2022 web documentary, Fatima In Kabul, was nominated for the 2022 Canadian Screen Awards and a 2022 Banff Rockie Awards.",
+        "Throughout her career, Brishkay Ahmed has collaborated with the CBC, Super Channel, NFB, Bravo TV, Java Films, Women Make Movies, Telefilm, Cinema Politica and RTA on projects. Brishkay Ahmed currently serves on the Documentary Organization Board of Canada, BC Chapter.",
+        "I acknowledge, I live and work on the unceded Indigenous land belonging to the xʷməθkwəy̓əm (Musqueam), S k w x wú7mesh (Squamish), Stó:lō (Stolo), and Səl̓ílwətaʔ/Selilwitulh (Tsleil-Waututh) Nations."
+      ]
+    },
+    {
+      "slug": "dan-jackson",
+      "name": "Dan Jackson",
+      "image": null,
+      "roles": {
+        "documentary-film": "Instructor"
+      },
+      "bio": [
+        "Dan Jackson began his career working for Academy Award-winning documentary filmmaker Charles Guggenheim. While living in Washington DC, he wrote, directed and edited the award-winning shorts “David’s Run” and “Anything Can Happen.” After re-locating to Los Angeles, he directed on multiple seasons of “Rescue 911” and other reality-based series. He wrote, directed and produced documentaries on Stevie Ray Vaughan, Willie Nelson, America’s Military Academies and the Harley-Davidson V-Rod. For ten years, he was an in-house show runner for Thom Beer’s Original Productions, overseeing the series “Monster House”, “Crash Files: Inside the NTSB”, “Impact: Stories of Survival” and “L.A. Hard Hats”. In 2010, he relocated to Vancouver BC, where he worked as a show runner on “Highway Thur Hell” (Discover/Netflix), “Diagnose Me” (Discovery Life), “Confessions: Animal Hoarding” (Animal Planet/Netflix), “This Is High School” (CBC) and “Age of A.I.” (YouTube). He wrote the travel memoir “Old Bug”, which won the Independent Publishers Assoc. Award Ben Franklin Award for Best New Voice."
+      ]
+    },
+    {
+      "slug": "manjula-dufresne",
+      "name": "Manjula Dufresne",
+      "image": null,
+      "roles": {
+        "documentary-film": "Instructor"
+      },
+      "bio": [
+        "Manjula Dufresne is an experienced investigative producer, until recently with CBC News Go Public, The National and CBC British Columbia.",
+        "She broke the story of sexual harassment in the RCMP which led to a large body of work and several awards including a Webster for Best News Reporting, a citation of merit for the Michener Awards, the CAJ Scoop Award and an RTDNA Edward R. Murrow award. She has done a variety of stories over her long career including covering all aspects of the Air India bombing file, the Pickton file, immigration scams and politics at every level.",
+        "Her favourite part about being a journalist is discovering something not known before and holding people to account."
+      ]
+    },
+    {
+      "slug": "cory-rodis",
+      "name": "Cory Rodis",
+      "image": "/images/instructors/cory-rodis.jpg",
+      "roles": {
+        "game-design": "Lead Instructor"
+      },
+      "bio": [
+        "Cory Rodis has published multiple games of his own, has experience in MMORPG, TCG, and tabletop design, and is a published writer. His students have gone on to work at some of the most acclaimed studios in the world. He spends much of his free time working with students, creating game design communities, fostering and guiding discussion, and consulting on game projects. With nearly a decade of experience in games and education, Cory brings a fresh approach to game design that combines the theoretical with the practical to foster a deep and holistic skillset in his students."
+      ]
+    },
+    {
+      "slug": "gregory-mcmartin",
+      "name": "Gregory McMartin",
+      "image": "/images/instructors/gregory-mcmartin.jpg",
+      "roles": {
+        "game-design": "Level Design & Unreal Engine"
+      },
+      "bio": [
+        "Gregory McMartin brings 18 years of experience in video game development. Through working with companies such as Cavedog Entertainment, Electronic Arts, Relic Entertainment, Turbine, and Radical Entertainment, Gregory has experienced video game development from many vantage points. Gregory has played principal creative roles for the following titles, among others: “Harry Potter and the Chamber of Secrets PC,” “Incredible Hulk: Ultimate Destruction,” and “Scarface: The World is Yours.” Gregory was also the project lead for Cavedog’s ambitious “Amen: The Awakening” and wrote the original game design treatment for Relic’s “Homeworld.”"
+      ]
+    },
+    {
+      "slug": "victor-diaz",
+      "name": "Victor Diaz",
+      "image": "/images/instructors/victor-diaz.jpg",
+      "roles": {
+        "game-design": "Programming"
+      },
+      "bio": [
+        "Victor Diaz is a game developer with over 7 years of experience working with industry-leading game engines such as Unity and Unreal. Currently, he serves as a full-time Lead Game Developer at a game studio in Vancouver. Throughout his career, he has contributed to over 30 successful projects, utilizing experience in game programming and development. He holds a Bachelor’s degree in Game Programming and a Diploma in Advanced Game Development, and provides his students with a strong foundation in both technical and creative aspects of game design."
+      ]
+    },
+    {
+      "slug": "xenia-pirojenko",
+      "name": "Xenia Pirojenko",
+      "image": "/images/instructors/xenia-pirojenko.jpg",
+      "roles": {
+        "visual-effects-compositing": "Compositing"
+      },
+      "bio": [
+        "Xenia Pirojenko has been working in the VFX industry for the past 6 years as a senior compositor, key artist and supervisor of the roto/paint department on titles such as Game of Thrones, Finch, Bumblebee, and many more. Throughout her career, she realized how important it is to share knowledge and information with artists and that is why she decided to take up a new challenge and teach what she loves."
+      ]
+    },
+    {
+      "slug": "james-lee",
+      "name": "James Lee",
+      "image": "/images/instructors/james-lee.jpg",
+      "roles": {
+        "visual-effects-compositing": "Compositing"
+      },
+      "bio": [
+        "James Lee is an experienced compositor, where he worked on many well-known feature films and television shows such as Ms. Marvel, Black Panther 2, Detective Pikachu, Ad Astra and Skyscraper. He also worked at studios such as Digital Domain, Fuse, Encore, Kalos Studios, MPC and Dneg. He has excellent knowledge both in technical and creative skills in Nuke compositing software.",
+        "James’s hobbies include cooking, gaming and walking his dog, Candy."
+      ]
+    },
+    {
+      "slug": "susanna-josef",
+      "name": "Susanna Josef",
+      "image": "/images/instructors/susanna-josef.jpg",
+      "roles": {
+        "visual-effects-compositing": "Compositing"
+      },
+      "bio": [
+        "Susanna Josef is a VFX Compositor based in Montreal with a background of traditional art, cinematography, TV production and software engineering. Susanna has worked on many fantastic titles throughout her professional career, including Dungeons & Dragons: Honor Among Thieves (2023) , Sonic The Hedgehog 2 (2022) , Top Gun: Maverick (2022) , Fantastic Beasts: The Crimes of Grindelwald (2018), Maleficent (2014) and Guardians of the Galaxy (2014) , just to name a few!"
+      ]
+    },
+    {
+      "slug": "daniel-azevedo",
+      "name": "Daniel Azevedo",
+      "image": "/images/instructors/daniel-azevedo.jpg",
+      "roles": {
+        "visual-effects-compositing": "Compositing"
+      },
+      "bio": [
+        "Daniel Azevedo is a Digital Compositor, based in Toronto, Ontario. His impressive and extensive list of credits include some of today’s most well-known films and television series across platforms like Disney+, Amazon Prime Video and more. His visual effects work can be seen on projects such Logan, The Shallows , The Greatest Showman, The Mist , The Mandalorian , Indiana Jones and the Dial of Destiny and The Boys ."
+      ]
+    },
+    {
+      "slug": "karl-buckley",
+      "name": "Karl Buckley",
+      "image": "/images/instructors/karl-buckley.jpg",
+      "roles": {
+        "visual-effects-compositing": "Compositing"
+      },
+      "bio": [
+        "Karl Buckley has 20+ years of experience in the 3D animation industry and has worked for many studios such as: Mainframe Entertainment, Electronic Arts, Technicolor, Rainmaker Entertainment, Waterproof Studios and WildBrain Studios.",
+        "For most of his career Karl has worked as a look development artist and 3D modeler. Some of the projects Karl has worked on include the following titles: Escape from Planet Earth (animated feature), Driver San Francisco (game cinematics), Splinter Cell “Conviction” (game trailer), Ghost Busters (game trailer), Company of Heroes 2 (game trailer), Assassins Creed 2 (game cinematics), Assassins Creed 3 (game cinematics), Need for Speed Most Wanted (game), Def Jam “The Fight for New York” (game).",
+        "In addition to his production experience, Karl has also been a part time instructor for over 10 years, mentoring 3D animation students in the areas of shading and texturing, problem solving, and developing a keen eye for details."
+      ]
+    },
+    {
+      "slug": "lorraine-hodgins",
+      "name": "Lorraine Hodgins",
+      "image": "/images/instructors/lorraine-hodgins.jpg",
+      "roles": {
+        "graphic-digital-design": "Lead Instructor"
+      },
+      "bio": [
+        "Lorraine Hodgins is a dynamic visual artist and educator with over 30 years of experience in both the creative and digital arts. A graduate of Sheridan College’s prestigious BAA Interpretative Illustration Program and Interactive Design course, Lorraine has taught across Canada, collaborating with artists and students at institutions including Capilano College in Vancouver, George Brown, Centennial, and Humber Colleges in Toronto, and the New Brunswick College of Craft and Design. Her passion for visual expression is constantly growing, and her work has been featured in publications such as 3×3 Magazine and the Vancouver Sun. Constantly pushing the boundaries of her craft, she continues to explore new media and tecniques with other Creatives."
+      ]
+    },
+    {
+      "slug": "rachel-dian",
+      "name": "Rachel Dian",
+      "image": "/images/instructors/rachel-dian.jpg",
+      "roles": {
+        "graphic-digital-design": "InDesign & Illustrator"
+      },
+      "bio": [
+        "Students benefit not only from Rachel’s real-world experience, but also from her expertise as an instructor: she’s taught in classrooms since 2016, and has offered one-on-one graphic design tutoring since 2012."
+      ]
+    },
+    {
+      "slug": "karam-hanna",
+      "name": "Karam Hanna",
+      "image": "/images/instructors/karam-hanna.jpg",
+      "roles": {
+        "graphic-digital-design": "Ads & Marketing"
+      },
+      "bio": []
+    },
+    {
+      "slug": "michael-carson",
+      "name": "Michael Carson",
+      "image": "/images/instructors/michael-carson.jpg",
+      "roles": {
+        "graphic-digital-design": "Web Design"
+      },
+      "bio": [
+        "Michael Carson is a creative professional with a Bachelor’s of Creative Arts from Yorkville University and an Advanced Diploma in Graphic Design from Mohawk College. He is the president and creative director at Raven Media Corp and an award-winning graphic designer. Michael has been teaching for five years, working as a graphic designer for ten years, and has over twenty years of experience as a photographer. His expertise in design and visual storytelling drives both his professional practice and his teaching, inspiring the next generation of creatives at InFocus Film School."
+      ]
+    },
+    {
+      "slug": "naomi-buchanan-nguyen",
+      "name": "Naomi Buchanan-Nguyen",
+      "image": "/images/instructors/naomi-buchanan-nguyen.jpg",
+      "roles": {
+        "game-design": "UX/UI for Games",
+        "graphic-digital-design": "Print & Digital"
+      },
+      "bio": [
+        "Naomi Buchanan-Nguyen brings two decades of expertise in User Experience, Graphic, Web, and Instructional Design, sharing her knowledge as both an instructor and professional across various educational institutions in Canada. Her hands-on teaching style and distinct perspective cater to students from different backgrounds, proving particularly advantageous for individuals in the neurodivergent community. She is excited to join the remarkable team of educators at the College, Naomi aims to equip students with the technical aspects of the Design industry while emphasizing the importance of design fundamentals. Her unique approach and commitment to inclusivity make her a valuable addition to the institution."
+      ]
+    },
+    {
+      "slug": "jorge-puerto-vannetti",
+      "name": "Jorge Puerto Vannetti",
+      "image": "/images/instructors/jorge-puerto-vannetti.jpg",
+      "roles": {
+        "game-design": "Business for Games"
+      },
+      "bio": [
+        "Jorge Puertovannetti is a g ame designer and developer, specializing in game programming, currently working in the VFX industry. He has worked on titles such as Candle Knight, Chibi Clash, RuPaul’s Drag Race: Superstar, The Office: Somehow We Manage , and BudMatch: Munchie Match . He has extensive experience as an instructor and mentor for game development, and trained as an Unreal Authorized Instructor for Epic Games. He is a fan of game jams, speedruns, and anything related to Nintendo."
+      ]
+    },
+    {
+      "slug": "chris-joys",
+      "name": "Chris Joys",
+      "image": "/images/instructors/chris-joys.jpg",
+      "roles": {
+        "film-production": "Cinematography"
+      },
+      "bio": [
+        "Chris Joys is an award-winning filmmaker and photographer who has had multiple exhibitions and film festival screenings around the world. He has shot and directed successful campaigns for brands such as Giorgio Armani, Discovery Channel, Harley Davidson, Royal Enfield and Newtown Jets.",
+        "Having had multiple photography exhibitions and film festival credits under his belt, Chris prides himself in being a meticulous solo creative while also being flexible to take on specific roles on a large scale production."
+      ],
+      "former": true
+    }
+  ],
+  "programs": {
+    "film-production": [
+      "david-michan",
+      "julia-ivanova",
+      "duane-adler",
+      "carleen-kyle",
+      "katie-weekley",
+      "jeremy-klassen",
+      "dolores-drake",
+      "alvaro-furloni",
+      "gail-taylor",
+      "chris-joys"
+    ],
+    "3d-animation-intensive": [
+      "magic-eslami",
+      "robert-yau",
+      "xiangjun-zeng",
+      "sandy-sze",
+      "mario-alberto-melgoza-ruiz",
+      "juan-cisneros",
+      "nabil-chequeiq"
+    ],
+    "writing-for-film-tv": [
+      "katie-weekley",
+      "duane-adler",
+      "carleen-kyle",
+      "julia-kwan",
+      "jackie-blackmore",
+      "roslyn-muir",
+      "eduardo-basile"
+    ],
+    "documentary-film": [
+      "julia-ivanova",
+      "john-ritchie",
+      "nimisha-mukerji",
+      "lynn-booth",
+      "david-vaisbord",
+      "jeremy-klassen",
+      "brishkay-ahmed",
+      "dan-jackson",
+      "manjula-dufresne"
+    ],
+    "game-design": [
+      "cory-rodis",
+      "gregory-mcmartin",
+      "victor-diaz",
+      "jorge-puerto-vannetti",
+      "naomi-buchanan-nguyen"
+    ],
+    "visual-effects-compositing": [
+      "xenia-pirojenko",
+      "james-lee",
+      "susanna-josef",
+      "daniel-azevedo",
+      "karl-buckley"
+    ],
+    "graphic-digital-design": [
+      "lorraine-hodgins",
+      "rachel-dian",
+      "karam-hanna",
+      "michael-carson",
+      "naomi-buchanan-nguyen"
+    ]
+  }
+}

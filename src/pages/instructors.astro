@@ -1,0 +1,738 @@
+---
+// Instructors, by program. Pick a program at the top; each person opens to
+// their full bio. Data: src/data/instructors.json (copied from the live
+// site's instructor pages, 2026-09-25).
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import PageHero from '../components/PageHero.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+import data from '../data/instructors.json';
+import { getPrograms } from '../lib/programs';
+
+type Person = (typeof data.instructors)[number] & { former?: boolean };
+const people = new Map<string, Person>(data.instructors.map((p) => [p.slug, p as Person]));
+const programs = getPrograms().filter((p) => (data.programs as Record<string, string[]>)[p.slug]);
+const roster = (slug: string) => ((data.programs as Record<string, string[]>)[slug] ?? []).map((s) => people.get(s)!).filter(Boolean);
+const roleFor = (p: Person, slug: string) => (p.roles as Record<string, string>)[slug] ?? '';
+const rolesOf = (p: Person) => Object.entries(p.roles as Record<string, string>);
+const allPeople = data.instructors as Person[];
+const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2);
+const total = data.instructors.length;
+---
+
+<Base
+  title="Our Instructors — InFocus Film School"
+  description="Meet the working directors, animators, writers, designers and VFX artists who teach at InFocus Film School, program by program."
+>
+  <Nav />
+
+  <main>
+    <PageHero
+      title="Our Instructors"
+      eyebrow="Faculty"
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'About Us', href: '/about' }, { label: 'Instructors' }]}
+    >
+      <p>
+        Every InFocus class is taught by a working professional. Choose a program to meet the
+        people who will mentor you.
+      </p>
+    </PageHero>
+
+    <div class="page">
+      <div class="wrap">
+        <!-- Program picker -->
+        <div class="picker" role="tablist" aria-label="Programs">
+          {programs.map((p, i) => (
+            <button
+              type="button"
+              role="tab"
+              class="tab"
+              id={`tab-${p.slug}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              aria-controls={`panel-${p.slug}`}
+              data-tab={p.slug}
+            >
+              <span class="tab__n">{String(roster(p.slug).length).padStart(2, '0')}</span>
+              <span class="tab__name">{p.shortTitle}</span>
+            </button>
+          ))}
+        </div>
+
+        {programs.map((p, i) => {
+          const list = roster(p.slug);
+          const lead = list.find((x) => /lead|department head/i.test(roleFor(x, p.slug)));
+          const rest = list.filter((x) => x !== lead);
+          return (
+            <section class="prog" id={`panel-${p.slug}`} role="tabpanel" aria-labelledby={`tab-${p.slug}`} data-panel={p.slug} hidden={i !== 0}>
+              <header class="prog__head">
+                <div>
+                  <p class="eyebrow"><span aria-hidden="true" />{p.shortTitle}</p>
+                  <h2 class="prog__title">
+                    {list.length} {list.length === 1 ? 'instructor' : 'instructors'}
+                  </h2>
+                </div>
+                <a class="prog__link" href={`/programs/${p.slug}`}>About the program <span aria-hidden="true">→</span></a>
+              </header>
+
+              <ul class="grid">
+                {[...(lead ? [lead] : []), ...rest].map((x, j) => {
+                  const role = roleFor(x, p.slug);
+                  return (
+                    <li class:list={['card', { 'card--lead': x === lead && !x.former, 'card--former': x.former }]} style={`--i:${j}`}>
+                      <button type="button" class="card__btn" data-open={x.slug} aria-haspopup="dialog">
+                        <span class="card__media">
+                          {x.image ? (
+                            <img src={x.image} alt={x.name} width="400" height="500" loading="lazy" decoding="async" />
+                          ) : (
+                            <span class="card__initials" aria-hidden="true">{initials(x.name)}</span>
+                          )}
+                          {x.former && <span class="card__flag">Former instructor</span>}
+                          {x === lead && !x.former && <span class="card__flag card__flag--lead">{role}</span>}
+                        </span>
+                        <span class="card__body">
+                          <span class="card__name">{x.name}</span>
+                          {role && <span class="card__role">{role}</span>}
+                          <span class="card__more">Read bio <span aria-hidden="true">→</span></span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+
+        <p class="note">
+          <strong>{total}</strong> working professionals teach across our programs. Several teach in
+          more than one.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bio panel -->
+    <div class="sheet" data-sheet hidden>
+      <div class="sheet__backdrop" data-close></div>
+      <aside class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-name" tabindex="-1" data-sheet-panel>
+        <button type="button" class="sheet__close" data-close aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        {allPeople.map((x) => {
+          const roles = rolesOf(x);
+          const person = x;
+          return (
+            <article class="bio" data-bio={x.slug} hidden>
+              <div class="bio__top">
+                {x.image ? (
+                  <img class="bio__img" src={x.image} alt="" width="400" height="500" loading="lazy" decoding="async" />
+                ) : (
+                  <span class="bio__img bio__img--initials" aria-hidden="true">{initials(x.name)}</span>
+                )}
+                <div>
+                  {person.former && <p class="bio__former">Former instructor</p>}
+                  <h2 class="bio__name" data-bio-name>{x.name}</h2>
+                  <ul class="bio__roles">
+                    {roles.map(([slug, role]) => {
+                      const prog = programs.find((p) => p.slug === slug);
+                      return (
+                        <li>
+                          <span>{role || 'Instructor'}</span>
+                          {prog && <a href={`/programs/${prog.slug}`}>{prog.shortTitle}</a>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+              {person.former && (
+                <p class="bio__note">
+                  Chris is not currently teaching at InFocus. His work with our students and his awards
+                  remain part of the school’s story.
+                </p>
+              )}
+              {x.bio.length ? x.bio.map((para) => <p>{para}</p>) : <p class="bio__empty">Bio coming soon.</p>}
+            </article>
+          );
+        })}
+      </aside>
+    </div>
+  </main>
+
+  <Cta />
+  <Footer />
+</Base>
+
+<style>
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .page {
+    padding: clamp(36px, 4.4vw, 64px) var(--gutter) clamp(56px, 7vw, 112px);
+    background: var(--white);
+    color: var(--charcoal);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .eyebrow span {
+    width: 36px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ---- Program picker ---- */
+
+  .picker {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 5;
+    display: flex;
+    gap: 6px;
+    margin: 0 calc(var(--gutter) * -1) clamp(28px, 3.4vw, 48px);
+    padding: 12px var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.12);
+  }
+
+  .picker::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    border: 1px solid rgba(51, 51, 51, 0.18);
+    border-radius: 999px;
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  .tab__n {
+    font-size: 11px;
+    color: var(--red);
+  }
+
+  .tab:hover {
+    border-color: var(--charcoal);
+  }
+
+  .tab[aria-selected='true'] {
+    border-color: var(--charcoal);
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .tab[aria-selected='true'] .tab__n {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ---- Program section ---- */
+
+  .prog[hidden] {
+    display: none;
+  }
+
+  .prog {
+    scroll-margin-top: calc(var(--nav-h) + 80px);
+  }
+
+  .prog__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(22px, 2.6vw, 36px);
+  }
+
+  .prog__title {
+    margin: 0;
+    font-size: clamp(30px, 3.4vw, 56px);
+    line-height: 1;
+  }
+
+  .prog__link {
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--red);
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  .prog__link:hover {
+    color: var(--red);
+  }
+
+  /* ---- Cards ---- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.8vw, 26px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    animation: card-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* The lead spans two columns on wide screens. */
+  .card--lead {
+    grid-column: span 2;
+  }
+
+  .card__btn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--charcoal);
+    color: var(--white);
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+
+  .card__btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 50px -28px rgba(0, 0, 0, 0.55);
+  }
+
+  .card__btn:focus-visible {
+    outline: 3px solid var(--red);
+    outline-offset: 3px;
+  }
+
+  .card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    /* The portraits fade to red at the bottom; continue that into the card. */
+    background: linear-gradient(to bottom, #4a0f0f, #8f1f1f);
+  }
+
+  .card--lead .card__media {
+    aspect-ratio: 8 / 5;
+  }
+
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card--lead .card__media img {
+    object-position: 50% 15%;
+  }
+
+  .card__btn:hover .card__media img {
+    transform: scale(1.04);
+  }
+
+  .card__initials {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-head);
+    font-size: clamp(48px, 5vw, 80px);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .card__flag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    font-family: var(--font-head);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .card__flag--lead {
+    background: var(--red);
+  }
+
+  .card--former .card__media img {
+    filter: grayscale(1);
+    opacity: 0.85;
+  }
+
+  .card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px 18px;
+  }
+
+  .card__name {
+    font-family: var(--font-head);
+    font-size: clamp(18px, 1.5vw, 24px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .card__role {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .card__more {
+    margin-top: auto;
+    padding-top: 12px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    transition: color 0.2s ease;
+  }
+
+  .card__btn:hover .card__more {
+    color: var(--white);
+  }
+
+  .note {
+    margin: clamp(32px, 4vw, 56px) 0 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(51, 51, 51, 0.14);
+    font-size: 14px;
+    color: #6d6d6d;
+  }
+
+  .note strong {
+    color: var(--charcoal);
+  }
+
+  /* ---- Bio sheet ---- */
+
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+  }
+
+  .sheet[hidden] {
+    display: none;
+  }
+
+  .sheet__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    animation: fade 0.3s ease;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .sheet__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(560px, 100%);
+    overflow-y: auto;
+    padding: clamp(24px, 3vw, 44px);
+    background: var(--white);
+    color: var(--charcoal);
+    box-shadow: -30px 0 80px -30px rgba(0, 0, 0, 0.5);
+    animation: slide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+  }
+
+  @keyframes slide {
+    from {
+      transform: translateX(40px);
+      opacity: 0;
+    }
+  }
+
+  .sheet__close {
+    position: sticky;
+    top: 0;
+    float: right;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -6px -6px 0 0;
+    border-radius: 50%;
+    background: #f1f1f1;
+    font-size: 26px;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .sheet__close:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .bio[hidden] {
+    display: none;
+  }
+
+  .bio__top {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(51, 51, 51, 0.14);
+  }
+
+  .bio__img {
+    display: grid;
+    place-items: center;
+    width: 120px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 12px;
+    background: linear-gradient(to bottom, #4a0f0f, #8f1f1f);
+  }
+
+  .bio__img--initials {
+    font-family: var(--font-head);
+    font-size: 34px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .bio__former {
+    margin: 0 0 6px;
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  .bio__name {
+    margin: 0 0 10px;
+    font-size: clamp(26px, 2.4vw, 34px);
+    line-height: 1;
+  }
+
+  .bio__roles {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+  }
+
+  .bio__roles span {
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  .bio__roles a {
+    margin-left: 8px;
+    color: #6d6d6d;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(189, 47, 47, 0.5);
+  }
+
+  .bio__roles a:hover {
+    color: var(--red);
+  }
+
+  .bio__note {
+    padding: 12px 16px;
+    border-left: 3px solid var(--red);
+    background: #f6f6f6;
+    font-size: 14px !important;
+    color: #555 !important;
+  }
+
+  .bio p {
+    margin: 0 0 1em;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #3f3f3f;
+  }
+
+  .bio__empty {
+    color: #9a9a9a !important;
+    font-style: italic;
+  }
+
+  body:has(.sheet:not([hidden])) {
+    overflow: hidden;
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card--lead {
+      grid-column: span 2;
+    }
+
+    .card__body {
+      padding: 12px 14px 14px;
+    }
+
+    .card__more {
+      display: none;
+    }
+
+    .bio__top {
+      grid-template-columns: 90px minmax(0, 1fr);
+    }
+
+    .bio__img {
+      width: 90px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .sheet__backdrop,
+    .sheet__panel {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // ---- Program tabs ----
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+  const panels = [...document.querySelectorAll<HTMLElement>('[data-panel]')];
+
+  const show = (slug: string, push = true) => {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === slug)));
+    panels.forEach((p) => {
+      const on = p.dataset.panel === slug;
+      p.hidden = !on;
+      if (on) {
+        // Restart the card cascade.
+        p.querySelectorAll<HTMLElement>('.card').forEach((c) => {
+          c.style.animation = 'none';
+          void c.offsetWidth;
+          c.style.animation = '';
+        });
+      }
+    });
+    tabs.find((t) => t.dataset.tab === slug)?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    if (push) history.replaceState(null, '', `#${slug}`);
+  };
+
+  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.tab!)));
+
+  // ---- Bio sheet ----
+  const sheet = document.querySelector<HTMLElement>('[data-sheet]')!;
+  const panel = sheet.querySelector<HTMLElement>('[data-sheet-panel]')!;
+  const bios = [...sheet.querySelectorAll<HTMLElement>('[data-bio]')];
+  let opener: HTMLElement | null = null;
+
+  const openBio = (slug: string, from?: HTMLElement) => {
+    const bio = bios.find((b) => b.dataset.bio === slug);
+    if (!bio) return;
+    bios.forEach((b) => (b.hidden = b !== bio));
+    sheet.hidden = false;
+    panel.scrollTop = 0;
+    opener = from ?? null;
+    panel.focus();
+    panel.setAttribute('aria-labelledby', 'sheet-name');
+    bio.querySelector('[data-bio-name]')?.setAttribute('id', 'sheet-name');
+  };
+
+  const closeBio = () => {
+    sheet.hidden = true;
+    bios.forEach((b) => b.querySelector('[data-bio-name]')?.removeAttribute('id'));
+    opener?.focus();
+    opener = null;
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-open]').forEach((btn) =>
+    btn.addEventListener('click', () => openBio(btn.dataset.open!, btn))
+  );
+  sheet.querySelectorAll<HTMLElement>('[data-close]').forEach((el) => el.addEventListener('click', closeBio));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !sheet.hidden) closeBio();
+  });
+
+  // Deep links: #program or #program/person
+  const fromHash = () => {
+    const hash = decodeURIComponent(location.hash.slice(1));
+    if (!hash) return;
+    const [prog, person] = hash.split('/');
+    if (panels.some((p) => p.dataset.panel === prog)) show(prog, false);
+    if (person) openBio(person);
+  };
+  fromHash();
+  addEventListener('hashchange', fromHash);
+</script>
