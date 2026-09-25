@@ -29,7 +29,7 @@ const initials = (n: string) => n.split(/\s+/).map((w) => w[0]).join('').slice(0
 <Base
   title="Leadership — InFocus Film School"
   description="Meet the leadership team behind InFocus Film School: Dr. Monika Chhabra Gupta, Dmetri Berko, DJ Gupta, Faye Foshaug and Raisa Afrida."
-  image={president.image}
+  image={president.image ?? undefined}
 >
   <Nav />
 
