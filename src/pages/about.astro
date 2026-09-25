@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
+import ParentOrg from '../components/ParentOrg.astro';
 
 // Frames for the rolling film strip in the opening. Listed twice in the
 // markup so the loop is seamless.
@@ -321,27 +322,7 @@ const seals = [
       </div>
     </section>
 
-    <!-- ===== Parent organization ===== -->
-    <section class="parent" aria-labelledby="parent-title">
-      <div class="parent__inner">
-        <a class="parent__logo" href="https://mcgcollege.com/" target="_blank" rel="noopener" aria-label="MCG Career College">
-          <img src="/images/mcg-logo-white.png" alt="MCG Career College" width="656" height="238" loading="lazy" decoding="async" />
-        </a>
-        <div>
-          <p class="eyebrow eyebrow--light"><span aria-hidden="true"></span>Our family of schools</p>
-          <h2 id="parent-title" class="parent__title">Part of MCG Career College</h2>
-          <p class="parent__text">
-            InFocus Film School is part of MCG Career College. Under MCG’s leadership, InFocus
-            continues its founding mission of accelerated, hands-on education in film and
-            entertainment arts, now supported by a wider network committed to career-focused
-            learning and student success.
-          </p>
-          <a class="parent__link" href="https://mcgcollege.com/" target="_blank" rel="noopener">
-            Visit MCG Career College <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </div>
-    </section>
+    <ParentOrg />
 
     <!-- ===== Accreditation ===== -->
     <section class="accred" aria-labelledby="accred-title">
@@ -1044,83 +1025,6 @@ const seals = [
   .letter__role {
     font-size: 14px;
     color: #6d6d6d;
-  }
-
-  /* ================= Parent ================= */
-
-  .parent {
-    padding: clamp(56px, 7vw, 112px) var(--gutter);
-    background:
-      radial-gradient(60% 90% at 100% 0%, rgba(189, 47, 47, 0.22), transparent 65%),
-      radial-gradient(50% 80% at 0% 100%, rgba(34, 68, 102, 0.5), transparent 70%),
-      var(--charcoal);
-    color: var(--white);
-  }
-
-  .parent__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    gap: clamp(28px, 5vw, 96px);
-    align-items: center;
-    max-width: 1320px;
-    margin: 0 auto;
-  }
-
-  .parent__logo {
-    display: grid;
-    place-items: center;
-    padding: clamp(28px, 4vw, 56px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 16px;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
-
-  .parent__logo:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .parent__logo img {
-    width: min(100%, 320px);
-    height: auto;
-  }
-
-  .parent__title {
-    margin: 0;
-    font-size: clamp(30px, 3.4vw, 56px);
-    line-height: 1;
-  }
-
-  .parent__text {
-    margin: clamp(16px, 1.8vw, 24px) 0 0;
-    max-width: 58ch;
-    font-size: clamp(15px, 1.1vw, 18px);
-    line-height: 1.75;
-    color: rgba(255, 255, 255, 0.75);
-  }
-
-  .parent__link {
-    display: inline-flex;
-    gap: 10px;
-    margin-top: clamp(22px, 2.4vw, 32px);
-    padding-bottom: 6px;
-    border-bottom: 2px solid var(--red);
-    font-family: var(--font-head);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-  }
-
-  .parent__link:hover {
-    color: var(--red);
-  }
-
-  @media (max-width: 800px) {
-    .parent__inner {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 
   /* ================= Accreditation ================= */
