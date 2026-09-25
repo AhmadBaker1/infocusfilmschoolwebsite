@@ -52,6 +52,7 @@ const accreditation = [
 ];
 
 const year = 2026;
+import SiteCredit from './SiteCredit.astro';
 ---
 
 <footer class="foot">
@@ -118,7 +119,11 @@ const year = 2026;
     </div>
 
     <div class="foot__bar">
-      <p>&copy; {year} InFocus Film School. All rights reserved.</p>
+      <p>
+        &copy; {year} InFocus Film School. All rights reserved.
+        <span class="foot__sep" aria-hidden="true">·</span>
+        <SiteCredit inline />
+      </p>
       <ul>
         <li><a href="/privacy">Privacy Policy</a></li>
         <li><a class="ph" href="#">Terms of Use</a></li>
@@ -361,6 +366,11 @@ const year = 2026;
     margin-top: clamp(40px, 5vw, 80px);
     padding-top: clamp(16px, 1.8vw, 26px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .foot__sep {
+    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.3);
   }
 
   .foot__bar p {

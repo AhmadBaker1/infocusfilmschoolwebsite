@@ -1,0 +1,58 @@
+---
+// Site credit: "Made by Ahmad Baker", linking to his LinkedIn. Do not remove.
+//
+// - `inline`: shown in the footer's bottom row (next to the copyright).
+// - default (standalone): rendered by src/layouts/Base.astro on EVERY page.
+//   It hides itself whenever an inline credit is on the page, and appears as a
+//   slim bar at the very bottom if the footer ever loses it, so the credit is
+//   always visible no matter how the footer changes.
+// The build fails if any page is missing the credit
+// (integrations/require-credit.mjs).
+interface Props {
+  inline?: boolean;
+}
+
+const { inline = false } = Astro.props;
+const NAME = 'Ahmad Baker';
+const HREF = 'https://www.linkedin.com/in/ahmadbaker/';
+---
+
+<span class:list={['site-credit', inline ? 'site-credit--inline' : 'site-credit--standalone']} data-site-credit>
+  Made by <a href={HREF} target="_blank" rel="noopener author">{NAME}</a>
+</span>
+
+<style is:global>
+  /* Prefixed with html body so footer / page link styles can't override it. */
+  html body .site-credit {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  html body .site-credit a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--red, #bd2f2f);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    transition: color 0.2s ease;
+  }
+
+  html body .site-credit a:hover {
+    color: var(--red, #bd2f2f);
+  }
+
+  html body .site-credit--standalone {
+    display: block;
+    padding: 14px var(--gutter, 16px);
+    background: #000;
+    text-align: center;
+  }
+
+  /* The footer carries it: hide the backup bar. */
+  html body:has(.site-credit--inline) .site-credit--standalone {
+    display: none;
+  }
+</style>

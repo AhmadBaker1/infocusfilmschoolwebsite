@@ -1,8 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import requireCredit from './integrations/require-credit.mjs';
 
 export default defineConfig({
   site: 'https://infocusfilmschool.com',
+  // Fails the build if any page is missing the site credit.
+  integrations: [requireCredit()],
   // Old WordPress URLs that moved.
   redirects: {
     '/jobs': '/careers',

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import SiteCredit from '../components/SiteCredit.astro';
 
 interface Props {
   title: string;
@@ -35,5 +36,7 @@ const { title, description, image = '/images/IF-Logo-Social.jpg', type = 'websit
   </head>
   <body>
     <slot />
+    <!-- Required on every page; the build fails without it. -->
+    <SiteCredit />
   </body>
 </html>
