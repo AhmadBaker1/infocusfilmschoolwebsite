@@ -71,6 +71,11 @@ import SiteCredit from './SiteCredit.astro';
         </a>
         <p class="foot__tag">Your future in focus.</p>
 
+        <a class="foot__parent" href="https://mcgcollege.com/" target="_blank" rel="noopener">
+          <span class="foot__parent-label">Part of</span>
+          <img src="/images/mcg-logo-white.png" alt="MCG Career College" width="656" height="238" loading="lazy" decoding="async" />
+        </a>
+
         <address class="foot__contact">
           <a href="https://maps.google.com/?q=554+Seymour+Street+Vancouver+BC+V6B+3J5" target="_blank" rel="noopener">
             554 Seymour Street<br />Vancouver, BC V6B 3J5
@@ -222,6 +227,37 @@ import SiteCredit from './SiteCredit.astro';
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.62);
+  }
+
+  .foot__parent {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(18px, 2vw, 26px);
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    transition: border-color 0.25s ease, background-color 0.25s ease;
+  }
+
+  .foot__parent:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .foot__parent-label {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .foot__brand .foot__parent img {
+    width: auto;
+    height: 28px;
+    opacity: 0.9;
   }
 
   .foot__contact {
